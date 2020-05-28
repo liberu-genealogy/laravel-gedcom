@@ -1,0 +1,30 @@
+{
+  "name": "asdfx/laravel-gedcom",
+  "description": "A package that converts gedcom files to Eloquent models",
+  "type": "library",
+  "require": {
+    "modularsoftware/php-gedcom": "^1.0",
+    "illuminate/support": "^7.13",
+    "symfony/var-dumper": "^5.0",
+    "illuminate/database": "^7.13"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alex Mills",
+      "email": "alex@asdfx.us"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Asdfx\\LaravelGedcom\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Asdfx\\LaravelGedcom\\ServiceProvider"
+      ]
+    }
+  }
+}
