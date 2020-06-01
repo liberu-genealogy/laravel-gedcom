@@ -7,5 +7,5 @@ use PhpGedcom\Record;
 
 interface GedcomModel
 {
-    public static function createFromGedcom($record): Model;
+    public static function createFromGedcom($record): ?Model;
 }
