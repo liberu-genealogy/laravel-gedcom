@@ -35,12 +35,19 @@ $parser->parse($filename, true);
 ```
 
 ## Documentation
+
+### Database
 This package will create the following database tables, which map to models:
 * places -> `Asdfx\LaravelGedcom\Models\Place`
 * persons -> `Asdfx\LaravelGedcom\Models\Person`
 * person_events -> `Asdfx\LaravelGedcom\Models\PersonEvent`
 * families `Asdfx\LaravelGedcom\Models\Family`
 * family_events `Asdfx\LaravelGedcom\Models\FamilyEvents`
+
+### `parse()` Method
+The `parse()` method takes two parameters, `string $filename`, and `bool $progressBar = false`. 
+If you set `$progressBar` to true, a ProgressBar will be output to `php://stdout`, which is useful when you are calling
+the parser from Artisan commands.
 
 ## Contributing 
 
