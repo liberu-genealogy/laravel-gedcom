@@ -2,7 +2,7 @@
 
 namespace Asdfx\LaravelGedcom\Commands;
 
-use Asdfx\LaravelGedcom\Utils\GedcomParser;
+use Asdfx\LaravelGedcom\Facades\GedcomParserFacade;
 use Illuminate\Console\Command;
 
 class GedcomImporter extends Command
@@ -39,7 +39,6 @@ class GedcomImporter extends Command
     public function handle()
     {
         $filename = $this->argument('filename');
-        $parser = new GedcomParser();
-        $parser->parse($filename, true);
+        GedcomParserFacade::parse($filename, true);
     }
 }
