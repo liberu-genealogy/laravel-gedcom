@@ -71,7 +71,7 @@ class Person extends Model
         return collect($result);
     }
 
-    public function add_event($title, $date, $place, $description = '')
+    public function addEvent($title, $date, $place, $description = '')
     {
         $place_id = Place::getIdByTitle($place);
         $event = PersonEvent::create(array(
