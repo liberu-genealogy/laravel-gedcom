@@ -4,9 +4,8 @@
   "type": "library",
   "require": {
     "modularsoftware/php-gedcom": "^1.0",
-    "illuminate/support": "^7.13",
-    "symfony/var-dumper": "^5.0",
-    "illuminate/database": "^7.13"
+    "illuminate/support": "^5.5",
+    "illuminate/database": "^5.5"
   },
   "license": "MIT",
   "authors": [
