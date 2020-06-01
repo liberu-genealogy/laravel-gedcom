@@ -4,7 +4,7 @@ as Laravel models, inside your Laravel application.
 
 ## Installation
 ```
-composer require asdfgx/laravel-gedcom
+composer require asdfx/laravel-gedcom
 ```
 
 ## Usage
