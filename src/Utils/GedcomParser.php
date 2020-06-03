@@ -2,8 +2,8 @@
 
 namespace Asdfx\LaravelGedcom\Utils;
 
-use Asdfx\LaravelGedcom\Models\Family;
-use Asdfx\LaravelGedcom\Models\Person;
+use \App\Family;
+use \App\Person;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
