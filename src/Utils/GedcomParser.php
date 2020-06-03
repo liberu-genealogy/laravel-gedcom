@@ -121,13 +121,14 @@ class GedcomParser
         $husb = $family->getHusb();
         $wife = $family->getWife();
 	$description = NULL;
+	$type_id = 0;
         $children = $family->getChil();
         $events = $family->getEven();
 
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
-        $family = Family::create(compact('husband_id', 'wife_id', 'description'));
+        $family = Family::create(compact('husband_id', 'wife_id', 'description', 'type_id'));
 
         if ($children !== null) {
             foreach ($children as $child) {
