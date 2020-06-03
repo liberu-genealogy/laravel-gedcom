@@ -4,8 +4,6 @@
   "type": "library",
   "require": {
     "modularsoftware/php-gedcom": "^1.0",
-    "illuminate/support": "^5.5",
-    "illuminate/database": "^5.5"
   },
   "license": "MIT",
   "authors": [
