@@ -1,5 +1,5 @@
 {
-  "name": "asdfx/laravel-gedcom",
+  "name": "modularsoftware/laravel-gedcom",
   "description": "A package that converts gedcom files to Eloquent models",
   "type": "library",
   "require": {
