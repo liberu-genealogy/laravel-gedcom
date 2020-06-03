@@ -3,7 +3,7 @@
   "description": "A package that converts gedcom files to Eloquent models",
   "type": "library",
   "require": {
-    "modularsoftware/php-gedcom": "^1.0",
+    "modularsoftware/php-gedcom": "^1.0"
   },
   "license": "MIT",
   "authors": [
