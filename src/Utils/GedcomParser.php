@@ -90,7 +90,7 @@ class GedcomParser
         if ($givn == "") {
             $givn = $name;
         }
-        $person = Person::create(compact('givn', 'surn', 'sex'));
+        $person = Person::create(compact('name', 'givn', 'surn', 'sex'));
         $this->persons_id[$g_id] = $person->id;
 
         if ($events !== null) {
@@ -120,13 +120,14 @@ class GedcomParser
         $g_id = $family->getId();
         $husb = $family->getHusb();
         $wife = $family->getWife();
+	$description = NULL;
         $children = $family->getChil();
         $events = $family->getEven();
 
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
-        $family = Family::create(compact('husband_id', 'wife_id'));
+        $family = Family::create(compact('husband_id', 'wife_id', 'description'));
 
         if ($children !== null) {
             foreach ($children as $child) {
