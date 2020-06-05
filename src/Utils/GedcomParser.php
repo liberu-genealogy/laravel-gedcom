@@ -7,7 +7,7 @@ use \App\Person;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
-
+use \App\Events\GedComProgressSent;
 class GedcomParser
 {
     /**
@@ -18,22 +18,26 @@ class GedcomParser
      */
     protected $persons_id = [];
 
-    public function parse(string $filename, bool $progressBar = false)
+    public function parse(string $filename, string $slug, bool $progressBar = false)
     {
         $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
 
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
-
+        $total = count($individuals) + count($families);
+        $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
+            event(new GedComProgressSent($slug, $total, $complete));
         }
 
         foreach ($individuals as $individual) {
             $this->getPerson($individual);
             if ($progressBar === true) {
                 $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -41,6 +45,8 @@ class GedcomParser
             $this->getFamily($family);
             if ($progressBar === true) {
                 $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
