@@ -23,6 +23,21 @@ class GedcomParser
         $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
 
+        /**
+         * work
+         */
+
+        $head = $gedcom->getHead();
+        $subn = $gedcom->getSubn();
+        $subm = $gedcom->getSubm();
+        $sour = $gedcom->getSour();
+        $note = $gedcom->getNote();
+        $repo = $gedcom->getRepo();
+        $obje = $gedcom->getObje();
+
+        /**
+          * work end
+          */
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
         $total = count($individuals) + count($families);
@@ -89,14 +104,42 @@ class GedcomParser
             $name = current($individual->getName())->getName();
         }
 
-        $sex = $individual->getSex();
-        $attr = $individual->getAttr();
-        $events = $individual->getEven();
+        // string value
+        $uid  = $individual->getUid();
+        $chan = $individual->getChan();
+        $rin  = $individual->getRin();
+        $resn = $individual->getResn(); 
+        $rfn  = $individual->getRfn();
+        $afn  = $individual->getAfn();
+
+        // array value
+        $note = $individual->getNote();
+        $obje = $individual->getObje();
+        $sour = $individual->getSour();
+        $fams = $individual->getFams();
+        $famc = $individual->getFamc();
+        $alia = $individual->getAlia();
+        $asso = $individual->getAsso();
+        $subm = $individual->getSubm();
+        $anci = $individual->getAnci();
+        $desi = $individual->getDesi();
+        $refn = $individual->getRefn();
+
+        // object
+        $bapl = $individual->getBapl();
+        $conl = $individual->getConl();
+        $endl = $individual->getEndl();
+        $slgc = $individual->getSlgc();
+
+
+        $sex = preg_replace("/[^MF]/", "", $individual->getSex());
+        $attr = $individual->getAllAttr();
+        $events = $individual->getAllEven();
 
         if ($givn == "") {
             $givn = $name;
         }
-        $person = Person::create(compact('name', 'givn', 'surn', 'sex'));
+        $person = Person::updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid','chan', 'rin', 'resn', 'rfn', 'afn'));
         $this->persons_id[$g_id] = $person->id;
 
         if ($events !== null) {
@@ -126,15 +169,29 @@ class GedcomParser
         $g_id = $family->getId();
         $husb = $family->getHusb();
         $wife = $family->getWife();
-	$description = NULL;
-	$type_id = 0;
+        
+        // string
+        $chan = $family->getChan();
+        $nchi = $family->getNchi();
+
+        // array
+        $_slgs = $family->getSlgs();
+        $_subm = $family->getSubm();
+        $_refn = $family->getRefn();
+        $_rin = $family->getRin();
+        $_note = $family->getNote();
+        $_sour = $family->getSour();
+        $_obje = $family->getObje();
+
+        $description = NULL;
+        $type_id = 0;
         $children = $family->getChil();
-        $events = $family->getEven();
+        $events = $family->getAllEven();
 
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
-        $family = Family::create(compact('husband_id', 'wife_id', 'description', 'type_id'));
+        $family = Family::updateOrCreate(compact('husband_id', 'wife_id'), compact('husband_id', 'wife_id', 'description', 'type_id' ,'chan', 'nchi'));
 
         if ($children !== null) {
             foreach ($children as $child) {
