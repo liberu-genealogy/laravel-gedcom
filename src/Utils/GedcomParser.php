@@ -36,17 +36,46 @@ class GedcomParser
         $obje = $gedcom->getObje();
 
         /**
-          * work end
-          */
+        * work end
+        */
+        $c_subn = 0;
+        $c_subm = count($subm);
+        
+        if($subn != null){
+            // 
+            $c_subn = 1;
+        }
+
+
+
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
-        $total = count($individuals) + count($families);
+        $total = count($individuals) + count($families) + $c_subn+ $c_subm;
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
             event(new GedComProgressSent($slug, $total, $complete));
         }
 
+        if($subn != null){
+            // store the submission information for the GEDCOM file.
+            $this->getSubn($subn);
+            if($progressBar === true){
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
+
+        // store information about all the submitters to the GEDCOM file.
+        foreach ($subm as $item){
+            $this->getSubm($item);
+            if ($progressBar === true) {
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
         foreach ($individuals as $individual) {
             $this->getPerson($individual);
             if ($progressBar === true) {
@@ -210,5 +239,53 @@ class GedcomParser
                 $family->addEvent($event->getType(), $date, $place);
             };
         }
+    }
+
+    private function getSubn($subn){
+        $subm = $subn->getSubm();
+        $famf = $subn->getFamf();
+        $temp = $subn->getTemp();
+        $ance = $subn->getAnce();
+        $desc = $subn->getDesc();
+        $ordi = $subn->getOrdi();
+        $rin = $subn->getRin();
+        $_subn = Subn::updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
+    }
+
+    // insert subm data to model
+    private function getSubm($_subm){
+        $subm = $_subm->getSubm(); // string
+        $chan = $_subm->getChan(); // Record\Chan---
+        $name = $_subm->getName(); // string
+        $_addr = $_subm->getAddr(); // Record/Addr
+        $rin  = $_subm->getRin(); // string
+        $rfn  = $_subm->getRfn(); // string 
+        $_lang = $_subm->getLang(); // array
+        $_phon = $_subm->getPhon(); // array
+        $obje = $_subm->getObje(); // array ---
+
+        // create chan model - id, ref_type (subm), date, time
+        // create note model - id, ref_type ( chan ), note
+        // create sour model - id, ref_type ( note), sour, Chan, titl, auth, data, text, publ, Repo, abbr, rin, refn_a, Note_a, Obje_a
+        // $arr_chan = array('date'=>$chan->getDate(), 'time'=>$chan->getTime());
+        // create obje model - id, _isRef, _obje, _form, _titl, _file, _Note_a
+
+        $arr_addr = array(
+            'addr'=>$_addr->getAddr(),
+            'adr1' => $_addr->getAdr1(),
+            'adr2'=>$_addr->getAdr2(),
+            'city'=>$_addr->getCity(),
+            'stae'=>$_addr->getStae(),
+            'ctry'=>$_addr->getCtry()
+        );
+        $addr = json_encode($arr_addr);
+        $lang = json_encode($_lang);
+        $arr_phon = array();
+        foreach($_phon as $item){
+            $__phon = $item->getPhon();
+            array_push($arr_phon, $__phon);
+        }
+        $phon = json_encode($arr_phon);
+        Subm::updateOrCreate(compact('subm', 'name','addr','rin','rfn','lang','phon'), compact('subm', 'name','addr','rin','rfn','lang','phon'));
     }
 }
