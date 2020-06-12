@@ -4,6 +4,12 @@ namespace ModularSoftware\LaravelGedcom\Utils;
 
 use \App\Family;
 use \App\Person;
+use \App\Subn;
+use \App\Subm;
+use \App\Sour;
+use \App\Noteged;
+use \App\Repoged;
+use \App\Objeged;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -41,17 +47,17 @@ class GedcomParser
         $c_subn = 0;
         $c_subm = count($subm);
         $c_sour = count($sour);
-
+        $c_note = count($note);
+        $c_repo = count($repo);
+        $c_obje = count($obje);
         if($subn != null){
             // 
             $c_subn = 1;
         }
 
-
-
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
-        $total = count($individuals) + count($families) + $c_subn+ $c_subm + $c_sour;
+        $total = count($individuals) + count($families) + $c_subn+ $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
@@ -87,7 +93,36 @@ class GedcomParser
                 event(new GedComProgressSent($slug, $total, $complete));
             }
         }
-                
+        
+        // store all the notes contained within the GEDCOM file that are not inline.
+        foreach ($note as $item){
+            $this->getNote($item);
+            if ($progressBar === true) {
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
+
+        // store all repositories that are contained within the GEDCOM file and referenced by sources.
+        foreach ($repo as $item){
+            $this->getRepo($item);
+            if ($progressBar === true) {
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
+        // store all the media objects that are contained within the GEDCOM file.
+        foreach ($obje as $item){
+            $this->getObje($item);
+            if ($progressBar === true) {
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
+        
         foreach ($individuals as $individual) {
             $this->getPerson($individual);
             if ($progressBar === true) {
@@ -316,5 +351,57 @@ class GedcomParser
         $note = $_sour->getNote(); // array
         $obje = $_sour->getObje(); // array
         Sour::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr') );
+    }
+
+    // insert note data to database
+    private function getNote($_note){
+        $gid = $_note->getId(); // string
+        $note = $_note->getNote(); // string
+        $chan = $_note->getChan(); // string ? 
+        $even = $_note->getEven(); // string ? 
+        $refn = $_note->getRefn(); // array
+        $rin = $_note->getRin(); // string
+        $sour = $_note->getSour(); // array
+        Noteged::updateOrCreate(compact('gid','note', 'rin'), compact('gid','note', 'rin'));
+    }
+
+    // insert repo data to database
+    private function getRepo($_repo){
+        $repo = $_repo->getRepo(); // string 
+        $name = $_repo->getName(); // string
+        $_addr = $_repo->getAddr(); // Record/Addr
+        $rin = $_repo->getRin(); // string
+        $chan = $_repo->getChan(); // Record / Chan -- 
+        $_phon = $_repo->getPhon(); // array
+        $refn = $_repo->getRefn(); // array --
+        $note = $_repo->getNote(); // array --
+        $arr_addr = array(
+            'addr'=>$_addr->getAddr(),
+            'adr1' => $_addr->getAdr1(),
+            'adr2'=>$_addr->getAdr2(),
+            'city'=>$_addr->getCity(),
+            'stae'=>$_addr->getStae(),
+            'ctry'=>$_addr->getCtry()
+        );
+        $addr = json_encode($arr_addr);
+        $arr_phon = array();
+        foreach($_phon as $item){
+            $__phon = $item->getPhon();
+            array_push($arr_phon, $__phon);
+        }
+        $phon = json_encode($arr_phon);
+        Repoged::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));     
+    }
+
+    // insert obje data to database
+    private function getObje($_obje){
+        $gid = $_obje->getId(); // string
+        $_form = $_obje->getForm(); // string
+        $_titl = $_obje->getTitl(); // string
+        $_blob = $_obje->getBlob(); // string
+        $_rin = $_obje->getRin(); // string
+        $_chan = $_obje->getChan(); // Chan
+        $_file = $_obje->getFile(); // string
+        Objeged::updateOrCreate(compact('gid', 'form', 'titl', 'blob', 'rin', 'file'), compact('gid', 'form', 'titl', 'blob', 'rin', 'file'));
     }
 }
