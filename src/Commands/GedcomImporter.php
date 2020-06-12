@@ -1,8 +1,8 @@
 <?php
 
-namespace Asdfx\LaravelGedcom\Commands;
+namespace ModularSoftware\LaravelGedcom\Commands;
 
-use Asdfx\LaravelGedcom\Facades\GedcomParserFacade;
+use ModularSoftware\LaravelGedcom\Facades\GedcomParserFacade;
 use Illuminate\Console\Command;
 
 class GedcomImporter extends Command

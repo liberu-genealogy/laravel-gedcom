@@ -1,6 +1,6 @@
 <?php
 
-namespace Asdfx\LaravelGedcom\Utils;
+namespace ModularSoftware\LaravelGedcom\Utils;
 
 class DateParser {
 

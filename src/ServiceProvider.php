@@ -1,9 +1,9 @@
 <?php
 
-namespace Asdfx\LaravelGedcom;
+namespace ModularSoftware\LaravelGedcom;
 
-use Asdfx\LaravelGedcom\Commands\GedcomImporter;
-use Asdfx\LaravelGedcom\Utils\GedcomParser;
+use ModularSoftware\LaravelGedcom\Commands\GedcomImporter;
+use ModularSoftware\LaravelGedcom\Utils\GedcomParser;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {

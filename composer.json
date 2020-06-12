@@ -9,18 +9,20 @@
   "authors": [
     {
       "name": "Alex Mills",
-      "email": "alex@asdfx.us"
+      "email": "alex@asdfx.us",
+      "name": "Curtis Delicata",
+      "email": "curtis.delicata@outlook.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Asdfx\\LaravelGedcom\\": "src"
+      "ModularSoftware\\LaravelGedcom\\": "src"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Asdfx\\LaravelGedcom\\ServiceProvider"
+        "ModularSoftware\\LaravelGedcom\\ServiceProvider"
       ]
     }
   }

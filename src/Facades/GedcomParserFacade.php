@@ -1,6 +1,6 @@
 <?php
 
-namespace Asdfx\LaravelGedcom\Facades;
+namespace ModularSoftware\LaravelGedcom\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

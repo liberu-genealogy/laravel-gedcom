@@ -1,8 +1,8 @@
 <?php
 
-namespace Asdfx\LaravelGedcom\Observers;
+namespace ModularSoftware\LaravelGedcom\Observers;
 
-use Asdfx\LaravelGedcom\Utils\DateParser;
+use ModularSoftware\LaravelGedcom\Utils\DateParser;
 
 class EventActionsObserver
 {
