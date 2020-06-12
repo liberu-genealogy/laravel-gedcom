@@ -40,7 +40,8 @@ class GedcomParser
         */
         $c_subn = 0;
         $c_subm = count($subm);
-        
+        $c_sour = count($sour);
+
         if($subn != null){
             // 
             $c_subn = 1;
@@ -50,7 +51,7 @@ class GedcomParser
 
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
-        $total = count($individuals) + count($families) + $c_subn+ $c_subm;
+        $total = count($individuals) + count($families) + $c_subn+ $c_subm + $c_sour;
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
@@ -76,6 +77,17 @@ class GedcomParser
                 event(new GedComProgressSent($slug, $total, $complete));
             }
         }
+
+        // store sources cited throughout the GEDCOM file.
+        foreach ($sour as $item){
+            $this->getSour($item);
+            if ($progressBar === true) {
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
+                
         foreach ($individuals as $individual) {
             $this->getPerson($individual);
             if ($progressBar === true) {
@@ -287,5 +299,22 @@ class GedcomParser
         }
         $phon = json_encode($arr_phon);
         Subm::updateOrCreate(compact('subm', 'name','addr','rin','rfn','lang','phon'), compact('subm', 'name','addr','rin','rfn','lang','phon'));
+    }
+    // insert sour data to database
+    private function getSour($_sour){
+        $sour = $_sour->getSour(); // string
+        $chan = $_sour->getChan(); // Record/Chan
+        $titl = $_sour->getTitl(); // string
+        $auth = $_sour->getAuth(); // string
+        $data = $_sour->getData(); // string
+        $text = $_sour->getText(); // string
+        $publ = $_sour->getPubl(); // string
+        $repo = $_sour->getRepo(); // Repo
+        $abbr = $_sour->getAbbr(); // string
+        $rin = $_sour->getRin(); // string
+        $refn = $_sour->getRefn(); // array
+        $note = $_sour->getNote(); // array
+        $obje = $_sour->getObje(); // array
+        Sour::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr') );
     }
 }
