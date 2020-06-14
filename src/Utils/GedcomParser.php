@@ -6,10 +6,10 @@ use \App\Family;
 use \App\Person;
 use \App\Subn;
 use \App\Subm;
-use \App\Sour;
-use \App\Noteged;
-use \App\Repoged;
-use \App\Objeged;
+use \App\Source;
+use \App\Note;
+use \App\Repository;
+use \App\Object;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -350,7 +350,7 @@ class GedcomParser
         $refn = $_sour->getRefn(); // array
         $note = $_sour->getNote(); // array
         $obje = $_sour->getObje(); // array
-        Sour::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr') );
+        Source::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr') );
     }
 
     // insert note data to database
@@ -362,7 +362,7 @@ class GedcomParser
         $refn = $_note->getRefn(); // array
         $rin = $_note->getRin(); // string
         $sour = $_note->getSour(); // array
-        Noteged::updateOrCreate(compact('gid','note', 'rin'), compact('gid','note', 'rin'));
+        Note::updateOrCreate(compact('gid','note', 'rin'), compact('gid','note', 'rin'));
     }
 
     // insert repo data to database
@@ -390,7 +390,7 @@ class GedcomParser
             array_push($arr_phon, $__phon);
         }
         $phon = json_encode($arr_phon);
-        Repoged::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));     
+        Repository::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));     
     }
 
     // insert obje data to database
@@ -402,6 +402,6 @@ class GedcomParser
         $_rin = $_obje->getRin(); // string
         $_chan = $_obje->getChan(); // Chan
         $_file = $_obje->getFile(); // string
-        Objeged::updateOrCreate(compact('gid', 'form', 'titl', 'blob', 'rin', 'file'), compact('gid', 'form', 'titl', 'blob', 'rin', 'file'));
+        Object::updateOrCreate(compact('gid', 'form', 'titl', 'blob', 'rin', 'file'), compact('gid', 'form', 'titl', 'blob', 'rin', 'file'));
     }
 }
