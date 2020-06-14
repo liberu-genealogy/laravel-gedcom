@@ -14,6 +14,7 @@ use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use \App\Events\GedComProgressSent;
+
 class GedcomParser
 {
     /**
@@ -301,15 +302,35 @@ class GedcomParser
 
     // insert subm data to model
     private function getSubm($_subm){
-        $subm = $_subm->getSubm(); // string
-        $chan = $_subm->getChan(); // Record\Chan---
-        $name = $_subm->getName(); // string
-        $_addr = $_subm->getAddr(); // Record/Addr
-        $rin  = $_subm->getRin(); // string
-        $rfn  = $_subm->getRfn(); // string 
-        $_lang = $_subm->getLang(); // array
-        $_phon = $_subm->getPhon(); // array
-        $obje = $_subm->getObje(); // array ---
+        $subm = $_subm->getSubm() ?? 'Unknown'; // string
+        $chan = $_subm->getChan() ?? array('Unknown'); // Record\Chan---
+        $name = $_subm->getName() ?? 'Unknown'; // string
+        if ($_subm->getAddr() != NULL) // Record/Addr
+
+	{
+
+		 $addr = $_subm->getAddr();
+		 $addr->getAddr() ?? 'Unknown';
+		 $addr->getAdr1() ?? 'Unknown';
+		 $addr->getAdr2() ?? 'Unknown';
+		 $addr->getCity() ?? 'Unknown';
+		 $addr->getStae() ?? 'Unknown';
+		 $addr->getCtry() ?? 'Unknown';
+	}
+
+	else
+
+	{
+
+	$addr = NULL;
+
+	}
+
+        $rin  = $_subm->getRin() ?? 'Unknown'; // string
+        $rfn  = $_subm->getRfn() ?? 'Unknown'; // string 
+        $_lang = $_subm->getLang() ?? array('Unknown'); // array
+        $_phon = $_subm->getPhon() ?? array('Unknown'); // array
+        $obje = $_subm->getObje() ?? array('Unknown'); // array ---
 
         // create chan model - id, ref_type (subm), date, time
         // create note model - id, ref_type ( chan ), note
@@ -317,14 +338,35 @@ class GedcomParser
         // $arr_chan = array('date'=>$chan->getDate(), 'time'=>$chan->getTime());
         // create obje model - id, _isRef, _obje, _form, _titl, _file, _Note_a
 
-        $arr_addr = array(
-            'addr'=>$_addr->getAddr() ?: 'Unknown',
-            'adr1' => $_addr->getAdr1() ?: 'Unknown',
-            'adr2'=>$_addr->getAdr2() ?: 'Unknown',
-            'city'=>$_addr->getCity() ?: 'Unknown',
-            'stae'=>$_addr->getStae() ?: 'Unknown',
-            'ctry'=>$_addr->getCtry() ?: 'Unknown'
+
+
+        if ($addr != NULL)
+	{
+	$arr_addr = array(
+            'addr'=>$_addr->getAddr() ?? 'Unknown',
+            'adr1' => $_addr->getAdr1() ?? 'Unknown',
+            'adr2'=>$_addr->getAdr2() ?? 'Unknown',
+            'city'=>$_addr->getCity() ?? 'Unknown',
+            'stae'=>$_addr->getStae() ?? 'Unknown',
+            'ctry'=>$_addr->getCtry() ?? 'Unknown'
         );
+	}
+
+	else
+	{
+
+        $arr_addr = array(
+            'addr'=> 'Unknown',
+            'adr1' => 'Unknown',
+            'adr2'=> 'Unknown',
+            'city'=> 'Unknown',
+            'stae'=> 'Unknown',
+            'ctry'=> 'Unknown'
+        );
+
+	}
+
+
         $addr = json_encode($arr_addr);
         $lang = json_encode($_lang);
         $arr_phon = array();
