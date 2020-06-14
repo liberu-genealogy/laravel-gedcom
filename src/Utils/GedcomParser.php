@@ -318,12 +318,12 @@ class GedcomParser
         // create obje model - id, _isRef, _obje, _form, _titl, _file, _Note_a
 
         $arr_addr = array(
-            'addr'=>$_addr->getAddr(),
-            'adr1' => $_addr->getAdr1(),
-            'adr2'=>$_addr->getAdr2(),
-            'city'=>$_addr->getCity(),
-            'stae'=>$_addr->getStae(),
-            'ctry'=>$_addr->getCtry()
+            'addr'=>$_addr->getAddr() ?: 'Unknown',
+            'adr1' => $_addr->getAdr1() ?: 'Unknown',
+            'adr2'=>$_addr->getAdr2() ?: 'Unknown',
+            'city'=>$_addr->getCity() ?: 'Unknown',
+            'stae'=>$_addr->getStae() ?: 'Unknown',
+            'ctry'=>$_addr->getCtry() ?: 'Unknown'
         );
         $addr = json_encode($arr_addr);
         $lang = json_encode($_lang);
