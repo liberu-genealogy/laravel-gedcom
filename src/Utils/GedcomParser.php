@@ -63,7 +63,7 @@ class GedcomParser
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
-            event(new GedComProgressSent($slug, $total, $complete));
+            // event(new GedComProgressSent($slug, $total, $complete));
         }
 
         if($subn != null){
@@ -72,7 +72,7 @@ class GedcomParser
             if($progressBar === true){
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -82,7 +82,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -92,7 +92,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
         
@@ -102,7 +102,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -112,7 +112,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
         // store all the media objects that are contained within the GEDCOM file.
@@ -121,7 +121,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
         
@@ -130,7 +130,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -139,7 +139,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 

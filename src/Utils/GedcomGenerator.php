@@ -18,15 +18,27 @@ use \PhpGedcom\Gedcom;
 class GedcomGenerator
 {
     protected $family_id;
+    protected $p_id;
+    protected $up_nest;
+    protected $down_nest;
+    protected $arr_indi_id = array();
+    protected $arr_fam_id = array();
     protected $_gedcom = null;
-
-    public function __construct($family_id){
+    protected $log = "\n";
+    /**
+     * Constructor with family_id
+     */
+    public function __construct($p_id = 0, $family_id = 0, $up_nest =  0, $down_nest = 0){
         $this->family_id = $family_id;
+        $this->p_id = $p_id;
+        $this->up_nest = $up_nest;
+        $this->down_nest = $down_nest;
+        $this->arr_indi_id = array();
+        $this->arr_fam_id = array();
         $this->_gedcom = new Gedcom();
     }
 
-    
-    public function getGedcom(){
+    public function getGedcomFamily(){
         $this->setHead();
         $fam = $this->setFam($this->family_id);
         $writer = new \PhpGedcom\Writer();
@@ -34,6 +46,155 @@ class GedcomGenerator
         return $output;
     }
 
+    public function getGedcomPerson(){
+        $this->setHead();
+        $this->addUpData($this->p_id);
+        $writer = new \PhpGedcom\Writer();
+        $output = $writer->convert($this->_gedcom);
+        return $output;
+    }
+
+    public function addUpData($p_id, $nest = 0) {
+        if( empty($p_id) || $p_id < 1)
+            return;
+        if($this->up_nest < $nest){
+            return;    
+        }
+        
+        $person = Person::find($p_id);
+        if($person == null)
+            return;
+        
+        // add self to indi
+        if(!in_array($p_id, $this->arr_indi_id)){
+            array_push($this->arr_indi_id, $p_id);
+            $this->setIndi($p_id);
+        }else{
+            // already processed this person
+            return;
+        }
+
+        // process family ( partner, children )
+        $_families = Family::where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
+        foreach($_families as $item) {
+            // add family
+            $f_id = $item->id;
+            if(!in_array($f_id, $this->arr_fam_id)) {
+                array_push($this->arr_fam_id, $f_id);
+                $this->setFam($f_id);
+            }
+            
+            // add partner to indi
+            $husb_id = $item->husband_id;
+            $wife_id = $item->wife_id;
+            $this->log.=$nest." f_id=".$f_id."\n";
+            $this->log.=$nest." husb_id=".$husb_id."\n";
+            $this->log.=$nest." wife_id=".$wife_id."\n";
+            $this->addUpData($husb_id, $nest);
+            $this->addUpData($wife_id, $nest);
+
+            // add chidrent to indi
+            $children = Person::where('child_in_family_id', $f_id)->get();
+            foreach($children as $item2){
+                $child_id = $item2->id;
+                if(!in_array($child_id, $this->arr_indi_id)){
+                    array_push($this->arr_indi_id, $child_id);
+                    $this->setIndi($child_id);
+                }
+            }
+        }
+
+        $parent_family_id = $person->child_in_family_id;
+        $p_family = Family::find($parent_family_id);
+        
+        // there is not parent data.
+        if($p_family === null){
+            return;
+        }
+
+        // process brother
+        $brothers = Person::where('child_in_family_id', $parent_family_id)->get();
+        foreach($brothers as $item3){
+            $bro_id = $item3->id;
+            if(!in_array($bro_id, $this->arr_indi_id)){
+                array_push($this->arr_indi_id, $bro_id);
+                $this->setIndi($bro_id);
+            }
+        }
+
+        // process parent
+        $nest++;
+        $father_id = $p_family->husband_id;
+        $mother_id = $p_family->wife_id;
+        $this->addUpData($father_id, $nest);
+        $this->addUpData($mother_id, $nest);
+    }
+
+    public function addDownData($p_id, $nest = 0) {
+        if( empty($p_id) || $p_id < 1)
+            return;
+        if($this->down_nest < $nest){
+            return;    
+        }
+
+        $person = Person::find($p_id);
+        if($person == null)
+            return;
+        
+        // process self
+        if(!in_array($p_id, $this->arr_indi_id)){
+            // add to indi array
+            array_push($this->arr_indi_id, $p_id);
+            $this->setIndi($p_id);
+        }
+
+        $_families = Family::where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
+        foreach($_families as $item){
+            // add family
+            $f_id = $item->id;
+            if(!in_array($f_id, $this->arr_fam_id)) {
+                array_push($this->arr_fam_id, $f_id);
+                $this->setFam($f_id);
+            }
+            // process partner
+            $husband_id = $item->husband_id;
+            $wife_id = $item->wife_id;
+            $this->addDownData($husband_id, $nest);
+            $this->addDownData($wife_id, $nest);
+            
+            // process child
+            $children = Person::where('child_in_family_id', $item->id);
+            foreach($children as $item2){
+                $child_id = $item2->id;
+                $nest_next = $nest + 1;
+                $this->addDownData($child_id, $nest_next);
+            }
+        }
+
+        // process parent
+        $parent_family_id = $person->child_in_family_id;
+        $parent_family = Family::find($parent_family_id);
+        if($parent_family != null){
+            $father_id = $parent_family->husband_id;
+            $mother_id = $parent_family->wife_id;
+            if(!in_array($father_id, $this->arr_indi_id)){
+                array_push($this->arr_indi_id, $father_id);
+                $this->setIndi($father_id);
+            }
+            if(!in_array($mother_id, $this->arr_indi_id)){
+                array_push($this->arr_indi_id, $mother_id);
+                $this->setIndi($mother_id);
+            }
+        }
+        // process brother
+        $brothers = Person::where('child_in_family_id', $parent_family_id)->get();
+        foreach($brothers as $item3) {
+            $bro_id = $item3->id;
+            if(!in_array($bro_id, $this->arr_indi_id)) {
+                $this->addDownData($bro_id, $nest);
+            }
+        }
+    }
     protected function setHead(){
         $head = new \PhpGedcom\Record\Head();
         /**
@@ -104,6 +265,9 @@ class GedcomGenerator
     protected function setIndi($p_id, $f_id=null){
         $indi = new \PhpGedcom\Record\Indi();
         $person = Person::find($p_id);
+        if($person == null){
+            return;
+        }
         /**
          * @var string
          */
@@ -268,7 +432,7 @@ class GedcomGenerator
         $fam->setHusb($_husb);
 
         // add husb individual
-        $this->setIndi($_husb, $family_id);
+        // $this->setIndi($_husb, $family_id);
 
         /**
          *
@@ -277,7 +441,7 @@ class GedcomGenerator
         $fam->setWife($_wife);
 
         // add wife individual
-        $this->setIndi($_wife, $family_id);
+        // $this->setIndi($_wife, $family_id);
     
         /**
          *
@@ -291,7 +455,7 @@ class GedcomGenerator
         $_chil = Person::where('child_in_family_id', $family_id)->get();
         foreach($_chil as $item){
             $fam->addChil($item->id);
-            $this->setIndi($item->id);
+            // $this->setIndi($item->id);
         }
         
         /**
