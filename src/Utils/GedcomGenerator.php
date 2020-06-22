@@ -28,7 +28,7 @@ class GedcomGenerator
     
     public function getGedcom(){
         $this->setHead();
-        $this->setFam($this->family_id);
+        $fam = $this->setFam($this->family_id);
         $writer = new \PhpGedcom\Writer();
         $output = $writer->convert($this->_gedcom);
         return $output;
@@ -39,7 +39,9 @@ class GedcomGenerator
         /**
          * @var Head\Sour
          */
-        $sour = null;
+        $sour = new \PhpGedcom\Record\Head\Sour();
+        $sour->setSour(env('APP_NAME',''));
+        $sour->setVersion('1.0');
         $head->setSour($sour);
         /**
          * @var string
@@ -248,7 +250,9 @@ class GedcomGenerator
 
     protected function setFam($family_id){
         $famData = Family::where('id', $family_id)->first();
-        
+        if($famData == null){
+            return;
+        }
         $fam = new \PhpGedcom\Record\Fam();
         $_id = $famData->id;
         $fam->setId($_id);
@@ -418,6 +422,8 @@ class GedcomGenerator
             $obje = new \PhpGedcom\Record\ObjeRef();
             $fam->addObje($obje);
         }
+        $this->_gedcom->addFam($fam);
+        return $fam;
     }
 
     protected function setSubn(){
