@@ -112,13 +112,13 @@ class GedcomGenerator
             return;
         }
 
-        // process brother
-        $brothers = Person::where('child_in_family_id', $parent_family_id)->get();
-        foreach($brothers as $item3){
-            $bro_id = $item3->id;
-            if(!in_array($bro_id, $this->arr_indi_id)){
-                array_push($this->arr_indi_id, $bro_id);
-                $this->setIndi($bro_id);
+        // process siblings
+        $siblings = Person::where('child_in_family_id', $parent_family_id)->get();
+        foreach($siblings as $item3){
+            $sibling_id = $item3->id;
+            if(!in_array($sibling_id, $this->arr_indi_id)){
+                array_push($this->arr_indi_id, $sibling_id);
+                $this->setIndi($sibling_id);
             }
         }
 
@@ -186,12 +186,12 @@ class GedcomGenerator
                 $this->setIndi($mother_id);
             }
         }
-        // process brother
-        $brothers = Person::where('child_in_family_id', $parent_family_id)->get();
-        foreach($brothers as $item3) {
-            $bro_id = $item3->id;
-            if(!in_array($bro_id, $this->arr_indi_id)) {
-                $this->addDownData($bro_id, $nest);
+        // process siblings
+        $siblings = Person::where('child_in_family_id', $parent_family_id)->get();
+        foreach($siblings as $item3) {
+            $sibling_id = $item3->id;
+            if(!in_array($sibling_id, $this->arr_indi_id)) {
+                $this->addDownData($sibling_id, $nest);
             }
         }
     }
