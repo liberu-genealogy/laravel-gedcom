@@ -14,6 +14,7 @@ use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use \App\Events\GedComProgressSent;
+use Illuminate\Support\Facades\Log;
 
 class GedcomParser
 {
@@ -65,7 +66,13 @@ class GedcomParser
             $bar = $this->getProgressBar(count($individuals) + count($families));
             // event(new GedComProgressSent($slug, $total, $complete));
         }
-
+        Log::info('Individual:'.count($individuals));
+        Log::info('Families:'.count($families));
+        Log::info('Subn:'.$c_subn);
+        Log::info('Subm:'.$c_subm);
+        Log::info('Sour:'.$c_sour);
+        Log::info('Note:'.$c_note);
+        Log::info('Repo:'.$c_repo);
         if($subn != null){
             // store the submission information for the GEDCOM file.
             $this->getSubn($subn);
