@@ -431,14 +431,43 @@ class GedcomParser
         $_phon = $_repo->getPhon(); // array
         $refn = $_repo->getRefn(); // array --
         $note = $_repo->getNote(); // array --
-        $arr_addr = array(
-            'addr'=>$_addr->getAddr(),
-            'adr1' => $_addr->getAdr1(),
-            'adr2'=>$_addr->getAdr2(),
-            'city'=>$_addr->getCity(),
-            'stae'=>$_addr->getStae(),
-            'ctry'=>$_addr->getCtry()
-        );
+        
+        if ($_repo->getAddr() != NULL) // Record/Addr
+        {
+            $_addr = $_repo->getAddr();
+            $_addr->getAddr() ?? 'Unknown';
+            $_addr->getAdr1() ?? 'Unknown';
+            $_addr->getAdr2() ?? 'Unknown';
+            $_addr->getCity() ?? 'Unknown';
+            $_addr->getStae() ?? 'Unknown';
+            $_addr->getCtry() ?? 'Unknown';
+        }
+        else {
+            $_addr = NULL;
+        }
+
+
+        if ($_addr != NULL)
+        {
+            $arr_addr = array(
+                'addr'=>$addr->getAddr() ?? 'Unknown',
+                'adr1' => $addr->getAdr1() ?? 'Unknown',
+                'adr2'=>$addr->getAdr2() ?? 'Unknown',
+                'city'=>$addr->getCity() ?? 'Unknown',
+                'stae'=>$addr->getStae() ?? 'Unknown',
+                'ctry'=>$addr->getCtry() ?? 'Unknown'
+            );
+        } else {
+            $arr_addr = array(
+                'addr'=> 'Unknown',
+                'adr1' => 'Unknown',
+                'adr2'=> 'Unknown',
+                'city'=> 'Unknown',
+                'stae'=> 'Unknown',
+                'ctry'=> 'Unknown'
+            );
+        }
+
         $addr = json_encode($arr_addr);
         $arr_phon = array();
         foreach($_phon as $item){
