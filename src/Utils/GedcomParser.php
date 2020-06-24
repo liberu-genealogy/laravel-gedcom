@@ -6,7 +6,7 @@ use \App\Family;
 use \App\Person;
 use \App\Subn;
 use \App\Subm;
-use \App\Sources;
+use \App\Source;
 use \App\Note;
 use \App\Repository;
 use \App\MediaObject;
@@ -406,7 +406,7 @@ class GedcomParser
         $refn = $_sour->getRefn(); // array
         $note = $_sour->getNote(); // array
         $obje = $_sour->getObje(); // array
-        Sources::updateOrCreate(compact('sour', 'titl', 'auth', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'text', 'publ', 'abbr') );
+        Source::updateOrCreate(compact('sour', 'titl', 'auth', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'text', 'publ', 'abbr') );
     }
 
     // insert note data to database
