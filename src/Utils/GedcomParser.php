@@ -25,7 +25,7 @@ class GedcomParser
      * @var string
      */
     protected $persons_id = [];
-
+    protected $subm_ids = [];
     public function parse(string $filename, string $slug, bool $progressBar = false)
     {
         $parser = new \PhpGedcom\Parser();
@@ -73,19 +73,15 @@ class GedcomParser
         Log::info('Sour:'.$c_sour);
         Log::info('Note:'.$c_note);
         Log::info('Repo:'.$c_repo);
-        if($subn != null){
-            // store the submission information for the GEDCOM file.
-            $this->getSubn($subn);
-            if($progressBar === true){
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
 
         // store information about all the submitters to the GEDCOM file.
         foreach ($subm as $item){
-            $this->getSubm($item);
+            // $this->getSubm($item);
+            if($item) {
+                $_subm_id = $item->getSubm();
+                $subm_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Subm::read($item);
+                $this->subm_ids[$_subm_id] = $subm_id;
+            }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -93,9 +89,24 @@ class GedcomParser
             }
         }
 
+        if($subn != null){
+            // store the submission information for the GEDCOM file.
+            // $this->getSubn($subn);
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Subn::read($subn, $this->subm_ids);
+            if($progressBar === true){
+                $bar->advance();
+                $complete++;
+                event(new GedComProgressSent($slug, $total, $complete));
+            }
+        }
+
+
         // store sources cited throughout the GEDCOM file.
         foreach ($sour as $item){
-            $this->getSour($item);
+            // $this->getSour($item);
+            if($item) { 
+                \ModularSoftware\LaravelGedcom\Utils\Importer\Sour::read($item);
+            }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -105,7 +116,11 @@ class GedcomParser
         
         // store all the notes contained within the GEDCOM file that are not inline.
         foreach ($note as $item){
-            $this->getNote($item);
+            // $this->getNote($item);
+            if($item) {
+                \ModularSoftware\LaravelGedcom\Utils\Importer\Note::read($item);
+            }
+            
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -115,7 +130,10 @@ class GedcomParser
 
         // store all repositories that are contained within the GEDCOM file and referenced by sources.
         foreach ($repo as $item){
-            $this->getRepo($item);
+            // $this->getRepo($item);
+            if($item) { 
+                \ModularSoftware\LaravelGedcom\Utils\Importer\Repo::read($item);
+            }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -124,7 +142,10 @@ class GedcomParser
         }
         // store all the media objects that are contained within the GEDCOM file.
         foreach ($obje as $item){
-            $this->getObje($item);
+            // $this->getObje($item);
+            if($item) { 
+                \ModularSoftware\LaravelGedcom\Utils\Importer\Obje::read($item);
+            }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -161,25 +182,6 @@ class GedcomParser
             new StringInput(''),
             new StreamOutput(fopen('php://stdout', 'w'))
         ))->createProgressBar($max);
-    }
-
-    private function getDate($input_date)
-    {
-        if(is_object($input_date)){
-            if(method_exists($input_date, 'getDate')) {
-                return $input_date->getDate();
-            }
-        }else{
-            return "$input_date";
-        }
-    }
-
-    private function getPlace($place)
-    {
-        if (is_object($place)) {
-            $place = $place->getPlac();
-        }
-        return $place;
     }
 
     private function getPerson($individual)
@@ -343,26 +345,26 @@ class GedcomParser
         // string
         $chan = $family->getChan();
         $nchi = $family->getNchi();
+        $rin = $family->getRin();
 
         // array
+        $subm = $family->getSubm();
         $_slgs = $family->getSlgs();
-        $_subm = $family->getSubm();
-        $_refn = $family->getRefn();
-        $_rin = $family->getRin();
-        $_sour = $family->getSour();
-        $_obje = $family->getObje();
 
         $description = NULL;
         $type_id = 0;
         $children = $family->getChil();
         $events = $family->getAllEven();
         $_note = $family->getNote();
+        $_obje = $family->getObje();
+        $_sour = $family->getSour();
+        $_refn = $family->getRefn();
 
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
         $family = Family::updateOrCreate(compact('husband_id', 'wife_id'), 
-        compact('husband_id', 'wife_id', 'description', 'type_id' ,'chan', 'nchi'));
+        compact('husband_id', 'wife_id', 'description', 'type_id' ,'chan', 'nchi', 'rin'));
 
         if ($children !== null) {
             foreach ($children as $child) {
@@ -374,209 +376,57 @@ class GedcomParser
             }
         }
 
-        if ($events !== null) {
-            foreach ($events as $event) {
-                $date = $this->getDate($event->getDate());
-                $place = $this->getPlace($event->getPlac());
-                $family->addEvent($event->getType(), $date, $place);
+        if ($events !== null && count($events) > 0) {
+            foreach ($events as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Fam\Even::read($item, $family);
+                }
+                // $date = $this->getDate($item->getDate());
+                // $place = $this->getPlace($item->getPlac());
+                // $family->addEvent($item->getType(), $date, $place);
             };
         }
-
-        if($_note !== null) {
-            foreach($_note as $item){
-                $this->getNote($item, 'fam');
+        $_group = 'fam';
+        $_gid = $family->id;
+        if($_note != null && count($_note) > 0) {
+            foreach($_note as $item) {
+                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($item, $_group, $_gid);
             }
         }
-    }
-
-    private function getSubn($subn){
-        $subm = $subn->getSubm();
-        $famf = $subn->getFamf();
-        $temp = $subn->getTemp();
-        $ance = $subn->getAnce();
-        $desc = $subn->getDesc();
-        $ordi = $subn->getOrdi();
-        $rin = $subn->getRin();
-        $_subn = Subn::updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
-    }
-
-    // insert subm data to model
-    private function getSubm($_subm){
-        $subm = $_subm->getSubm() ?? 'Unknown'; // string
-        $chan = $_subm->getChan() ?? array('Unknown'); // Record\Chan---
-        $name = $_subm->getName() ?? 'Unknown'; // string
-        if ($_subm->getAddr() != NULL) // Record/Addr
-        {
-            $addr = $_subm->getAddr();
-            $addr->getAddr() ?? 'Unknown';
-            $addr->getAdr1() ?? 'Unknown';
-            $addr->getAdr2() ?? 'Unknown';
-            $addr->getCity() ?? 'Unknown';
-            $addr->getStae() ?? 'Unknown';
-            $addr->getCtry() ?? 'Unknown';
+        if($_obje && count($_obje) > 0) {
+            foreach($_obje as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($item, $_group, $_gid);
+                }
+            }
         }
-        else {
-            $addr = NULL;
+        if($_refn && count($_refn) > 0) {
+            foreach($_refn as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Refn::read($item, $_group, $_gid);
+                }
+            }
         }
-
-        $rin  = $_subm->getRin() ?? 'Unknown'; // string
-        $rfn  = $_subm->getRfn() ?? 'Unknown'; // string 
-        $_lang = $_subm->getLang() ?? array('Unknown'); // array
-        $_phon = $_subm->getPhon() ?? array('Unknown'); // array
-        $obje = $_subm->getObje() ?? array('Unknown'); // array ---
-
-        // create chan model - id, ref_type (subm), date, time
-        // create note model - id, ref_type ( chan ), note
-        // create sour model - id, ref_type ( note), sour, Chan, titl, auth, data, text, publ, Repo, abbr, rin, refn_a, Note_a, Obje_a
-        // $arr_chan = array('date'=>$chan->getDate(), 'time'=>$chan->getTime());
-        // create obje model - id, _isRef, _obje, _form, _titl, _file, _Note_a
-
-        if ($addr != NULL)
-        {
-            $arr_addr = array(
-                'addr'=>$addr->getAddr() ?? 'Unknown',
-                'adr1' => $addr->getAdr1() ?? 'Unknown',
-                'adr2'=>$addr->getAdr2() ?? 'Unknown',
-                'city'=>$addr->getCity() ?? 'Unknown',
-                'stae'=>$addr->getStae() ?? 'Unknown',
-                'ctry'=>$addr->getCtry() ?? 'Unknown'
-            );
-        } else {
-            $arr_addr = array(
-                'addr'=> 'Unknown',
-                'adr1' => 'Unknown',
-                'adr2'=> 'Unknown',
-                'city'=> 'Unknown',
-                'stae'=> 'Unknown',
-                'ctry'=> 'Unknown'
-            );
+        if($_sour && count($_sour) > 0) {
+            foreach($_sour as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($item, $_group, $_gid);
+                }
+            }
         }
-        $addr = json_encode($arr_addr);
-        $lang = json_encode($_lang);
-        $arr_phon = array();
-        foreach($_phon as $item){
-            $__phon = $item->getPhon();
-            array_push($arr_phon, $__phon);
+        if($_slgs && count($_slgs) > 0) {
+            foreach($_slgs as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Fam\Slgs::read($item, $family);
+                }
+            }
         }
-        $phon = json_encode($arr_phon);
-        Subm::updateOrCreate(compact('subm', 'name','addr','rin','rfn','lang','phon'), compact('subm', 'name','addr','rin','rfn','lang','phon'));
-    }
-    // insert sour data to database
-    private function getSour($_sour){
-        $sour = $_sour->getSour(); // string
-        $chan = $_sour->getChan(); // Record/Chan
-        $titl = $_sour->getTitl(); // string
-        $auth = $_sour->getAuth(); // string
-        $data = $_sour->getData(); // object
-        $text = $_sour->getText(); // string
-        $publ = $_sour->getPubl(); // string
-        $repo = $_sour->getRepo(); // Repo
-        $abbr = $_sour->getAbbr(); // string
-        $rin = $_sour->getRin(); // string
-        $refn = $_sour->getRefn(); // array
-        $note = $_sour->getNote(); // array
-        $obje = $_sour->getObje(); // array
-        Source::updateOrCreate(compact('sour', 'titl', 'auth', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'text', 'publ', 'abbr') );
-    }
-
-    // insert note data to database
-    private function getNote($_note, $group='', $gid=0){
-        // $gid = $_note->getId(); // string
-        // $note = $_note->getNote(); // string
-        // $chan = $_note->getChan(); // string ? 
-        // $even = $_note->getEven(); // string ? 
-        // $refn = $_note->getRefn(); // array
-        // $rin = $_note->getRin(); // string
-        // $sour = $_note->getSour(); // array
-        // Note::updateOrCreate(compact('gid','note', 'rin','group'), compact('gid','note', 'rin','group'));
-    }
-
-    // insert repo data to database
-    private function getRepo($_repo){
-        $repo = $_repo->getRepo(); // string 
-        $name = $_repo->getName(); // string
-        $_addr = $_repo->getAddr(); // Record/Addr
-        $rin = $_repo->getRin(); // string
-        $chan = $_repo->getChan(); // Record / Chan -- 
-        $_phon = $_repo->getPhon(); // array
-        $refn = $_repo->getRefn(); // array --
-        $note = $_repo->getNote(); // array --
-        
-        if ($_repo->getAddr() != NULL) // Record/Addr
-        {
-            $_addr = $_repo->getAddr();
-            $_addr->getAddr() ?? 'Unknown';
-            $_addr->getAdr1() ?? 'Unknown';
-            $_addr->getAdr2() ?? 'Unknown';
-            $_addr->getCity() ?? 'Unknown';
-            $_addr->getStae() ?? 'Unknown';
-            $_addr->getCtry() ?? 'Unknown';
+        if($subm && count($subm) > 0) {
+            foreach($subm as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Subm::read($item, $_group, $_gid);
+                }
+            }
         }
-        else {
-            $_addr = NULL;
-        }
-
-
-        if ($_addr != NULL)
-        {
-            $arr_addr = array(
-                'addr'=>$addr->getAddr() ?? 'Unknown',
-                'adr1' => $addr->getAdr1() ?? 'Unknown',
-                'adr2'=>$addr->getAdr2() ?? 'Unknown',
-                'city'=>$addr->getCity() ?? 'Unknown',
-                'stae'=>$addr->getStae() ?? 'Unknown',
-                'ctry'=>$addr->getCtry() ?? 'Unknown'
-            );
-        } else {
-            $arr_addr = array(
-                'addr'=> 'Unknown',
-                'adr1' => 'Unknown',
-                'adr2'=> 'Unknown',
-                'city'=> 'Unknown',
-                'stae'=> 'Unknown',
-                'ctry'=> 'Unknown'
-            );
-        }
-
-        $addr = json_encode($arr_addr);
-        $arr_phon = array();
-        foreach($_phon as $item){
-            $__phon = $item->getPhon();
-            array_push($arr_phon, $__phon);
-        }
-        $phon = json_encode($arr_phon);
-        Repository::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));     
-    }
-
-
-    // insert obje data to database
-    private function getObje($_obje){
-        $gid = $_obje->getId(); // string
-        $_form = $_obje->getForm(); // string
-        $_titl = $_obje->getTitl(); // string
-        $_blob = $_obje->getBlob(); // string
-        $_rin = $_obje->getRin(); // string
-        $_chan = $_obje->getChan(); // Chan
-        $_file = $_obje->getFile(); // string
-        MediaObject::updateOrCreate(compact('gid', 'form', 'titl', 'blob', 'rin', 'file'), compact('gid', 'form', 'titl', 'blob', 'rin', 'file'));
-    }
-
-    // insert sourref object
-    private function getSourRef($sourref, $group='') {
-        $sour = $sourref->getSour();
-        $text = $sourref->getText();
-        $quay = $sourref->getQuay();
-        $page = $sourref->getPage();
-
-        // object
-        $even = $sourref->getEven();
-        $data = $sourref->getData();
-
-        // array
-        $obje = $sourref->getObje();
-        $note = $sourref->getNote();
-
-        // create or update Sourref
-
     }
 }

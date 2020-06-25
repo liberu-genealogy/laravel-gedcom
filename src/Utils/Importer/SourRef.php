@@ -37,7 +37,7 @@ class SourRef
         ];
         $record = Source::updateOrCreate($key, $data);
 
-        $_group = 'source';
+        $_group = 'sourref';
         $_gid = $record->id;
         // store Note
         $notes = $sourref->getNote();

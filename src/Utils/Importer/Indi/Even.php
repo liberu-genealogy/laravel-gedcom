@@ -25,6 +25,8 @@ class Even
 
         $_phon = $even->getPhon();
         $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($_phon);
+        $_addr = $even->getAddr();
+        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($_addr);
 
         $caus = $even->getCaus();
         $age = $even->getAge();
@@ -137,6 +139,7 @@ class Even
             'attr' => $attr, //
             'date' => $date,
             'plac' => $plac, //
+            'addr_id' => $addr_id, //
             'phon' => $phon, //
             'caus' => $caus, //
             'age'  => $age, //
@@ -184,13 +187,11 @@ class Even
             }
         }
         // object
-        $_chan = $even->getChan();
-        if($_chan) {
-            $chan = \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($_chan, $_group, $_gid);
+        $_chan = $even->getChan() ?? null;
+        if($_chan !== null) {
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($_chan, $_group, $_gid);
         }
 
-        $_addr = $even->getAddr();
-        // $addr = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($_addr, $_group, $_gid);
 
         // $_type = $even->getType();
         // $person->addEvent($_type, $date, $plac);

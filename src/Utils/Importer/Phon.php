@@ -20,9 +20,7 @@ class Phon
         }else{
             if(is_array($phon)){
                 $ret = '';
-                foreach($phon as $item) {
-                    $ret.="/".$item;
-                }
+                $ret = json_encode($phon);
                 return $ret;
             }else{
                 return "$phon";

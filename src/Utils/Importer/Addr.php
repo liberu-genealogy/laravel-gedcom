@@ -1,7 +1,7 @@
 <?php
 
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
-use \App\Address;
+use \App\Addr as MAddr;
 class Addr
 {
     /**
@@ -11,15 +11,34 @@ class Addr
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Addr $addr, $group='', $group_id=0)
+    public static function read($addr)
     {
-        $_refn = $refn->getRefn();
-        $type = $refn->getType();
-        // store refn
-        $key = ['group'=>$group,'gid'=>$group_id, 'refn'=>$_refn, 'type'=>$type];
-        $data = ['group'=>$group,'gid'=>$group_id, 'refn'=>$_refn, 'type'=>$type];
-        $record = MRefn::updateOrCreate($key, $data);
+        $id = null;
+        if($addr == null) {
+            return $id;
+        }
+        $adr1 = $addr->getAdr1();
+        $adr2 = $addr->getAdr2();
+        $city = $addr->getCity();
+        $stae = $addr->getStae();
+        $post = $addr->getPost();
+        $ctry = $addr->getCtry();
 
-        return;
+        $addr = MAddr::where([
+            ['adr1','=', $adr1],
+            ['adr2','=', $adr2],
+            ['city','=', $city],
+
+            ['stae','=', $stae],
+            ['post','=', $post],
+            ['ctry','=', $ctry],
+            ])->first();
+        if($addr !== null) {
+            $id = $addr->id;
+        }else {
+            $addr = MAddr::create(compact('adr1','adr2','city','stae','post','ctry'));
+            $id = $addr->id;
+        }
+        return $id;
     }
 }
