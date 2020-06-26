@@ -23,7 +23,6 @@ class Sour
         $publ = $sour->getPubl(); // string
         $abbr = $sour->getAbbr(); // string
 
-        $sour = $sour->getSour(); // string id
 
         $record = Source::updateOrCreate(compact('titl','rin', 'auth', 'text', 'publ', 'abbr'), 
         compact('titl', 'rin', 'auth', 'text', 'publ', 'abbr') );
@@ -67,6 +66,9 @@ class Sour
                 }
             }
         }
+
+        $sour = $sour->getSour(); // string id
+
 
         return ;
     }
