@@ -40,7 +40,7 @@ class RepoRef
         }
 
         // store Caln
-        $caln = $reporef->getData();
+        $caln = $reporef->getCaln();
         if($caln && count($caln) > 0) {
             foreach($caln as $item) {
                 if($item) {
