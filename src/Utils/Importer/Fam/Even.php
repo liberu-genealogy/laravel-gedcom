@@ -11,7 +11,7 @@ class Even
      * @var string
      */
 
-    public static function read($even, $fam)
+    public static function read($conn, $even, $fam)
     {
         if($even == null || $fam === null) {
             return;
@@ -20,16 +20,16 @@ class Even
 
         $type = $even->getType();
         $_date = $even->getDate();
-        $date = \ModularSoftware\LaravelGedcom\Utils\Importer\Date::read($_date);
+        $date = \ModularSoftware\LaravelGedcom\Utils\Importer\Date::read($conn, $_date);
         $_plac = $even->getPlac();
-        $plac = \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Even\Plac::read($_plac);
+        $plac = \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Even\Plac::read($conn, $_plac);
 
 
         $_phon = $even->getPhon();
-        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($_phon);
+        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($conn, $_phon);
 
         $_addr = $even->getAddr();
-        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($_addr);
+        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($conn,$_addr);
 
         $caus = $even->getCaus();
         $age = $even->getAge();
@@ -43,7 +43,7 @@ class Even
         // update husb age
         $_husb = $even->getHusb();
         if($_husb) {
-            $husb = Person::find($husb_id);
+            $husb = Person::on($conn)->find($husb_id);
             if($husb) {
                 $husb->age = $_husb->getAge();
                 $husb->save();
@@ -53,7 +53,7 @@ class Even
         // update wife age
         $_wife = $even->getWife();
         if($_wife) {
-            $wife = Person::find($wife_id);
+            $wife = Person::on($conn)->find($wife_id);
             if($wife) {
                 $wife->age = $_wife->getAge();
                 $wife->save();
@@ -116,7 +116,7 @@ class Even
             'husb' => $husb_id, //
             'wife' => $wife_id, //
         ];
-        $record = FamilyEvent::updateOrCreate($key, $data);
+        $record = FamilyEvent::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'fam_even';
         $_gid = $record->id;
@@ -126,7 +126,7 @@ class Even
         if($sour && count($sour) > 0) {
             foreach($sour as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }
@@ -134,14 +134,14 @@ class Even
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }
         $notes = $even->getNote();
         if($notes && count($notes) > 0) { 
             foreach($notes as $item) { 
-                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($item, $_group, $_gid);
+                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
 

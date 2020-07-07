@@ -11,7 +11,7 @@ class Addr
      * 
      */
 
-    public static function read($addr)
+    public static function read($conn, $addr)
     {
         $id = null;
         if($addr == null) {
@@ -24,7 +24,7 @@ class Addr
         $post = $addr->getPost();
         $ctry = $addr->getCtry();
 
-        $addr = MAddr::where([
+        $addr = MAddr::on($conn)->where([
             ['adr1','=', $adr1],
             ['adr2','=', $adr2],
             ['city','=', $city],
@@ -36,7 +36,7 @@ class Addr
         if($addr !== null) {
             $id = $addr->id;
         }else {
-            $addr = MAddr::create(compact('adr1','adr2','city','stae','post','ctry'));
+            $addr = MAddr::on($conn)->create(compact('adr1','adr2','city','stae','post','ctry'));
             $id = $addr->id;
         }
         return $id;

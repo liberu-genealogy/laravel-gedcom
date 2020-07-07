@@ -11,7 +11,7 @@ class Slgs
      * @var string
      */
 
-    public static function read($slgs, $fam)
+    public static function read($conn, $slgs, $fam)
     {
         if($slgs == null || $fam === null) {
             return;
@@ -38,7 +38,7 @@ class Slgs
             'temp' => $temp,
         ];
 
-        $record = FamilySlgs::updateOrCreate($key, $data);
+        $record = FamilySlgs::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'fam_slgs';
         $_gid = $record->id;
@@ -48,7 +48,7 @@ class Slgs
         if($sour && count($sour) > 0) {
             foreach($sour as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }
@@ -56,7 +56,7 @@ class Slgs
         $note = $slgs->getNote();
         if($note && count($note) > 0) { 
             foreach($note as $item) { 
-                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($item, $_group, $_gid);
+                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
         return;

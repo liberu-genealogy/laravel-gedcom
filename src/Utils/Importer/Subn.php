@@ -11,7 +11,7 @@ class Subn
      * 
      */
 
-    public static function read($subn, $subm_ids)
+    public static function read($conn,$subn, $subm_ids)
     {
         if($subn == null || is_array($subn)) {
             return ;
@@ -27,7 +27,7 @@ class Subn
         $desc = $subn->getDesc();
         $ordi = $subn->getOrdi();
         $rin = $subn->getRin();
-        $_subn = MSubn::updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
+        $_subn = MSubn::on($conn)->updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
         return ;
     }
 }

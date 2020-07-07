@@ -11,7 +11,7 @@ class Plac
      * @var string
      */
 
-    public static function read($place)
+    public static function read($conn, $place)
     {
         if (is_object($place)) {
             $place = $place->getPlac();

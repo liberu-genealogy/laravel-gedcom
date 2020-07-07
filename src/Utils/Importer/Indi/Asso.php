@@ -12,7 +12,7 @@ class Asso
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Indi\Asso $asso, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\Indi\Asso $asso, $group='', $group_id=0)
     {
         $indi = $group_id;
         $rela = $asso->getRela();
@@ -20,7 +20,7 @@ class Asso
         // store asso 
         $key = ['group'=>$group,'gid'=>$group_id, 'rela'=>$rela];
         $data = ['group'=>$group,'gid'=>$group_id, 'rela'=>$rela];
-        $record = PersonAsso::updateOrCreate($key, $data);
+        $record = PersonAsso::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'indi_asso';
         $_gid = $record->id;
@@ -29,7 +29,7 @@ class Asso
         if($note && count($note) > 0) {
             foreach($note as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }
@@ -39,7 +39,7 @@ class Asso
         if($sour && count($sour) > 0) {
             foreach($sour as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }

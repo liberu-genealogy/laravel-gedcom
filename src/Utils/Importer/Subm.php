@@ -11,7 +11,7 @@ class Subm
      * 
      */
 
-    public static function read($subm, $group=null, $gid= null)
+    public static function read($conn,$subm, $group=null, $gid= null)
     {
         if($subm == null || is_array($subm)) {
             return ;
@@ -22,9 +22,9 @@ class Subm
             $name = $subm;
         }
         $addr = $subm->getAddr() ?? null;
-        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($addr);
+        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($conn,$addr);
         $_phon = $subm->getPhon() ?? null; // array
-        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($_phon);
+        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($conn,$_phon);
         $rin  = $subm->getRin() ?? null; // string
         $rfn  = $subm->getRfn() ?? null; // string 
 
@@ -49,7 +49,7 @@ class Subm
             'rfn' => $rfn,
             'lang' => $lang,
         ];
-        $record = MSubm::updateOrCreate($key, $data);
+        $record = MSubm::on($conn)->updateOrCreate($key, $data);
         $_group = 'subm';
         $_gid = $record->id;
 
@@ -57,20 +57,20 @@ class Subm
 
         if($note != null && count($note) > 0) {
             foreach($note as $item) {
-                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($item, $_group, $_gid);
+                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
         $obje = $subm->getObje() ?? null;  // array ---
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }
         $chan = $subm->getChan() ?? null; // Record\Chan---
         if($chan !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($chan, $_group, $_gid);
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
         }
         return ;
     }

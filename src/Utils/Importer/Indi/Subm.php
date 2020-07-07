@@ -12,11 +12,11 @@ class Subm
      * 
      */
 
-    public static function read(string $subm, $group='', $group_id=0)
+    public static function read($conn,string $subm, $group='', $group_id=0)
     {
         // store alia 
         $key = ['group'=>$group,'gid'=>$group_id, 'subm'=>$subm];
         $data = ['group'=>$group,'gid'=>$group_id, 'subm'=>$subm];
-        $record = PersonSubm::updateOrCreate($key, $data);
+        $record = PersonSubm::on($conn)->updateOrCreate($key, $data);
     }
 }

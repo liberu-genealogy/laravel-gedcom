@@ -12,11 +12,11 @@ class Alia
      * 
      */
 
-    public static function read(string $alia, $group='', $group_id=0)
+    public static function read($conn,string $alia, $group='', $group_id=0)
     {
         // store alia 
         $key = ['group'=>$group,'gid'=>$group_id, 'alia'=>$alia];
         $data = ['group'=>$group,'gid'=>$group_id, 'alia'=>$alia];
-        $record = PersonAlia::updateOrCreate($key, $data);
+        $record = PersonAlia::on($conn)->updateOrCreate($key, $data);
     }
 }

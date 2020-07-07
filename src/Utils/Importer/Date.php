@@ -11,7 +11,7 @@ class Date
      * @var string
      */
 
-    public static function read($input_date)
+    public static function read($conn, $input_date)
     {
         if(is_object($input_date)){
             if(method_exists($input_date, 'getDate')) {

@@ -15,7 +15,7 @@ class SourRef
      * 
      */
 
-    public static function read(\PhpGedcom\Record\SourRef $sourref, $group='', $group_id=0)
+    public static function read($conn, \PhpGedcom\Record\SourRef $sourref, $group='', $group_id=0)
     {
         if($sourref == null) {
             return;
@@ -35,7 +35,7 @@ class SourRef
             'quay'=>$quay,
             'page'=>$page,
         ];
-        $record = Source::updateOrCreate($key, $data);
+        $record = Source::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'sourref';
         $_gid = $record->id;
@@ -43,20 +43,20 @@ class SourRef
         $notes = $sourref->getNote();
         if($notes && count($notes) > 0) { 
             foreach($notes as $item) { 
-                NoteRef::read($item, $_group, $_gid);
+                NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
 
         // store Data
         $data = $sourref->getData();
         if($data) {
-            Data::read($data,  $_group, $_gid);
+            Data::read($conn, $data,  $_group, $_gid);
         }
 
         // store \PhpGedcom\Record\SourRef\Even
         $even = $sourref->getEven();
         if($even) {
-            Even::read($even, $_group, $_gid);
+            Even::read($conn, $even, $_group, $_gid);
         }
 
         return;

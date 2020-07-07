@@ -11,7 +11,7 @@ class Caln
      * 
      */
 
-    public static function read($caln, $group=null, $gid=null)
+    public static function read($conn,$caln, $group=null, $gid=null)
     {
         if($caln == null || is_array($caln)) {
             return;
@@ -29,7 +29,7 @@ class Caln
             'gid'=>$gid,
             'medi'=>$medi,
         ];
-        $_caln = MCaln::updateOrCreate($key, $data);
+        $_caln = MCaln::on($conn)->updateOrCreate($key, $data);
         
         return;
     }

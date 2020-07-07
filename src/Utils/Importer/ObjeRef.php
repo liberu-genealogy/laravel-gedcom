@@ -13,7 +13,7 @@ class ObjeRef
      * 
      */
 
-    public static function read(\PhpGedcom\Record\ObjeRef $objeref, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\ObjeRef $objeref, $group='', $group_id=0)
     {
         if($objeref == null) {
             return;
@@ -31,7 +31,7 @@ class ObjeRef
             'file'=>$file,
             'form'=>$form,
         ];
-        $record = MediaObject::updateOrCreate($key, $data);
+        $record = MediaObject::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'objeref';
         $_gid = $record->id;
@@ -39,7 +39,7 @@ class ObjeRef
         $notes = $objeref->getNote();
         if($notes && count($notes) > 0) { 
             foreach($notes as $item) { 
-                NoteRef::read($item, $_group, $_gid);
+                NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
         return;

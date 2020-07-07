@@ -14,7 +14,7 @@ class RepoRef
      * 
      */
 
-    public static function read(\PhpGedcom\Record\RepoRef $reporef, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\RepoRef $reporef, $group='', $group_id=0)
     {
         if($reporef == null) {
             return;
@@ -27,7 +27,7 @@ class RepoRef
             'gid'=>$group_id,
             'repo'=>$repo,
         ];
-        $record = Repository::updateOrCreate($key, $data);
+        $record = Repository::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'reporef';
         $_gid = $record->id;
@@ -35,7 +35,7 @@ class RepoRef
         $notes = $reporef->getNote();
         if($notes && count($notes) > 0) { 
             foreach($notes as $item) { 
-                NoteRef::read($item, $_group, $_gid);
+                NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
 
@@ -44,7 +44,7 @@ class RepoRef
         if($caln && count($caln) > 0) {
             foreach($caln as $item) {
                 if($item) {
-                    Caln::read($item, $_group, $_gid);
+                    Caln::read($conn,$item, $_group, $_gid);
                 }
             }
         }

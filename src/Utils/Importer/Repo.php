@@ -15,7 +15,7 @@ class Repo
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Repo $repo, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\Repo $repo, $group='', $group_id=0)
     {
         if($repo == null) {
             return;
@@ -23,9 +23,9 @@ class Repo
         $name = $repo->getName(); // string
         $rin = $repo->getRin(); // string
         $addr = $repo->getAddr(); // Record/Addr
-        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($addr);
+        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($conn,$addr);
         $_phon = $repo->getPhon(); // Record/Phon array
-        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($_phon);
+        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($conn,$_phon);
         
         // store Source
         $key = [
@@ -45,7 +45,7 @@ class Repo
             'phon' => $phon,
         ];
 
-        $record = Repository::updateOrCreate($key, $data);
+        $record = Repository::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'repo';
         $_gid = $record->id;
@@ -53,19 +53,19 @@ class Repo
         $note = $repo->getNote(); // Record/NoteRef array
         if($note && count($note) > 0) { 
             foreach($note as $item) { 
-                NoteRef::read($item, $_group, $_gid);
+                NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
         $refn = $repo->getRefn(); // Record/Refn array
         if($refn && count($refn) > 0) { 
             foreach($refn as $item) { 
-                Refn::read($item, $_group, $_gid);
+                Refn::read($conn,$item, $_group, $_gid);
             }
         }
 
         $chan = $repo->getChan(); // Recore/Chan 
         if($chan !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($chan, $_group, $_gid);
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
         }
         return;
     }

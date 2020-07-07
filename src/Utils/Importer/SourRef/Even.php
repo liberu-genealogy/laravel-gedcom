@@ -11,7 +11,7 @@ class Even
      * 
      */
 
-    public static function read(\PhpGedcom\Record\SourRef\Even $even, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\SourRef\Even $even, $group='', $group_id=0)
     {
         $_even = $even->getEven();
         $role = $even->getRole();
@@ -19,7 +19,7 @@ class Even
         // store Even of source/data
         $key = ['group'=>$group,'gid'=>$group_id, 'even'=>$_even, 'role'=>$role];
         $data = ['group'=>$group,'gid'=>$group_id, 'even'=>$_even, 'role'=>$role];
-        $record = SourceRefEven::updateOrCreate($key, $data);
+        $record = SourceRefEven::on($conn)->updateOrCreate($key, $data);
 
         return;
     }

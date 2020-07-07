@@ -12,11 +12,11 @@ class Desi
      * 
      */
 
-    public static function read(string $desi, $group='', $group_id=0)
+    public static function read($conn,string $desi, $group='', $group_id=0)
     {
         // store alia 
         $key = ['group'=>$group,'gid'=>$group_id, 'desi'=>$desi];
         $data = ['group'=>$group,'gid'=>$group_id, 'desi'=>$desi];
-        $record = PersonDesi::updateOrCreate($key, $data);
+        $record = PersonDesi::on($conn)->updateOrCreate($key, $data);
     }
 }

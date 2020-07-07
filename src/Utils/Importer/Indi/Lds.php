@@ -13,7 +13,7 @@ class Lds
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Indi\Lds $lds, $group='', $group_id=0, $type='')
+    public static function read($conn,\PhpGedcom\Record\Indi\Lds $lds, $group='', $group_id=0, $type='')
     {
         $stat = $lds->getStat();
         $date = $lds->getDate();
@@ -45,7 +45,7 @@ class Lds
             'temp'=>$temp,
             'slgc_famc' =>$slgc_famc,
         ];
-        $record = PersonLds::updateOrCreate($key, $data);
+        $record = PersonLds::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'indi_lds';
         $_gid = $record->id;
@@ -54,7 +54,7 @@ class Lds
         if($sour && count($sour) > 0) {
             foreach($sour as $item) {
                 if($item) {
-                    SourRef::read($item, $_group, $_gid);
+                    SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }
@@ -64,7 +64,7 @@ class Lds
         if($note && count($note) > 0) {
             foreach($note as $item) {
                 if($item) {
-                    NoteRef::read($item, $_group, $_gid);
+                    NoteRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }

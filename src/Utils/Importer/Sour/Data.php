@@ -14,7 +14,7 @@ class Data
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Sour\Data $data, $group='', $group_id=0)
+    public static function read($conn, \PhpGedcom\Record\Sour\Data $data, $group='', $group_id=0)
     {
         $date = $data->getDate();
         $agnc = $data->getAgnc();
@@ -23,7 +23,7 @@ class Data
         // store Data of sources
         $key = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
         $data = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
-        $record = SourceData::updateOrCreate($key, $data);
+        $record = SourceData::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'sourcedata';
         $_gid = $record->id;
@@ -38,7 +38,7 @@ class Data
         $note = $data->getNote();
         if($note && count($note) > 0) {
             foreach($note as $item) {
-                NoteRef::read($item, $_group, $_gid);
+                NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
         return;

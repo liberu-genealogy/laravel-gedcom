@@ -12,7 +12,7 @@ class Even
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Sour\Data\Even $even, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\Sour\Data\Even $even, $group='', $group_id=0)
     {
         $date = $even->getDate();
         $plac = $even->getPlac();
@@ -20,7 +20,7 @@ class Even
         // store Even of source/data
         $key = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'plac'=>$plac];
         $data = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'plac'=>$plac];
-        $record = SourceDataEven::updateOrCreate($key, $data);
+        $record = SourceDataEven::on($conn)->updateOrCreate($key, $data);
 
         return;
     }

@@ -15,7 +15,7 @@ class Obje
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Obje $obje, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\Obje $obje, $group='', $group_id=0)
     {
         if($obje == null) {
             return;
@@ -48,7 +48,7 @@ class Obje
             'file' => $file,
         ];
 
-        $record = MediaObject::updateOrCreate($key, $data);
+        $record = MediaObject::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'obje';
         $_gid = $record->id;
@@ -56,7 +56,7 @@ class Obje
         $refn = $obje->getRefn(); // Record/Refn array
         if($refn && count($refn) > 0) { 
             foreach($refn as $item) { 
-                Refn::read($item, $_group, $_gid);
+                Refn::read($conn,$item, $_group, $_gid);
             }
         }
 
@@ -64,13 +64,13 @@ class Obje
         $note = $obje->getNote(); // Record/NoteRef array
         if($note && count($note) > 0) { 
             foreach($note as $item) { 
-                NoteRef::read($item, $_group, $_gid);
+                NoteRef::read($conn,$item, $_group, $_gid);
             }
         }
 
         $chan = $obje->getChan(); // Recore/Chan 
         if($chan !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($chan, $_group, $_gid);
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
         }
         return;
     }

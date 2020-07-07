@@ -12,7 +12,7 @@ class Chan
      * 
      */
 
-    public static function read(\PhpGedcom\Record\Chan $chan, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\Chan $chan, $group='', $group_id=0)
     {
 
         $date = $chan->getDate();
@@ -21,7 +21,7 @@ class Chan
         // store chan 
         $key = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'time'=>$time];
         $data = ['group'=>$group,'gid'=>$group_id,  'date'=>$date, 'time'=>$time];
-        $record = MChan::updateOrCreate($key, $data);
+        $record = MChan::on($conn)->updateOrCreate($key, $data);
 
         // store Sources of Note
         $_group = 'chan';
@@ -31,7 +31,7 @@ class Chan
         if($note && count($note) > 0){
             foreach($note as $item) {
                 if($item) {
-                    NoteRef::read($item, $_group, $_gid);
+                    NoteRef::read($conn,$item, $_group, $_gid);
                 }
             }
         }

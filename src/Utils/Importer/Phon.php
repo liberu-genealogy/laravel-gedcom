@@ -11,7 +11,7 @@ class Phon
      * @var string
      */
 
-    public static function read($phon)
+    public static function read($conn, $phon)
     {
         if(is_object($phon)){
             if(method_exists($phon, 'getPhon')) {
