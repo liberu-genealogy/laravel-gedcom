@@ -72,6 +72,6 @@ class Subm
         if($chan !== null) {
             \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
         }
-        return ;
+        return $_gid;
     }
 }

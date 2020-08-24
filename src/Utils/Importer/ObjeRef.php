@@ -16,11 +16,10 @@ class ObjeRef
     public static function read($conn,\PhpGedcom\Record\ObjeRef $objeref, $group='', $group_id=0)
     {
         if($objeref == null) {
-            return;
+            return ;
         }
         $titl = $objeref->getTitl();
         $file = $objeref->getFile();
-        $form = $objeref->getForm();
 
         // store MediaObject
         $key = ['group'=>$group,'gid'=>$group_id, 'titl'=>$titl, 'file'=>$file, 'form'=>$form];

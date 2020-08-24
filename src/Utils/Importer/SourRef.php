@@ -1,7 +1,7 @@
 <?php
 
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
-use \App\Source;
+use \App\SourceRef;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\Sour\Data;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef\Even;
@@ -15,27 +15,32 @@ class SourRef
      * 
      */
 
-    public static function read($conn, \PhpGedcom\Record\SourRef $sourref, $group='', $group_id=0)
+    public static function read($conn, \PhpGedcom\Record\SourRef $sourref, $group='', $group_id=0, $sour_ids)
     {
         if($sourref == null) {
             return;
         }
+
         $sour = $sourref->getSour();
+        if( !isset($sour_ids[$sour])) {
+            return;
+        }
+        $sour_id = $sour_ids[$sour];
         $text = $sourref->getText();
         $quay = $sourref->getQuay();
         $page = $sourref->getPage();
 
         // store Source
-        $key = ['group'=>$group,'gid'=>$group_id, 'note'=>$sour];
+        $key = ['group'=>$group,'gid'=>$group_id, 'sour_id'=>$sour_id];
         $data = [
             'group'=>$group,
             'gid'=>$group_id,
-            'sour'=>$sour,
+            'sour_id'=>$sour_id,
             'text'=>$text,
             'quay'=>$quay,
             'page'=>$page,
         ];
-        $record = Source::on($conn)->updateOrCreate($key, $data);
+        $record = SourceRef::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'sourref';
         $_gid = $record->id;

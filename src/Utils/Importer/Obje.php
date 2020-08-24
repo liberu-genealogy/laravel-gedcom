@@ -18,7 +18,7 @@ class Obje
     public static function read($conn,\PhpGedcom\Record\Obje $obje, $group='', $group_id=0)
     {
         if($obje == null) {
-            return;
+            return 0;
         }
 
         $form = $obje->getForm(); // string
@@ -72,6 +72,6 @@ class Obje
         if($chan !== null) {
             \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
         }
-        return;
+        return $_gid;
     }
 }

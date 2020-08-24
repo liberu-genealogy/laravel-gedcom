@@ -14,7 +14,7 @@ class Sour
     public static function read($conn,$sour)
     {
         if($sour == null || is_array($sour)) {
-            return ;
+            return 0;
         }
         $titl = $sour->getTitl(); // string
         $rin = $sour->getRin(); // string
@@ -70,6 +70,6 @@ class Sour
         $sour = $sour->getSour(); // string id
 
 
-        return ;
+        return $_gid;
     }
 }
