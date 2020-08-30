@@ -23,7 +23,6 @@ class Sour
         $publ = $sour->getPubl(); // string
         $abbr = $sour->getAbbr(); // string
 
-
         $record = Source::on($conn)->updateOrCreate(compact('titl','rin', 'auth', 'text', 'publ', 'abbr'), 
         compact('titl', 'rin', 'auth', 'text', 'publ', 'abbr') );
 

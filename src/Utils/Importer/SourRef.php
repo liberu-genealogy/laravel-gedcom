@@ -3,6 +3,7 @@
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
 use \App\SourceRef;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef;
+use \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\Sour\Data;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef\Even;
 
@@ -44,6 +45,14 @@ class SourRef
 
         $_group = 'sourref';
         $_gid = $record->id;
+        // store MediaObje
+        $objes = $sourref->getObje();
+        if($objes && count($objes) > 0) { 
+            foreach($objes as $item) { 
+                ObjeRef::read($conn, $item, $_group, $_gid);
+            }
+        }
+
         // store Note
         $notes = $sourref->getNote();
         if($notes && count($notes) > 0) { 

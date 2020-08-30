@@ -23,8 +23,12 @@ class Subm
         }
         $addr = $subm->getAddr() ?? null;
         $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($conn,$addr);
-        $_phon = $subm->getPhon() ?? null; // array
-        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($conn,$_phon);
+        $_phon = $subm->getPhon() ?? array(); // array
+        $phon = implode(",", $_phon);
+        $_email = $subm->getEmail() ?? array();
+        $email = implode(',', $_email);
+        $_fax = $subm->getFax() ?? array();
+        
         $rin  = $subm->getRin() ?? null; // string
         $rfn  = $subm->getRfn() ?? null; // string 
 

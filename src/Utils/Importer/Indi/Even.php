@@ -13,10 +13,7 @@ class Even
 
     public static function read($conn, $even, $person)
     {
-        $class_name = get_class($even); // example return: PhpGedcom\Record\Indi\Birt
-        $path = explode('\\', $class_name); // explode: ['PhpGedcom\Record\Indi\','Birt']
-        $class_name = array_pop($path); // Birt
-
+        $class_name = get_class($even);
         $person_id = $person->id;
         $type = $even->getType();
         $attr = $even->getAttr();
@@ -157,11 +154,11 @@ class Even
         $_gid = $record->id;
 
         // update person's record
-        if ($class_name == 'Birt' && ! empty($date)) {
+        if ($class_name == 'BIRT' && ! empty($date)) {
             $person->birthday = date('Y-m-d', strtotime($date));
         }
         // add deathyear to person table ( for form builder )
-        if ($class_name == 'Deat' && ! empty($date)) {
+        if ($class_name == 'DEAT' && ! empty($date)) {
             $person->deathday = date('Y-m-d', strtotime($date));
         }
         $person->save();

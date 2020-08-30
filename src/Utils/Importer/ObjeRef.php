@@ -3,7 +3,7 @@
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
 use \App\MediaObject;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef;
-
+use \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef\File;
 class ObjeRef
 {
     /**
@@ -18,6 +18,7 @@ class ObjeRef
         if($objeref == null) {
             return ;
         }
+        $obje_id = $objeref->getId();
         $titl = $objeref->getTitl();
         $file = $objeref->getFile();
 
@@ -26,9 +27,8 @@ class ObjeRef
         $data = [
             'group'=>$group,
             'gid'=>$group_id,
+            'obje_id'=>$obje_id,
             'titl'=>$titl,
-            'file'=>$file,
-            'form'=>$form,
         ];
         $record = MediaObject::on($conn)->updateOrCreate($key, $data);
 
@@ -39,6 +39,12 @@ class ObjeRef
         if($notes && count($notes) > 0) { 
             foreach($notes as $item) { 
                 NoteRef::read($conn,$item, $_group, $_gid);
+            }
+        }
+        $files = $objeref->getFile();
+        if($files && count($files) > 0) {
+            foreach($files as $item) {
+                File::read($conn, $item, $_group, $_gid);
             }
         }
         return;

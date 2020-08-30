@@ -21,31 +21,22 @@ class Obje
             return 0;
         }
 
-        $form = $obje->getForm(); // string
-        $titl = $obje->getTitl(); // string
-        $blob = $obje->getBlob(); // string
+        $id = $obje->getId();
         $rin = $obje->getRin(); // string
-        $file = $obje->getFile(); // string
 
 
         // store Object
         $key = [
             'group'=>$group,
             'gid'=>$group_id, 
-            'form' => $form,
             'rin' => $rin,
-            'titl' => $titl,
-            'blob' => $blob,
-            'file' => $file,
+            'obje_id' => $id,
         ];
         $data = [
             'group'=>$group,
             'gid'=>$group_id, 
-            'form' => $form,
             'rin' => $rin,
-            'titl' => $titl,
-            'blob' => $blob,
-            'file' => $file,
+            'obje_id' => $id,
         ];
 
         $record = MediaObject::on($conn)->updateOrCreate($key, $data);
@@ -68,6 +59,14 @@ class Obje
             }
         }
 
+        // store Note
+        $files = $obje->getFile(); // Record/NoteRef array
+        if($files && count($files) > 0) { 
+            foreach($files as $item) { 
+                \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef\File::read($conn,$item, $_group, $_gid);
+            }
+        }
+        
         $chan = $obje->getChan(); // Recore/Chan 
         if($chan !== null) {
             \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);

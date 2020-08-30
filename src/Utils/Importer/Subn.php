@@ -27,8 +27,22 @@ class Subn
         $desc = $subn->getDesc();
         $ordi = $subn->getOrdi();
         $rin = $subn->getRin();
-        $_subn = MSubn::on($conn)->updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
+        $record = MSubn::on($conn)->updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
         
+        $_group = 'subn';
+        $_gid = $record->id;
+
+        $note = $subn->getNote();  // array ---
+
+        if($note != null && count($note) > 0) {
+            foreach($note as $item) {
+                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn,$item, $_group, $_gid);
+            }
+        }
+        $chan = $subn->getChan() ?? null; // Record\Chan---
+        if($chan !== null) {
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
+        }
         return;
     }
 }
