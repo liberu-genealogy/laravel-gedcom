@@ -18,12 +18,12 @@ class Data
     {
         $date = $data->getDate();
         $agnc = $data->getAgnc();
-        $text = $data->getData();
+        $text = $data->getText();
 
         // store Data of sources
         $key = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
-        $data = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
-        $record = SourceData::on($conn)->updateOrCreate($key, $data);
+        $_data = ['group'=>$group,'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
+        $record = SourceData::on($conn)->updateOrCreate($key, $_data);
 
         $_group = 'sourcedata';
         $_gid = $record->id;
@@ -31,7 +31,7 @@ class Data
         $even = $data->getEven();
         if($even && count($even) > 0) {
             foreach($even as $item) {
-                Even::read($item, $_group, $_gid);
+                Even::read($conn, $item, $_group, $_gid);
             }
         }
         // \PhpGedcom\Record\NoteRef array

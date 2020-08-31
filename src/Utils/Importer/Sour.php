@@ -16,12 +16,12 @@ class Sour
         if($sour == null || is_array($sour)) {
             return 0;
         }
-        $titl = $sour->getTitl(); // string
-        $rin = $sour->getRin(); // string
         $auth = $sour->getAuth(); // string
-        $text = $sour->getText(); // string
-        $publ = $sour->getPubl(); // string
+        $titl = $sour->getTitl(); // string
         $abbr = $sour->getAbbr(); // string
+        $publ = $sour->getPubl(); // string
+        $rin = $sour->getRin(); // string
+        $text = $sour->getText(); // string
 
         $record = Source::on($conn)->updateOrCreate(compact('titl','rin', 'auth', 'text', 'publ', 'abbr'), 
         compact('titl', 'rin', 'auth', 'text', 'publ', 'abbr') );
@@ -35,7 +35,7 @@ class Sour
         }
         $repo = $sour->getRepo(); // Repo
         if($repo !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\RepoRef::read($conn,$repo, $_group, $_gid=0);
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Sour\Repo::read($conn,$repo, $_group, $_gid=0);
         }
         $data = $sour->getData(); // object
         if($data !== null) {

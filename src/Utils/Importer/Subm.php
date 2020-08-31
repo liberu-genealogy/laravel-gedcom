@@ -28,18 +28,25 @@ class Subm
         $_email = $subm->getEmail() ?? array();
         $email = implode(',', $_email);
         $_fax = $subm->getFax() ?? array();
-        
+        $fax = implode(',', $_fax);
+        $_www = $subm->getWww() ?? array();
+        $www = implode(',' , $_www);
+
         $rin  = $subm->getRin() ?? null; // string
         $rfn  = $subm->getRfn() ?? null; // string 
 
         $_lang = $subm->getLang(); // string array
-        $lang = json_encode($_lang);
+        $lang = implode(',',$_lang);
         $key = [
             'group' => $group,
             'gid' => $gid,
             'name' => $name,
             'addr_id' => $addr_id,
+            'lang' => $lang,
             'phon' => $phon,
+            'email' => $email,
+            'fax' => $fax,
+            'www' => $www,
             'rin'=>$rin,
             'rfn' => $rfn,
         ];
@@ -48,10 +55,13 @@ class Subm
             'gid' => $gid,
             'name' => $name,
             'addr_id' => $addr_id,
+            'lang' => $lang,
             'phon' => $phon,
+            'email' => $email,
+            'fax' => $fax,
+            'www' => $www,
             'rin'=>$rin,
             'rfn' => $rfn,
-            'lang' => $lang,
         ];
         $record = MSubm::on($conn)->updateOrCreate($key, $data);
         $_group = 'subm';

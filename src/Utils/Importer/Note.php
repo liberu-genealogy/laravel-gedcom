@@ -48,6 +48,6 @@ class Note
         if($chan !== null){
             Chan::read($conn,$chan, $_group, $_gid);
         }
-        return;
+        return $_gid;
     }
 }

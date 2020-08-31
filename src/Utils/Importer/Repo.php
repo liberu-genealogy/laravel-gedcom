@@ -25,8 +25,13 @@ class Repo
         $addr = $repo->getAddr(); // Record/Addr
         $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($conn,$addr);
         $_phon = $repo->getPhon(); // Record/Phon array
-        $phon = \ModularSoftware\LaravelGedcom\Utils\Importer\Phon::read($conn,$_phon);
-        
+        $phon = implode(',', $_phon);
+        $_email = $repo->getEmail();
+        $email = implode(',', $_email);
+        $_fax = $repo->getFax();
+        $fax = implode(',', $_fax);
+        $_www = $repo->getWww();
+        $www = implode(',', $_www);
         // store Source
         $key = [
             'group'=>$group,
@@ -35,6 +40,9 @@ class Repo
             'rin' => $rin,
             'addr_id' => $addr_id,
             'phon' => $phon,
+            'email' => $email,
+            'fax' => $fax,
+            'www' => $www,
         ];
         $data = [
             'group'=>$group,
@@ -43,6 +51,9 @@ class Repo
             'rin' => $rin,
             'addr_id' => $addr_id,
             'phon' => $phon,
+            'email' => $email,
+            'fax' => $fax,
+            'www' => $www,
         ];
 
         $record = Repository::on($conn)->updateOrCreate($key, $data);
@@ -67,6 +78,6 @@ class Repo
         if($chan !== null) {
             \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn,$chan, $_group, $_gid);
         }
-        return;
+        return $_gid;
     }
 }
