@@ -30,7 +30,7 @@ class GedcomParser
     public function parse($conn, string $filename, string $slug, bool $progressBar = false)
     {
         $this->conn = $conn;
-        error_log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
+        error_log('lOG PARSER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
         // var_dump($gedcom);
@@ -326,16 +326,16 @@ class GedcomParser
         }
         
         if($bapl !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Lds::read($this->conn,$bapl, $_group, $_gid, 'BAPL');
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$bapl, $_group, $_gid, 'BAPL');
         }
         if($conl !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Lds::read($this->conn,$conl, $_group, $_gid, 'CONL');
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$conl, $_group, $_gid, 'CONL');
         }
         if($endl !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Lds::read($this->conn,$endl, $_group, $_gid, 'ENDL');
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$endl, $_group, $_gid, 'ENDL');
         }
         if($slgc !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Lds::read($this->conn,$slgc, $_group, $_gid, 'SLGC');
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$slgc, $_group, $_gid, 'SLGC');
         }
     }
 

@@ -15,11 +15,12 @@ class Asso
     public static function read($conn,\PhpGedcom\Record\Indi\Asso $asso, $group='', $group_id=0)
     {
         $indi = $group_id;
+        $_indi = $asso->getIndi();
         $rela = $asso->getRela();
 
         // store asso 
-        $key = ['group'=>$group,'gid'=>$group_id, 'rela'=>$rela];
-        $data = ['group'=>$group,'gid'=>$group_id, 'rela'=>$rela];
+        $key = ['group'=>$group,'gid'=>$group_id, 'rela'=>$rela, 'indi' => $_indi];
+        $data = ['group'=>$group,'gid'=>$group_id, 'rela'=>$rela, 'indi' => $_indi];
         $record = PersonAsso::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'indi_asso';

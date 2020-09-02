@@ -13,7 +13,7 @@ class Lds
      * 
      */
 
-    public static function read($conn,\PhpGedcom\Record\Indi\Lds $lds, $group='', $group_id=0, $type='')
+    public static function read($conn,\PhpGedcom\Record\Indi\Lds $lds, $group='', $group_id=0, $type='', $sour_ids=[], $obje_ids=[])
     {
         $stat = $lds->getStat();
         $date = $lds->getDate();
@@ -54,7 +54,7 @@ class Lds
         if($sour && count($sour) > 0) {
             foreach($sour as $item) {
                 if($item) {
-                    SourRef::read($conn, $item, $_group, $_gid);
+                    SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
                 }
             }
         }
