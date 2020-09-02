@@ -11,7 +11,7 @@ class Even
      * @var string
      */
 
-    public static function read($conn, $even, $fam)
+    public static function read($conn, $even, $fam, $obje_ids=[])
     {
         if($even == null || $fam === null) {
             return;
@@ -134,7 +134,7 @@ class Even
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid, $obje_ids);
                 }
             }
         }

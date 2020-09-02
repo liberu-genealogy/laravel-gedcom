@@ -11,7 +11,7 @@ class Subm
      * 
      */
 
-    public static function read($conn,$subm, $group=null, $gid= null)
+    public static function read($conn,$subm, $group=null, $gid= null, $obje_ids = [])
     {
         if($subm == null || is_array($subm)) {
             return ;
@@ -78,7 +78,7 @@ class Subm
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid, $obje_ids);
                 }
             }
         }

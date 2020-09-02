@@ -13,17 +13,20 @@ class ObjeRef
      * 
      */
 
-    public static function read($conn,\PhpGedcom\Record\ObjeRef $objeref, $group='', $group_id=0)
+    public static function read($conn,\PhpGedcom\Record\ObjeRef $objeref, $group='', $group_id=0, $obje_ids = [])
     {
         if($objeref == null) {
             return ;
         }
         $obje_id = $objeref->getId();
+        if(isset($obje_ids[$obje_id])) {
+            $obje_id = $obje_ids[$obje_id];
+        }
         $titl = $objeref->getTitl();
         $file = $objeref->getFile();
 
         // store MediaObject
-        $key = ['group'=>$group,'gid'=>$group_id, 'titl'=>$titl, 'file'=>$file, 'form'=>$form];
+        $key = ['group'=>$group,'gid'=>$group_id, 'titl'=>$titl, 'file'=>$file];
         $data = [
             'group'=>$group,
             'gid'=>$group_id,

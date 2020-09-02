@@ -16,7 +16,7 @@ class SourRef
      * 
      */
 
-    public static function read($conn, \PhpGedcom\Record\SourRef $sourref, $group='', $group_id=0, $sour_ids)
+    public static function read($conn, \PhpGedcom\Record\SourRef $sourref, $group='', $group_id=0, $sour_ids=[], $obje_ids=[])
     {
         if($sourref == null) {
             return;
@@ -49,7 +49,7 @@ class SourRef
         $objes = $sourref->getObje();
         if($objes && count($objes) > 0) { 
             foreach($objes as $item) { 
-                ObjeRef::read($conn, $item, $_group, $_gid);
+                ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
             }
         }
 

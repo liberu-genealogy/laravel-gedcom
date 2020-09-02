@@ -11,7 +11,7 @@ class Sour
      * 
      */
 
-    public static function read($conn,$sour)
+    public static function read($conn,$sour, $obje_ids=[])
     {
         if($sour == null || is_array($sour)) {
             return 0;
@@ -61,7 +61,7 @@ class Sour
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn,$item, $_group, $_gid, $obje_ids);
                 }
             }
         }

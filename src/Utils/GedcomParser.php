@@ -320,7 +320,7 @@ class GedcomParser
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($this->conn,$item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($this->conn,$item, $_group, $_gid, $this->obje_ids);
                 }
             }
         }
@@ -399,7 +399,7 @@ class GedcomParser
         if($_obje && count($_obje) > 0) {
             foreach($_obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($this->conn,$item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($this->conn,$item, $_group, $_gid, $this->obje_ids);
                 }
             }
         }

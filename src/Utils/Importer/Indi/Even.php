@@ -11,7 +11,7 @@ class Even
      * @var string
      */
 
-    public static function read($conn, $even, $person)
+    public static function read($conn, $even, $person, $obje_ids=[])
     {
         $class_name = get_class($even);
         $person_id = $person->id;
@@ -176,7 +176,7 @@ class Even
         if($obje && count($obje) > 0) {
             foreach($obje as $item) {
                 if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid);
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
         }
