@@ -1,7 +1,7 @@
 <?php
 
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
-use \App\MChan;
+use \App\Chan as MChan;
 use \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef;
 class Chan
 {
