@@ -15,7 +15,7 @@ class Repo
 
     public static function read($conn, \PhpGedcom\Record\Sour\Repo $data, $group='', $group_id=0)
     {
-        $repo_id = $data->getId();
+        $repo_id = $data->getRepo();
         if(empty($repo_id)) {
             $repo_id = rand(1, 10000);
         }

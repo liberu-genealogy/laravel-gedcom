@@ -105,7 +105,7 @@ class GedcomParser
             // $this->getSubm($item);
             if($item) {
                 $_subm_id = $item->getSubm();
-                $subm_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Subm::read($this->conn,$item, $this->obje_ids);
+                $subm_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Subm::read($this->conn,$item, null, null, $this->obje_ids);
                 $this->subm_ids[$_subm_id] = $subm_id;
             }
             if ($progressBar === true) {
@@ -146,7 +146,7 @@ class GedcomParser
         foreach ($repo as $item){
             // $this->getRepo($item);
             if($item) {
-                $repo_id = $item->getId();
+                $repo_id = $item->getRepo();
                 $_repo_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Repo::read($this->conn,$item);
                 $this->repo_ids[$repo_id] = $_repo_id;
             }
@@ -390,17 +390,36 @@ class GedcomParser
             }
         }
 
-        if($bapl !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$bapl, $_group, $_gid, 'BAPL', $this->sour_ids, $this->obje_ids);
+        if($bapl && count($bapl) > 0) {
+            foreach($bapl as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$item, $_group, $_gid, 'BAPL', $this->sour_ids, $this->obje_ids);
+                }
+            }
         }
-        if($conl !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$conl, $_group, $_gid, 'CONL', $this->sour_ids, $this->obje_ids);
+
+        if($conl && count($conl) > 0) {
+            foreach($conl as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$item, $_group, $_gid, 'CONL', $this->sour_ids, $this->obje_ids);
+                }
+            }
         }
-        if($endl !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$endl, $_group, $_gid, 'ENDL', $this->sour_ids, $this->obje_ids);
+        
+        if($endl && count($endl) > 0) {
+            foreach($endl as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$item, $_group, $_gid, 'ENDL', $this->sour_ids, $this->obje_ids);
+                }
+            }
         }
-        if($slgc !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$slgc, $_group, $_gid, 'SLGC', $this->sour_ids, $this->obje_ids);
+        
+        if($slgc && count($slgc) > 0) {
+            foreach($slgc as $item) {
+                if($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Lds::read($this->conn,$item, $_group, $_gid, 'SLGC', $this->sour_ids, $this->obje_ids);
+                }
+            }
         }
     }
 
