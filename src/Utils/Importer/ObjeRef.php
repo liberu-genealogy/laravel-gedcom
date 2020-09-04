@@ -26,7 +26,7 @@ class ObjeRef
         $file = $objeref->getFile();
 
         // store MediaObject
-        $key = ['group'=>$group,'gid'=>$group_id, 'titl'=>$titl, 'file'=>$file];
+        $key = ['group'=>$group,'gid'=>$group_id, 'titl'=>$titl];
         $data = [
             'group'=>$group,
             'gid'=>$group_id,
