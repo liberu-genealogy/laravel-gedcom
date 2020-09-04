@@ -40,7 +40,7 @@ class ObjeRef
         // store Note
 
         $files = $objeref->getFile();
-        if($files && count($files) > 0) {
+        if($files && count((is_countable($files)?$files:[]))) {
             foreach($files as $item) {
                 File::read($conn, $item, $_group, $_gid);
             }
