@@ -421,6 +421,9 @@ class GedcomParser
                 }
             }
         }
+        if($chan) {
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($this->conn, $chan, $_group, $_gid);
+        }
     }
 
     private function getFamily($family)
@@ -431,7 +434,6 @@ class GedcomParser
         $wife = $family->getWife();
 
         // string
-        $chan = $family->getChan();
         $nchi = $family->getNchi();
         $rin = $family->getRin();
 
@@ -449,11 +451,14 @@ class GedcomParser
         $_sour = $family->getSour();
         $_refn = $family->getRefn();
 
+        // object
+        $chan = $family->getChan();
+
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
         $family = Family::on($this->conn)->updateOrCreate(compact('husband_id', 'wife_id'),
-            compact('husband_id', 'wife_id', 'description', 'type_id' ,'chan', 'nchi', 'rin'));
+            compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin'));
 
         if ($children !== null) {
             foreach ($children as $child) {
@@ -516,6 +521,9 @@ class GedcomParser
                     \ModularSoftware\LaravelGedcom\Utils\Importer\Subm::read($this->conn,$item, $_group, $_gid, $this->obje_ids);
                 }
             }
+        }
+        if($chan) {
+            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($this->conn, $chan, 'family', $family->id);
         }
     }
 }
