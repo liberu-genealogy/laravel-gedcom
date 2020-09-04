@@ -18,7 +18,7 @@ class ObjeRef
         if($objeref == null) {
             return ;
         }
-        $obje_id = $objeref->getId();
+        $obje_id = $objeref->getObje();
         if(isset($obje_ids[$obje_id])) {
             $obje_id = $obje_ids[$obje_id];
         }
