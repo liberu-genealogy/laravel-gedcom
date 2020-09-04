@@ -38,12 +38,7 @@ class ObjeRef
         $_group = 'objeref';
         $_gid = $record->id;
         // store Note
-        $notes = $objeref->getNote();
-        if($notes && count($notes) > 0) { 
-            foreach($notes as $item) { 
-                NoteRef::read($conn,$item, $_group, $_gid);
-            }
-        }
+
         $files = $objeref->getFile();
         if($files && count($files) > 0) {
             foreach($files as $item) {
