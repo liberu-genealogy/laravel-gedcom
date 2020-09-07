@@ -6,7 +6,7 @@
 [![StyleCI](https://github.styleci.io/repos/135390590/shield?branch=master)](https://github.styleci.io/repos/135390590)
 [![CodeFactor](https://www.codefactor.io/repository/github/modularsoftware/laravel-gedcom/badge/master)](https://www.codefactor.io/repository/github/modularsoftware/laravel-gedcom/overview/master)
 [![codebeat badge](https://codebeat.co/badges/911f9e33-212a-4dfa-a860-751cdbbacff7)](https://codebeat.co/projects/github-com-modulargenealogy-gedcom-laravel-gedcom-master)
-[![Build Status](https://travis-ci.org/modularsoftware/laravel-gedcom.svg?branch=master)](https://travis-ci.org/modularsoftware/genealogy)
+[![Build Status](https://travis-ci.org/modularsoftware/laravel-gedcom.svg?branch=master)](https://travis-ci.org/modularsoftware/laravel-gedcom)
 
 
 modularsoftware/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
