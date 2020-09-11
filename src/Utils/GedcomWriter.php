@@ -2,25 +2,26 @@
 
 namespace ModularSoftware\LaravelGedcom\Utils;
 
-use \App\Family;
-use \App\Person;
-use \App\Subn;
-use \App\Subm;
-use \App\Source;
-use \App\Note;
-use \App\Repository;
-use \App\MediaObject;
+use App\Events\GedComProgressSent;
+use App\Family;
+use App\MediaObject;
+use App\Note;
+use App\Person;
+use App\Repository;
+use App\Source;
+use App\Subm;
+use App\Subn;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
-use \App\Events\GedComProgressSent;
 
 class GedcomWriter
 {
     /**
      * Array of persons ID
      * key - old GEDCOM ID
-     * value - new autoincrement ID
+     * value - new autoincrement ID.
+     *
      * @var string
      */
     protected $persons_id = [];
@@ -31,9 +32,8 @@ class GedcomWriter
         $gedcom = @$parser->parse($filename);
 
         /**
-         * work
+         * work.
          */
-
         $head = $gedcom->getHead();
         $subn = $gedcom->getSubn();
         $subm = $gedcom->getSubm();
@@ -43,32 +43,32 @@ class GedcomWriter
         $obje = $gedcom->getObje();
 
         /**
-        * work end
-        */
+         * work end.
+         */
         $c_subn = 0;
         $c_subm = count($subm);
         $c_sour = count($sour);
         $c_note = count($note);
         $c_repo = count($repo);
         $c_obje = count($obje);
-        if($subn != null){
-            // 
+        if ($subn != null) {
+            //
             $c_subn = 1;
         }
 
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
-        $total = count($individuals) + count($families) + $c_subn+ $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
+        $total = count($individuals) + count($families) + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
             event(new GedComProgressSent($slug, $total, $complete));
         }
 
-        if($subn != null){
+        if ($subn != null) {
             // store the submission information for the GEDCOM file.
             $this->getSubn($subn);
-            if($progressBar === true){
+            if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
                 event(new GedComProgressSent($slug, $total, $complete));
@@ -76,7 +76,7 @@ class GedcomWriter
         }
 
         // store information about all the submitters to the GEDCOM file.
-        foreach ($subm as $item){
+        foreach ($subm as $item) {
             $this->getSubm($item);
             if ($progressBar === true) {
                 $bar->advance();
@@ -86,7 +86,7 @@ class GedcomWriter
         }
 
         // store sources cited throughout the GEDCOM file.
-        foreach ($sour as $item){
+        foreach ($sour as $item) {
             $this->getSour($item);
             if ($progressBar === true) {
                 $bar->advance();
@@ -94,9 +94,9 @@ class GedcomWriter
                 event(new GedComProgressSent($slug, $total, $complete));
             }
         }
-        
+
         // store all the notes contained within the GEDCOM file that are not inline.
-        foreach ($note as $item){
+        foreach ($note as $item) {
             $this->getNote($item);
             if ($progressBar === true) {
                 $bar->advance();
@@ -106,7 +106,7 @@ class GedcomWriter
         }
 
         // store all repositories that are contained within the GEDCOM file and referenced by sources.
-        foreach ($repo as $item){
+        foreach ($repo as $item) {
             $this->getRepo($item);
             if ($progressBar === true) {
                 $bar->advance();
@@ -115,7 +115,7 @@ class GedcomWriter
             }
         }
         // store all the media objects that are contained within the GEDCOM file.
-        foreach ($obje as $item){
+        foreach ($obje as $item) {
             $this->getObje($item);
             if ($progressBar === true) {
                 $bar->advance();
@@ -123,7 +123,7 @@ class GedcomWriter
                 event(new GedComProgressSent($slug, $total, $complete));
             }
         }
-        
+
         foreach ($individuals as $individual) {
             $this->getPerson($individual);
             if ($progressBar === true) {
@@ -165,6 +165,7 @@ class GedcomWriter
         if (is_object($place)) {
             $place = $place->getPlac();
         }
+
         return $place;
     }
 
@@ -182,12 +183,12 @@ class GedcomWriter
         }
 
         // string value
-        $uid  = $individual->getUid();
+        $uid = $individual->getUid();
         $chan = $individual->getChan();
-        $rin  = $individual->getRin();
-        $resn = $individual->getResn(); 
-        $rfn  = $individual->getRfn();
-        $afn  = $individual->getAfn();
+        $rin = $individual->getRin();
+        $resn = $individual->getResn();
+        $rfn = $individual->getRfn();
+        $afn = $individual->getAfn();
 
         // array value
         $note = $individual->getNote();
@@ -208,15 +209,14 @@ class GedcomWriter
         $endl = $individual->getEndl();
         $slgc = $individual->getSlgc();
 
-
-        $sex = preg_replace("/[^MF]/", "", $individual->getSex());
+        $sex = preg_replace('/[^MF]/', '', $individual->getSex());
         $attr = $individual->getAllAttr();
         $events = $individual->getAllEven();
 
-        if ($givn == "") {
+        if ($givn == '') {
             $givn = $name;
         }
-        $person = Person::updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid','chan', 'rin', 'resn', 'rfn', 'afn'));
+        $person = Person::updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid', 'chan', 'rin', 'resn', 'rfn', 'afn'));
         $this->persons_id[$g_id] = $person->id;
 
         if ($events !== null) {
@@ -224,7 +224,7 @@ class GedcomWriter
                 $date = $this->getDate($event->getDate());
                 $place = $this->getPlace($event->getPlac());
                 $person->addEvent($event->getType(), $date, $place);
-            };
+            }
         }
 
         if ($attr !== null) {
@@ -236,8 +236,8 @@ class GedcomWriter
                 } else {
                     $note = '';
                 }
-                $person->addEvent($event->getType(), $date, $place, $event->getAttr() . ' ' . $note);
-            };
+                $person->addEvent($event->getType(), $date, $place, $event->getAttr().' '.$note);
+            }
         }
     }
 
@@ -246,7 +246,7 @@ class GedcomWriter
         $g_id = $family->getId();
         $husb = $family->getHusb();
         $wife = $family->getWife();
-        
+
         // string
         $chan = $family->getChan();
         $nchi = $family->getNchi();
@@ -260,7 +260,7 @@ class GedcomWriter
         $_sour = $family->getSour();
         $_obje = $family->getObje();
 
-        $description = NULL;
+        $description = null;
         $type_id = 0;
         $children = $family->getChil();
         $events = $family->getAllEven();
@@ -268,7 +268,7 @@ class GedcomWriter
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
-        $family = Family::updateOrCreate(compact('husband_id', 'wife_id'), compact('husband_id', 'wife_id', 'description', 'type_id' ,'chan', 'nchi'));
+        $family = Family::updateOrCreate(compact('husband_id', 'wife_id'), compact('husband_id', 'wife_id', 'description', 'type_id', 'chan', 'nchi'));
 
         if ($children !== null) {
             foreach ($children as $child) {
@@ -285,11 +285,12 @@ class GedcomWriter
                 $date = $this->getDate($event->getDate());
                 $place = $this->getPlace($event->getPlac());
                 $family->addEvent($event->getType(), $date, $place);
-            };
+            }
         }
     }
 
-    private function getSubn($subn){
+    private function getSubn($subn)
+    {
         $subm = $subn->getSubm();
         $famf = $subn->getFamf();
         $temp = $subn->getTemp();
@@ -297,40 +298,32 @@ class GedcomWriter
         $desc = $subn->getDesc();
         $ordi = $subn->getOrdi();
         $rin = $subn->getRin();
-        $_subn = Subn::updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc','ordi', 'rin'));
+        $_subn = Subn::updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'));
     }
 
     // insert subm data to model
-    private function getSubm($_subm){
+    private function getSubm($_subm)
+    {
         $subm = $_subm->getSubm() ?? 'Unknown'; // string
-        $chan = $_subm->getChan() ?? array('Unknown'); // Record\Chan---
+        $chan = $_subm->getChan() ?? ['Unknown']; // Record\Chan---
         $name = $_subm->getName() ?? 'Unknown'; // string
-        if ($_subm->getAddr() != NULL) // Record/Addr
+        if ($_subm->getAddr() != null) { // Record/Addr
+         $addr = $_subm->getAddr();
+            $addr->getAddr() ?? 'Unknown';
+            $addr->getAdr1() ?? 'Unknown';
+            $addr->getAdr2() ?? 'Unknown';
+            $addr->getCity() ?? 'Unknown';
+            $addr->getStae() ?? 'Unknown';
+            $addr->getCtry() ?? 'Unknown';
+        } else {
+            $addr = null;
+        }
 
-	{
-
-		 $addr = $_subm->getAddr();
-		 $addr->getAddr() ?? 'Unknown';
-		 $addr->getAdr1() ?? 'Unknown';
-		 $addr->getAdr2() ?? 'Unknown';
-		 $addr->getCity() ?? 'Unknown';
-		 $addr->getStae() ?? 'Unknown';
-		 $addr->getCtry() ?? 'Unknown';
-	}
-
-	else
-
-	{
-
-	$addr = NULL;
-
-	}
-
-        $rin  = $_subm->getRin() ?? 'Unknown'; // string
-        $rfn  = $_subm->getRfn() ?? 'Unknown'; // string 
-        $_lang = $_subm->getLang() ?? array('Unknown'); // array
-        $_phon = $_subm->getPhon() ?? array('Unknown'); // array
-        $obje = $_subm->getObje() ?? array('Unknown'); // array ---
+        $rin = $_subm->getRin() ?? 'Unknown'; // string
+        $rfn = $_subm->getRfn() ?? 'Unknown'; // string
+        $_lang = $_subm->getLang() ?? ['Unknown']; // array
+        $_phon = $_subm->getPhon() ?? ['Unknown']; // array
+        $obje = $_subm->getObje() ?? ['Unknown']; // array ---
 
         // create chan model - id, ref_type (subm), date, time
         // create note model - id, ref_type ( chan ), note
@@ -338,47 +331,40 @@ class GedcomWriter
         // $arr_chan = array('date'=>$chan->getDate(), 'time'=>$chan->getTime());
         // create obje model - id, _isRef, _obje, _form, _titl, _file, _Note_a
 
-
-
-        if ($addr != NULL)
-	{
-	$arr_addr = array(
-            'addr'=>$_addr->getAddr() ?? 'Unknown',
-            'adr1' => $_addr->getAdr1() ?? 'Unknown',
-            'adr2'=>$_addr->getAdr2() ?? 'Unknown',
-            'city'=>$_addr->getCity() ?? 'Unknown',
-            'stae'=>$_addr->getStae() ?? 'Unknown',
-            'ctry'=>$_addr->getCtry() ?? 'Unknown'
-        );
-	}
-
-	else
-	{
-
-        $arr_addr = array(
-            'addr'=> 'Unknown',
-            'adr1' => 'Unknown',
-            'adr2'=> 'Unknown',
-            'city'=> 'Unknown',
-            'stae'=> 'Unknown',
-            'ctry'=> 'Unknown'
-        );
-
-	}
-
+        if ($addr != null) {
+            $arr_addr = [
+                'addr' => $_addr->getAddr() ?? 'Unknown',
+                'adr1' => $_addr->getAdr1() ?? 'Unknown',
+                'adr2' => $_addr->getAdr2() ?? 'Unknown',
+                'city' => $_addr->getCity() ?? 'Unknown',
+                'stae' => $_addr->getStae() ?? 'Unknown',
+                'ctry' => $_addr->getCtry() ?? 'Unknown',
+            ];
+        } else {
+            $arr_addr = [
+                'addr' => 'Unknown',
+                'adr1' => 'Unknown',
+                'adr2' => 'Unknown',
+                'city' => 'Unknown',
+                'stae' => 'Unknown',
+                'ctry' => 'Unknown',
+            ];
+        }
 
         $addr = json_encode($arr_addr);
         $lang = json_encode($_lang);
-        $arr_phon = array();
-        foreach($_phon as $item){
+        $arr_phon = [];
+        foreach ($_phon as $item) {
             $__phon = $item->getPhon();
             array_push($arr_phon, $__phon);
         }
         $phon = json_encode($arr_phon);
-        Subm::updateOrCreate(compact('subm', 'name','addr','rin','rfn','lang','phon'), compact('subm', 'name','addr','rin','rfn','lang','phon'));
+        Subm::updateOrCreate(compact('subm', 'name', 'addr', 'rin', 'rfn', 'lang', 'phon'), compact('subm', 'name', 'addr', 'rin', 'rfn', 'lang', 'phon'));
     }
+
     // insert sour data to database
-    private function getSour($_sour){
+    private function getSour($_sour)
+    {
         $sour = $_sour->getSour(); // string
         $chan = $_sour->getChan(); // Record/Chan
         $titl = $_sour->getTitl(); // string
@@ -392,51 +378,54 @@ class GedcomWriter
         $refn = $_sour->getRefn(); // array
         $note = $_sour->getNote(); // array
         $obje = $_sour->getObje(); // array
-        Source::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr') );
+        Source::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'));
     }
 
     // insert note data to database
-    private function getNote($_note){
+    private function getNote($_note)
+    {
         $gid = $_note->getId(); // string
         $note = $_note->getNote(); // string
-        $chan = $_note->getChan(); // string ? 
-        $even = $_note->getEven(); // string ? 
+        $chan = $_note->getChan(); // string ?
+        $even = $_note->getEven(); // string ?
         $refn = $_note->getRefn(); // array
         $rin = $_note->getRin(); // string
         $sour = $_note->getSour(); // array
-        Note::updateOrCreate(compact('gid','note', 'rin'), compact('gid','note', 'rin'));
+        Note::updateOrCreate(compact('gid', 'note', 'rin'), compact('gid', 'note', 'rin'));
     }
 
     // insert repo data to database
-    private function getRepo($_repo){
-        $repo = $_repo->getRepo(); // string 
+    private function getRepo($_repo)
+    {
+        $repo = $_repo->getRepo(); // string
         $name = $_repo->getName(); // string
         $_addr = $_repo->getAddr(); // Record/Addr
         $rin = $_repo->getRin(); // string
-        $chan = $_repo->getChan(); // Record / Chan -- 
+        $chan = $_repo->getChan(); // Record / Chan --
         $_phon = $_repo->getPhon(); // array
         $refn = $_repo->getRefn(); // array --
         $note = $_repo->getNote(); // array --
-        $arr_addr = array(
-            'addr'=>$_addr->getAddr(),
+        $arr_addr = [
+            'addr' => $_addr->getAddr(),
             'adr1' => $_addr->getAdr1(),
-            'adr2'=>$_addr->getAdr2(),
-            'city'=>$_addr->getCity(),
-            'stae'=>$_addr->getStae(),
-            'ctry'=>$_addr->getCtry()
-        );
+            'adr2' => $_addr->getAdr2(),
+            'city' => $_addr->getCity(),
+            'stae' => $_addr->getStae(),
+            'ctry' => $_addr->getCtry(),
+        ];
         $addr = json_encode($arr_addr);
-        $arr_phon = array();
-        foreach($_phon as $item){
+        $arr_phon = [];
+        foreach ($_phon as $item) {
             $__phon = $item->getPhon();
             array_push($arr_phon, $__phon);
         }
         $phon = json_encode($arr_phon);
-        Repository::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));     
+        Repository::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));
     }
 
     // insert obje data to database
-    private function getObje($_obje){
+    private function getObje($_obje)
+    {
         $gid = $_obje->getId(); // string
         $_form = $_obje->getForm(); // string
         $_titl = $_obje->getTitl(); // string

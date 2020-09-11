@@ -10,7 +10,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->commands([
-            GedcomImporter::class
+            GedcomImporter::class,
         ]);
 
         $this->app->bind('asdfx/laravel-gedcom:parser', function () {
@@ -20,6 +20,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/migrations/');
+        $this->loadMigrationsFrom(__DIR__.'/migrations/');
     }
 }

@@ -1,19 +1,21 @@
 <?php
 
 namespace ModularSoftware\LaravelGedcom\Utils\Importer\Fam;
-use \App\FamilySlgs;
+
+use App\FamilySlgs;
+
 class Slgs
 {
     /**
      * Array of persons ID
      * key - old GEDCOM ID
-     * value - new autoincrement ID
+     * value - new autoincrement ID.
+     *
      * @var string
      */
-
     public static function read($conn, $slgs, $fam)
     {
-        if($slgs == null || $fam === null) {
+        if ($slgs == null || $fam === null) {
             return;
         }
 
@@ -22,20 +24,19 @@ class Slgs
         $plac = $slgs->getPlac();
         $temp = $slgs->getTemp();
 
-
-        $key =[
-            'family_id'=>$fam->id,
-            'stat' => $stat,
-            'date' => $date,
-            'plac' => $plac,
-            'temp' => $temp,
+        $key = [
+            'family_id'=> $fam->id,
+            'stat'     => $stat,
+            'date'     => $date,
+            'plac'     => $plac,
+            'temp'     => $temp,
         ];
         $data = [
-            'family_id'=>$fam->id,
-            'stat' => $stat,
-            'date' => $date,
-            'plac' => $plac,
-            'temp' => $temp,
+            'family_id'=> $fam->id,
+            'stat'     => $stat,
+            'date'     => $date,
+            'plac'     => $plac,
+            'temp'     => $temp,
         ];
 
         $record = FamilySlgs::on($conn)->updateOrCreate($key, $data);
@@ -45,20 +46,19 @@ class Slgs
 
         // array
         $sour = $slgs->getSour();
-        if($sour && count($sour) > 0) {
-            foreach($sour as $item) {
-                if($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn,$item, $_group, $_gid);
+        if ($sour && count($sour) > 0) {
+            foreach ($sour as $item) {
+                if ($item) {
+                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }
 
         $note = $slgs->getNote();
-        if($note && count($note) > 0) { 
-            foreach($note as $item) { 
-                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn,$item, $_group, $_gid);
+        if ($note && count($note) > 0) {
+            foreach ($note as $item) {
+                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
-        return;
     }
 }

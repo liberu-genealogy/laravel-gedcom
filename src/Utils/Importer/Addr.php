@@ -1,20 +1,20 @@
 <?php
 
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
-use \App\Addr as MAddr;
+
+use App\Addr as MAddr;
+
 class Addr
 {
     /**
      * PhpGedcom\Record\Refn $noteref
-     * String $group 
-     * Integer $group_id
-     * 
+     * String $group
+     * Integer $group_id.
      */
-
     public static function read($conn, $addr)
     {
         $id = null;
-        if($addr == null) {
+        if ($addr == null) {
             return $id;
         }
         $adr1 = $addr->getAdr1();
@@ -25,20 +25,21 @@ class Addr
         $ctry = $addr->getCtry();
 
         $addr = MAddr::on($conn)->where([
-            ['adr1','=', $adr1],
-            ['adr2','=', $adr2],
-            ['city','=', $city],
+            ['adr1', '=', $adr1],
+            ['adr2', '=', $adr2],
+            ['city', '=', $city],
 
-            ['stae','=', $stae],
-            ['post','=', $post],
-            ['ctry','=', $ctry],
-            ])->first();
-        if($addr !== null) {
+            ['stae', '=', $stae],
+            ['post', '=', $post],
+            ['ctry', '=', $ctry],
+        ])->first();
+        if ($addr !== null) {
             $id = $addr->id;
-        }else {
-            $addr = MAddr::on($conn)->create(compact('adr1','adr2','city','stae','post','ctry'));
+        } else {
+            $addr = MAddr::on($conn)->create(compact('adr1', 'adr2', 'city', 'stae', 'post', 'ctry'));
             $id = $addr->id;
         }
+
         return $id;
     }
 }
