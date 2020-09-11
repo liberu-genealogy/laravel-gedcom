@@ -2,102 +2,102 @@
 
 namespace ModularSoftware\LaravelGedcom\Utils;
 
-use \App\Family;
-use \App\Person;
-use \App\Subn;
-use \App\Subm;
-use \App\Source;
-use \App\Note;
-use \App\Repository;
-use \App\MediaObject;
-use Illuminate\Console\OutputStyle;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
-use \App\Events\GedComProgressSent;
-use \PhpGedcom\Gedcom;
+use App\Family;
+use App\Person;
+use PhpGedcom\Gedcom;
+
 class GedcomGenerator
 {
     protected $family_id;
     protected $p_id;
     protected $up_nest;
     protected $down_nest;
-    protected $arr_indi_id = array();
-    protected $arr_fam_id = array();
+    protected $arr_indi_id = [];
+    protected $arr_fam_id = [];
     protected $_gedcom = null;
     protected $log = "\n";
+
     /**
-     * Constructor with family_id
+     * Constructor with family_id.
      */
-    public function __construct($p_id = 0, $family_id = 0, $up_nest =  0, $down_nest = 0){
+    public function __construct($p_id = 0, $family_id = 0, $up_nest = 0, $down_nest = 0)
+    {
         $this->family_id = $family_id;
         $this->p_id = $p_id;
         $this->up_nest = $up_nest;
         $this->down_nest = $down_nest;
-        $this->arr_indi_id = array();
-        $this->arr_fam_id = array();
+        $this->arr_indi_id = [];
+        $this->arr_fam_id = [];
         $this->_gedcom = new Gedcom();
     }
 
-    public function getGedcomFamily(){
+    public function getGedcomFamily()
+    {
         $this->setHead();
         $fam = $this->setFam($this->family_id);
         $writer = new \PhpGedcom\Writer();
         $output = $writer->convert($this->_gedcom);
+
         return $output;
     }
 
-    public function getGedcomPerson(){
+    public function getGedcomPerson()
+    {
         $this->setHead();
         $this->addUpData($this->p_id);
         $writer = new \PhpGedcom\Writer();
         $output = $writer->convert($this->_gedcom);
+
         return $output;
     }
 
-    public function addUpData($p_id, $nest = 0) {
-        if( empty($p_id) || $p_id < 1)
+    public function addUpData($p_id, $nest = 0)
+    {
+        if (empty($p_id) || $p_id < 1) {
             return;
-        if($this->up_nest < $nest){
-            return;    
         }
-        
-        $person = Person::find($p_id);
-        if($person == null)
+        if ($this->up_nest < $nest) {
             return;
-        
+        }
+
+        $person = Person::find($p_id);
+        if ($person == null) {
+            return;
+        }
+
         // add self to indi
-        if(!in_array($p_id, $this->arr_indi_id)){
+        if (!in_array($p_id, $this->arr_indi_id)) {
             array_push($this->arr_indi_id, $p_id);
             $this->setIndi($p_id);
-        }else{
+        } else {
             // already processed this person
             return;
         }
 
         // process family ( partner, children )
         $_families = Family::where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
-        foreach($_families as $item) {
+        foreach ($_families as $item) {
             // add family
             $f_id = $item->id;
-            if(!in_array($f_id, $this->arr_fam_id)) {
+            if (!in_array($f_id, $this->arr_fam_id)) {
                 array_push($this->arr_fam_id, $f_id);
                 $this->setFam($f_id);
             }
-            
+
             // add partner to indi
             $husb_id = $item->husband_id;
             $wife_id = $item->wife_id;
-            $this->log.=$nest." f_id=".$f_id."\n";
-            $this->log.=$nest." husb_id=".$husb_id."\n";
-            $this->log.=$nest." wife_id=".$wife_id."\n";
+            $this->log .= $nest.' f_id='.$f_id."\n";
+            $this->log .= $nest.' husb_id='.$husb_id."\n";
+            $this->log .= $nest.' wife_id='.$wife_id."\n";
             $this->addUpData($husb_id, $nest);
             $this->addUpData($wife_id, $nest);
 
             // add chidrent to indi
             $children = Person::where('child_in_family_id', $f_id)->get();
-            foreach($children as $item2){
+            foreach ($children as $item2) {
                 $child_id = $item2->id;
-                if(!in_array($child_id, $this->arr_indi_id)){
+                if (!in_array($child_id, $this->arr_indi_id)) {
                     array_push($this->arr_indi_id, $child_id);
                     $this->setIndi($child_id);
                 }
@@ -106,17 +106,17 @@ class GedcomGenerator
 
         $parent_family_id = $person->child_in_family_id;
         $p_family = Family::find($parent_family_id);
-        
+
         // there is not parent data.
-        if($p_family === null){
+        if ($p_family === null) {
             return;
         }
 
         // process siblings
         $siblings = Person::where('child_in_family_id', $parent_family_id)->get();
-        foreach($siblings as $item3){
+        foreach ($siblings as $item3) {
             $sibling_id = $item3->id;
-            if(!in_array($sibling_id, $this->arr_indi_id)){
+            if (!in_array($sibling_id, $this->arr_indi_id)) {
                 array_push($this->arr_indi_id, $sibling_id);
                 $this->setIndi($sibling_id);
             }
@@ -130,29 +130,32 @@ class GedcomGenerator
         $this->addUpData($mother_id, $nest);
     }
 
-    public function addDownData($p_id, $nest = 0) {
-        if( empty($p_id) || $p_id < 1)
+    public function addDownData($p_id, $nest = 0)
+    {
+        if (empty($p_id) || $p_id < 1) {
             return;
-        if($this->down_nest < $nest){
-            return;    
+        }
+        if ($this->down_nest < $nest) {
+            return;
         }
 
         $person = Person::find($p_id);
-        if($person == null)
+        if ($person == null) {
             return;
-        
+        }
+
         // process self
-        if(!in_array($p_id, $this->arr_indi_id)){
+        if (!in_array($p_id, $this->arr_indi_id)) {
             // add to indi array
             array_push($this->arr_indi_id, $p_id);
             $this->setIndi($p_id);
         }
 
         $_families = Family::where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
-        foreach($_families as $item){
+        foreach ($_families as $item) {
             // add family
             $f_id = $item->id;
-            if(!in_array($f_id, $this->arr_fam_id)) {
+            if (!in_array($f_id, $this->arr_fam_id)) {
                 array_push($this->arr_fam_id, $f_id);
                 $this->setFam($f_id);
             }
@@ -161,10 +164,10 @@ class GedcomGenerator
             $wife_id = $item->wife_id;
             $this->addDownData($husband_id, $nest);
             $this->addDownData($wife_id, $nest);
-            
+
             // process child
             $children = Person::where('child_in_family_id', $item->id);
-            foreach($children as $item2){
+            foreach ($children as $item2) {
                 $child_id = $item2->id;
                 $nest_next = $nest + 1;
                 $this->addDownData($child_id, $nest_next);
@@ -174,34 +177,36 @@ class GedcomGenerator
         // process parent
         $parent_family_id = $person->child_in_family_id;
         $parent_family = Family::find($parent_family_id);
-        if($parent_family != null){
+        if ($parent_family != null) {
             $father_id = $parent_family->husband_id;
             $mother_id = $parent_family->wife_id;
-            if(!in_array($father_id, $this->arr_indi_id)){
+            if (!in_array($father_id, $this->arr_indi_id)) {
                 array_push($this->arr_indi_id, $father_id);
                 $this->setIndi($father_id);
             }
-            if(!in_array($mother_id, $this->arr_indi_id)){
+            if (!in_array($mother_id, $this->arr_indi_id)) {
                 array_push($this->arr_indi_id, $mother_id);
                 $this->setIndi($mother_id);
             }
         }
         // process siblings
         $siblings = Person::where('child_in_family_id', $parent_family_id)->get();
-        foreach($siblings as $item3) {
+        foreach ($siblings as $item3) {
             $sibling_id = $item3->id;
-            if(!in_array($sibling_id, $this->arr_indi_id)) {
+            if (!in_array($sibling_id, $this->arr_indi_id)) {
                 $this->addDownData($sibling_id, $nest);
             }
         }
     }
-    protected function setHead(){
+
+    protected function setHead()
+    {
         $head = new \PhpGedcom\Record\Head();
         /**
          * @var Head\Sour
          */
         $sour = new \PhpGedcom\Record\Head\Sour();
-        $sour->setSour(env('APP_NAME',''));
+        $sour->setSour(env('APP_NAME', ''));
         $sour->setVersion('1.0');
         $head->setSour($sour);
         /**
@@ -262,10 +267,11 @@ class GedcomGenerator
         $this->_gedcom->setHead($head);
     }
 
-    protected function setIndi($p_id, $f_id=null){
+    protected function setIndi($p_id, $f_id = null)
+    {
         $indi = new \PhpGedcom\Record\Indi();
         $person = Person::find($p_id);
-        if($person == null){
+        if ($person == null) {
             return;
         }
         /**
@@ -287,33 +293,33 @@ class GedcomGenerator
         /**
          * @var Indi\Attr[]
          */
-        $attr = array();
+        $attr = [];
 
         /**
          * @var Indi\Even[]
          */
-        $even = array();
+        $even = [];
 
         /**
          * @var Indi\Note[]
          */
-        $note = array();
+        $note = [];
 
         /**
          * @var Obje[]
          */
-        $obje = array();
+        $obje = [];
 
         /**
          * @var Sour[]
          */
-        $sour = array();
+        $sour = [];
 
         /**
          * @var Indi\Name[]
-         * PhpGedcom\Record\Indi\Name
+         *                  PhpGedcom\Record\Indi\Name
          */
-        $name = array();
+        $name = [];
         $_name = new \PhpGedcom\Record\Indi\Name();
         $_name->setName($person->name);
         $indi->addName($_name);
@@ -321,7 +327,7 @@ class GedcomGenerator
         /**
          * @var string[]
          */
-        $alia = array();
+        $alia = [];
 
         /**
          * @var string
@@ -352,9 +358,9 @@ class GedcomGenerator
         /**
          * @var Indi\Fams[]
          */
-        $fams = array();
+        $fams = [];
         $fams = Family::where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
-        foreach($fams as $item){
+        foreach ($fams as $item) {
             $fam = new \PhpGedcom\Record\Indi\Fams();
             $fam->setFams($item->id);
             $indi->addFams($fam);
@@ -362,32 +368,32 @@ class GedcomGenerator
         /**
          * @var Indi\Famc[]
          */
-        $famc = array();
+        $famc = [];
 
         /**
          * @var Indi\Asso[]
          */
-        $asso = array();
+        $asso = [];
 
         /**
          * @var string[]
          */
-        $subm = array();
+        $subm = [];
 
         /**
          * @var string[]
          */
-        $anci = array();
+        $anci = [];
 
         /**
          * @var string[]
          */
-        $desi = array();
+        $desi = [];
 
         /**
          * @var Refn[]
          */
-        $refn = array();
+        $refn = [];
 
         /**
          * @var Indi\Bapl
@@ -409,74 +415,58 @@ class GedcomGenerator
          */
         $slgc;
         $this->_gedcom->addIndi($indi);
-
     }
 
-    protected function setFam($family_id){
+    protected function setFam($family_id)
+    {
         $famData = Family::where('id', $family_id)->first();
-        if($famData == null){
+        if ($famData == null) {
             return;
         }
         $fam = new \PhpGedcom\Record\Fam();
         $_id = $famData->id;
         $fam->setId($_id);
-        /**
-         *
-         */
+
         $_chan = null;
         $fam->setChan($_chan);
-        /**
-         *
-         */
+
         $_husb = $famData->husband_id;
         $fam->setHusb($_husb);
 
         // add husb individual
         // $this->setIndi($_husb, $family_id);
 
-        /**
-         *
-         */
         $_wife = $famData->wife_id;
         $fam->setWife($_wife);
 
         // add wife individual
         // $this->setIndi($_wife, $family_id);
-    
-        /**
-         *
-         */
+
         $_nchi = null;
         $fam->setNchi($_nchi);
-        /**
-         *
-         */
-        
+
         $_chil = Person::where('child_in_family_id', $family_id)->get();
-        foreach($_chil as $item){
+        foreach ($_chil as $item) {
             $fam->addChil($item->id);
             // $this->setIndi($item->id);
         }
-        
-        /**
-         *
-         */
-        $_even = array();
-        foreach($_even as $item){
+
+        $_even = [];
+        foreach ($_even as $item) {
             $even = new \PhpGedcom\Record\Fam\Even();
             $_type = null; // string
-            $_date = null; // string 
+            $_date = null; // string
             $_plac = null; // \PhpGedcom\Record\Indi\Even\Plac
-            $_caus = null; // string 
+            $_caus = null; // string
             $_age = null;  // string
             $_addr = null; // \PhpGedcom\Record\Addr
-            $_phon = array(); // \PhpGedcom\Record\Phon
+            $_phon = []; // \PhpGedcom\Record\Phon
             $_agnc = null; // string
             $_husb = null; // \PhpGedcom\Record\Fam\Even\Husb
             $_wife = null; // \PhpGedcom\Record\Fam\Even\Wife
-            $_obje = array(); // \PhpGedcom\Writer\ObjeRef
-            $_sour = array(); // \PhpGedcom\Writer\SourRef
-            $_note = array(); // \PhpGedcom\Writer\NoteRef
+            $_obje = []; // \PhpGedcom\Writer\ObjeRef
+            $_sour = []; // \PhpGedcom\Writer\SourRef
+            $_note = []; // \PhpGedcom\Writer\NoteRef
             $even->setType($_type);
             $even->setDate($_date);
             $even->setPlac($_plac);
@@ -491,18 +481,16 @@ class GedcomGenerator
             $even->setNote($_note);
             $fam->addEven($even);
         }
-        /**
-         *
-         */
-        $_slgs = array();
-        foreach($_slgs as $item){
+
+        $_slgs = [];
+        foreach ($_slgs as $item) {
             $slgs = new \PhpGedcom\Record\Fam\Slgs();
             $_stat = null;
             $_date = null;
             $_plac = null;
             $_temp = null;
-            $_sour = array();
-            $_note = array();
+            $_sour = [];
+            $_note = [];
 
             $slgs->setStat($_stat);
             $slgs->setDate($_date);
@@ -512,11 +500,9 @@ class GedcomGenerator
             $slgs->setNote($_note);
             $fam->addSlgs($slgs);
         }
-        /**
-         *
-         */
-        $_subm = array();
-        foreach($_subm as $item){
+
+        $_subm = [];
+        foreach ($_subm as $item) {
             $subm = new \PhpGedcom\Record\Subm();
             $subm_id = null;
             $chan = null; // @var Record\Chan
@@ -524,10 +510,10 @@ class GedcomGenerator
             $addr = null; //@var Record\Addr
             $rin = null;
             $rfn = null;
-            $lang = array();
-            $phon = array();
-            $obje = array();
-            $note = array();
+            $lang = [];
+            $phon = [];
+            $obje = [];
+            $note = [];
 
             $subm->setSubm($subm_id);
             $subm->setChan($chan);
@@ -543,74 +529,65 @@ class GedcomGenerator
 
             $fam->addSubm($subm);
         }
-        /**
-         *
-         */
-        $_refn = array();
-        foreach($_refn as $item){
+
+        $_refn = [];
+        foreach ($_refn as $item) {
             $refn = new \PhpGedcom\Record\Refn();
             $refn = null;
             $type = null;
 
             $subm->setRefn($refn);
             $subm->setType($type);
-            
+
             $fam->addRefn($refn);
         }
-        /**
-         *
-         */
+
         $_rin = null;
         $fam->setRin($_rin);
-        /**
-         *
-         */
-        $_note = array();
-        foreach($_note as $item){
+
+        $_note = [];
+        foreach ($_note as $item) {
             $note = new \PhpGedcom\Record\NoteRef();
             $fam->addNote($note);
         }
-        /**
-         *
-         */
-        $_sour = array();
-        foreach($_sour as $item){
+
+        $_sour = [];
+        foreach ($_sour as $item) {
             $sour = new \PhpGedcom\Record\SourRef();
             $fam->addSour($sour);
         }
-        /**
-         *
-         */
-        $_obje = array();
-        foreach($_obje as $item){
+
+        $_obje = [];
+        foreach ($_obje as $item) {
             $obje = new \PhpGedcom\Record\ObjeRef();
             $fam->addObje($obje);
         }
         $this->_gedcom->addFam($fam);
+
         return $fam;
     }
 
-    protected function setSubn(){
-
+    protected function setSubn()
+    {
     }
 
-    protected function setSubM(){
-
+    protected function setSubM()
+    {
     }
 
-    protected function setSour(){
-
+    protected function setSour()
+    {
     }
 
-    protected function setNote(){
-
+    protected function setNote()
+    {
     }
 
-    protected function setRepo(){
-
+    protected function setRepo()
+    {
     }
 
-    protected function setObje(){
-
+    protected function setObje()
+    {
     }
 }
