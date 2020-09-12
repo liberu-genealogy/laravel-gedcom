@@ -56,7 +56,7 @@ class Obje
 
         // store Note
         $files = $obje->getFile(); // Record/NoteRef array
-        if (($files && count((is_countable($files)?$files:[])))) {
+        if (($files && count((is_countable($files) ? $files : [])))) {
             foreach ($files as $item) {
                 \ModularSoftware\LaravelGedcom\Utils\Importer\ObjeRef\File::read($conn, $item, $_group, $_gid);
             }
