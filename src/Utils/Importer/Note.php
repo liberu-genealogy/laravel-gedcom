@@ -1,26 +1,22 @@
 <?php
 
 namespace ModularSoftware\LaravelGedcom\Utils\Importer;
-use \App\Note as MNote; 
-use \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef;
-use \ModularSoftware\LaravelGedcom\Utils\Importer\Chan;
-use \ModularSoftware\LaravelGedcom\Utils\Importer\Refn;
+
+use App\Note as MNote;
 
 class Note
 {
     /**
      * PhpGedcom\Record\NoteRef $noteref
-     * String $group 
-     * Integer $group_id
-     * 
+     * String $group
+     * Integer $group_id.
      */
-
-    public static function read($conn,\PhpGedcom\Record\Note $note, $group='', $group_id=0)
+    public static function read($conn, \PhpGedcom\Record\Note $note, $group = '', $group_id = 0)
     {
         $_note = $note->getNote();
         $rin = $note->getRin();
 
-        // store note 
+        // store note
         $key = ['group'=>$group, 'gid'=>$group_id, 'note'=>$_note];
         $data = ['group'=>$group, 'gid'=>$group_id, 'note'=>$_note, 'rin'=>$rin];
         $record = MNote::on($conn)->updateOrCreate($key, $data);
@@ -30,24 +26,25 @@ class Note
         $_gid = $record->id;
         // SourRef array
         $sour = $note->getSour();
-        if($sour && count($sour) > 0){
-            foreach($sour as $item) {
-                SourRef::read($conn,$item, $_group, $_gid);
+        if ($sour && count($sour) > 0) {
+            foreach ($sour as $item) {
+                SourRef::read($conn, $item, $_group, $_gid);
             }
         }
         // Refn array
         $refn = $note->getRefn();
-        if($refn && count($refn) > 0){
-            foreach($refn as $item) {
-                Refn::read($conn,$item, $_group, $_gid);
+        if ($refn && count($refn) > 0) {
+            foreach ($refn as $item) {
+                Refn::read($conn, $item, $_group, $_gid);
             }
         }
 
-        // Chan 
+        // Chan
         $chan = $note->getChan();
-        if($chan !== null){
-            Chan::read($conn,$chan, $_group, $_gid);
+        if ($chan !== null) {
+            Chan::read($conn, $chan, $_group, $_gid);
         }
+
         return $_gid;
     }
 }
