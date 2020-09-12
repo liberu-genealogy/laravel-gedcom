@@ -13,7 +13,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             GedcomImporter::class
         ]);
 
-        $this->app->bind('asdfx/laravel-gedcom:parser', function () {
+        $this->app->bind('modularsoftware/laravel-gedcom:parser', function () {
             return new GedcomParser();
         });
     }

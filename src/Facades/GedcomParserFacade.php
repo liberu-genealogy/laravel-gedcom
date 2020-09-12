@@ -8,6 +8,6 @@ class GedcomParserFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'asdfx/laravel-gedcom:parser';
+        return 'modularsoftware/laravel-gedcom:parser';
     }
 }
