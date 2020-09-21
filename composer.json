@@ -6,15 +6,6 @@
     "genealogiawebsite/php-gedcom": "^1.0"
   },
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Alex Mills",
-      "email": "alex@asdfx.us"
-    },
-      "name": "Curtis Delicata",
-      "email": "curtis.delicata@outlook.com"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "ModularSoftware\\LaravelGedcom\\": "src"
