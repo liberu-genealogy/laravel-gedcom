@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\SourRef;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 
 use App\SourceRefEven;
 

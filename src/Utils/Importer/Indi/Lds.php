@@ -1,10 +1,10 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Indi;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
 use App\PersonLds;
-use ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef;
-use ModularSoftware\LaravelGedcom\Utils\Importer\SourRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 
 class Lds
 {

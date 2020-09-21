@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Sour\Data;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour\Data;
 
 use App\SourceDataEven;
 

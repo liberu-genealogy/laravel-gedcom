@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Indi;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
 use App\PersonName;
 
@@ -57,7 +57,7 @@ class Name
         if ($note && count($note) > 0) {
             foreach ($note as $_item) {
                 if ($_item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $_item, $_group, $_gid);
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $_item, $_group, $_gid);
                 }
             }
         }
@@ -67,7 +67,7 @@ class Name
         if ($sour && count($sour) > 0) {
             foreach ($sour as $_item) {
                 if ($_item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn, $_item, $_group, $_gid);
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($conn, $_item, $_group, $_gid);
                 }
             }
         }
@@ -75,13 +75,13 @@ class Name
         // store fone
         $fone = $item->getFone();
         if ($fone != null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Name\Fone::read($conn, $fone, $_group, $_gid);
+            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name\Fone::read($conn, $fone, $_group, $_gid);
         }
 
         // store romn
         $romn = $item->getRomn();
         if ($romn != null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Name\Romn::read($conn, $romn, $_group, $_gid);
+            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name\Romn::read($conn, $romn, $_group, $_gid);
         }
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Observers;
+namespace GenealogiaWebsite\LaravelGedcom\Observers;
 
-use ModularSoftware\LaravelGedcom\Utils\DateParser;
+use GenealogiaWebsite\LaravelGedcom\Utils\DateParser;
 
 class EventActionsObserver
 {

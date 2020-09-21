@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Indi;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
 use App\PersonDesi;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
 use App\Chan as MChan;
 

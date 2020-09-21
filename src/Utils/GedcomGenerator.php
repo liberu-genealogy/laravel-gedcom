@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils;
+namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
 use App\Family;
 use App\Person;

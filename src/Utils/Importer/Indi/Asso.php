@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Indi;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
 use App\PersonAsso;
 
@@ -29,7 +29,7 @@ class Asso
         if ($note && count($note) > 0) {
             foreach ($note as $item) {
                 if ($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }
@@ -39,7 +39,7 @@ class Asso
         if ($sour && count($sour) > 0) {
             foreach ($sour as $item) {
                 if ($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }

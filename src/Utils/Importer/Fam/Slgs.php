@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Fam;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam;
 
 use App\FamilySlgs;
 
@@ -49,7 +49,7 @@ class Slgs
         if ($sour && count($sour) > 0) {
             foreach ($sour as $item) {
                 if ($item) {
-                    \ModularSoftware\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }
@@ -57,7 +57,7 @@ class Slgs
         $note = $slgs->getNote();
         if ($note && count($note) > 0) {
             foreach ($note as $item) {
-                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
     }

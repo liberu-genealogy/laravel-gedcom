@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
 use App\Subn as MSubn;
 
@@ -36,12 +36,12 @@ class Subn
 
         if ($note != null && count($note) > 0) {
             foreach ($note as $item) {
-                \ModularSoftware\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
         $chan = $subn->getChan() ?? null; // Record\Chan---
         if ($chan !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
+            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
 use App\Repository;
 
@@ -19,7 +19,7 @@ class Repo
         $name = $repo->getName(); // string
         $rin = $repo->getRin(); // string
         $addr = $repo->getAddr(); // Record/Addr
-        $addr_id = \ModularSoftware\LaravelGedcom\Utils\Importer\Addr::read($conn, $addr);
+        $addr_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Addr::read($conn, $addr);
         $_phon = $repo->getPhon(); // Record/Phon array
         $phon = implode(',', $_phon);
         $_email = $repo->getEmail();
@@ -72,7 +72,7 @@ class Repo
 
         $chan = $repo->getChan(); // Recore/Chan
         if ($chan !== null) {
-            \ModularSoftware\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
+            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
 
         return $_gid;

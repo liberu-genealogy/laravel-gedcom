@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularSoftware\LaravelGedcom\Utils\Importer\Indi\Name;
+namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
 
 use App\PersonNameFone;
 

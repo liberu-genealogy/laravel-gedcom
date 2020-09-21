@@ -8,13 +8,13 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "ModularSoftware\\LaravelGedcom\\": "src"
+      "GenealogiaWebsite\\LaravelGedcom\\": "src"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "ModularSoftware\\LaravelGedcom\\ServiceProvider"
+        "GenealogiaWebsite\\LaravelGedcom\\ServiceProvider"
       ]
     }
   }
