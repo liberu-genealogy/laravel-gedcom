@@ -272,7 +272,7 @@ class GedcomParser
         $attr = $individual->getAllAttr();
         $events = $individual->getAllEven();
         $note = $individual->getNote();
-        $sour = $individual->getSour();
+        $indv_sour = $individual->getSour();
         $alia = $individual->getAlia(); // string array
         $asso = $individual->getAsso();
         $subm = $individual->getSubm();
@@ -314,17 +314,23 @@ class GedcomParser
         $_gid = $person->id;
         if ($names != null && count($names) > 0) {
             foreach ($names as $item) {
+                if ($item){
                 \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name::read($this->conn, $item, $_group, $_gid);
+                }
             }
         }
         if ($note != null && count($note) > 0) {
             foreach ($note as $item) {
+                if ($item){
                 \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($this->conn, $item, $_group, $_gid);
+                }
             }
         }
-        if ($sour !== null && count($sour) > 0) {
-            foreach ($sour as $item) {
+        if ($indv_sour != null && count($indv_sour) > 0) {
+            foreach ($indv_sour as $item) {
+                if ($item) {
                 \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($this->conn, $item, $_group, $_gid, $this->sour_ids, $this->obje_ids);
+                }
             }
         }
 
