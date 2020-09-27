@@ -314,22 +314,22 @@ class GedcomParser
         $_gid = $person->id;
         if ($names != null && count($names) > 0) {
             foreach ($names as $item) {
-                if ($item){
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name::read($this->conn, $item, $_group, $_gid);
+                if ($item) {
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name::read($this->conn, $item, $_group, $_gid);
                 }
             }
         }
         if ($note != null && count($note) > 0) {
             foreach ($note as $item) {
-                if ($item){
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($this->conn, $item, $_group, $_gid);
+                if ($item) {
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($this->conn, $item, $_group, $_gid);
                 }
             }
         }
         if ($indv_sour != null && count($indv_sour) > 0) {
             foreach ($indv_sour as $item) {
                 if ($item) {
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($this->conn, $item, $_group, $_gid, $this->sour_ids, $this->obje_ids);
+                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($this->conn, $item, $_group, $_gid, $this->sour_ids, $this->obje_ids);
                 }
             }
         }
