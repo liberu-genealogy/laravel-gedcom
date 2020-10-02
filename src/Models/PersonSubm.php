@@ -4,19 +4,16 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $subm
  * @property string $created_at
  * @property string $updated_at
  */
 class PersonSubm extends Model
 {
-
-
     /**
      * The table associated with the model.
      *

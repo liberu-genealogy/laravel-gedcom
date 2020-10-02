@@ -4,9 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $date
  * @property string $plac
  * @property string $created_at
@@ -14,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SourceDataEven extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
@@ -33,5 +30,5 @@ class SourceDataEven extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group','gid','date', 'plac', 'created_at', 'updated_at'];
+    protected $fillable = ['group', 'gid', 'date', 'plac', 'created_at', 'updated_at'];
 }

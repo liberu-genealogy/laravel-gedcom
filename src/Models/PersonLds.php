@@ -4,11 +4,10 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $type
  * @property string $stat
  * @property string $date
@@ -20,8 +19,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PersonLds extends Model
 {
-
-
     /**
      * The "type" of the auto-incrementing ID.
      *

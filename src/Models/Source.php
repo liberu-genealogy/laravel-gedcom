@@ -4,11 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Source extends Model
 {
-
-
     /**
      * The "type" of the auto-incrementing ID.
      *

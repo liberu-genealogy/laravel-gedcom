@@ -4,11 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class SourceRepo extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
@@ -26,6 +23,5 @@ class SourceRepo extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group', 'gid', 'repo_id','caln','created_at', 'updated_at'];
-
+    protected $fillable = ['group', 'gid', 'repo_id', 'caln', 'created_at', 'updated_at'];
 }

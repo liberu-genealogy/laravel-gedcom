@@ -4,11 +4,10 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $date
  * @property string $text
  * @property string $agnc
@@ -17,8 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SourceData extends Model
 {
-
-
     /**
      * The table associated with the model.
      *

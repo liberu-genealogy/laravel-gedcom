@@ -4,9 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $adr1
  * @property string $adr2
  * @property string $city
@@ -18,8 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Addr extends Model
 {
-
-
     /**
      * The "type" of the auto-incrementing ID.
      *

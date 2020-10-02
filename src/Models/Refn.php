@@ -4,11 +4,10 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $refn
  * @property string $type
  * @property string $created_at
@@ -16,8 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Refn extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
