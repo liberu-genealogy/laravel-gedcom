@@ -34,16 +34,10 @@ class CreatePeopleTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('users', fn (Blueprint $table) => (
-            $table->foreign('person_id')->references('id')->on('people')
-        ));
     }
 
     public function down()
     {
-        Schema::table('users', fn (Blueprint $table) => (
-            $table->dropForeign(['person_id'])
-        ));
 
         Schema::dropIfExists('people');
     }
