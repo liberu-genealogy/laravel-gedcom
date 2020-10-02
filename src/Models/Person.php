@@ -5,6 +5,7 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 use Models\Family;
 use Models\PersonEvent;
 use Models\Place;
+use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
