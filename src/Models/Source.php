@@ -26,7 +26,7 @@ class Source extends Model
 
     public function citations()
     {
-        return $this->hasMany(Citations::class);
+        return $this->hasMany(Citation::class);
     }
 
     public function getCitationListAttribute()
