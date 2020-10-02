@@ -2,8 +2,8 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Commands;
 
-use Illuminate\Console\Command;
 use GenealogiaWebsite\LaravelGedcom\Facades\GedcomParserFacade;
+use Illuminate\Console\Command;
 
 class GedcomImporter extends Command
 {
