@@ -5,8 +5,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property int $user_id
+ * @property int    $id
+ * @property int    $user_id
  * @property string $slug
  * @property string $status
  * @property string $created_at

@@ -4,11 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Place extends Model
 {
-
-
     protected $fillable = ['description', 'title', 'date'];
 
     public static function getIdByTitle($title)

@@ -3,21 +3,17 @@
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Models\Family;
-use Models\Place;
 use Models\PersonEvent;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
+use Models\Place;
 
 class Person extends Model
 {
-
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = ['deleted_at', 'birthday','deathday'];
+    protected $dates = ['deleted_at', 'birthday', 'deathday'];
 
     protected $guarded = ['id'];
 
@@ -84,13 +80,14 @@ class Person extends Model
         $event = PersonEvent::updateOrCreate(
             [
                 'person_id' => $this->id,
-                'title' => $title,
+                'title'     => $title,
             ],
             [
-                'person_id' => $this->id,
-                'title' => $title,
+                'person_id'   => $this->id,
+                'title'       => $title,
                 'description' => $description,
-            ]);
+            ]
+        );
 
         if ($date) {
             $event->date = $date;
@@ -103,11 +100,11 @@ class Person extends Model
         }
 
         // add birthyear to person table ( for form builder )
-        if ($title == 'BIRT' && ! empty($date)) {
+        if ($title == 'BIRT' && !empty($date)) {
             $this->birthday = date('Y-m-d', strtotime($date));
         }
         // add deathyear to person table ( for form builder )
-        if ($title == 'DEAT' && ! empty($date)) {
+        if ($title == 'DEAT' && !empty($date)) {
             $this->deathday = date('Y-m-d', strtotime($date));
         }
         $this->save();
@@ -129,5 +126,4 @@ class Person extends Model
     {
         return $this->givn;
     }
-
 }

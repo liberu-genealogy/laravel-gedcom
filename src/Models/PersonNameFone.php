@@ -4,11 +4,10 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $type
  * @property string $name
  * @property string $npfx
@@ -20,11 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  */
-
 class PersonNameFone extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
@@ -42,5 +38,5 @@ class PersonNameFone extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group', 'gid', 'type','name','npfx','givn','nick','spfx','surn','nsfx','created_at', 'updated_at'];
+    protected $fillable = ['group', 'gid', 'type', 'name', 'npfx', 'givn', 'nick', 'spfx', 'surn', 'nsfx', 'created_at', 'updated_at'];
 }

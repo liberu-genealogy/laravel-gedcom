@@ -4,13 +4,11 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\People\Models\Person;
-// use GenealogiaWebsite\LaravelGedcom\Models\Person;
 
+// use GenealogiaWebsite\LaravelGedcom\Models\Person;
 
 class Family extends Model
 {
-
-
     protected $fillable = ['description', 'is_active', 'husband_id', 'wife_id', 'type_id', 'chan', 'nchi', 'rin'];
 
     protected $attributes = ['is_active' => false];
@@ -61,13 +59,14 @@ class Family extends Model
         $event = FamilyEvent::updateOrCreate(
             [
                 'family_id' => $this->id,
-                'title' => $title,
+                'title'     => $title,
             ],
             [
-                'family_id' => $this->id,
-                'title' => $title,
+                'family_id'   => $this->id,
+                'title'       => $title,
                 'description' => $description,
-            ]);
+            ]
+        );
         if ($date) {
             $event->date = $date;
             $event->save();

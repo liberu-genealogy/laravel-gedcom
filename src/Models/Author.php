@@ -4,11 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Author extends Model
 {
-
-
     protected $fillable = ['description', 'is_active', 'name'];
 
     protected $attributes = ['is_active' => false];

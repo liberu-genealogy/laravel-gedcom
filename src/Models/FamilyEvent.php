@@ -2,14 +2,12 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 use GenealogiaWebsite\LaravelGedcom\Observers\EventActionsObserver;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FamilyEvent extends Event
 {
     use SoftDeletes;
-
 
     /**
      * The attributes that should be mutated to dates.

@@ -4,12 +4,11 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
- * @property int $sour_id
+ * @property int    $gid
+ * @property int    $sour_id
  * @property string $text
  * @property string $quay
  * @property string $page
@@ -18,8 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SourceRef extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
@@ -37,6 +34,5 @@ class SourceRef extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group', 'gid', 'sour_id','text','quay','page','created_at', 'updated_at'];
-
+    protected $fillable = ['group', 'gid', 'sour_id', 'text', 'quay', 'page', 'created_at', 'updated_at'];
 }
