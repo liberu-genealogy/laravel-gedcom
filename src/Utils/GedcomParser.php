@@ -220,8 +220,8 @@ class GedcomParser
             //Record end time and calculate total execution time
             $time_end = microtime(true);
             $execution_time = ($time_end - $time_start);
-            error_log("\nTotal Execution Time: " . round($execution_time) . " Seconds");
-            
+            error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
+
             $bar->finish();
         }
     }

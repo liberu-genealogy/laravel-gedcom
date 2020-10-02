@@ -3,7 +3,6 @@
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use GenealogiaWebsite\LaravelGedcom\Models\Person;
 
 class Family extends Model
 {
