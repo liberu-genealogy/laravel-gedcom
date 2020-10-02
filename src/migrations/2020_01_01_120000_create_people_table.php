@@ -32,13 +32,11 @@ class CreatePeopleTable extends Migration
 
                 $table->timestamps();
             });
-
         }
     }
 
     public function down()
     {
-
         Schema::dropIfExists('people');
     }
 }

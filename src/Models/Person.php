@@ -2,9 +2,6 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Family;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonEvent;
-use GenealogiaWebsite\LaravelGedcom\Models\Place;
 use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
