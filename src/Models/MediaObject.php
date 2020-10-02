@@ -4,10 +4,9 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
- * @property int $gid
+ * @property int    $id
+ * @property int    $gid
  * @property string $group
  * @property string $obje_id
  * @property string $titl
@@ -17,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MediaObject extends Model
 {
-
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -28,5 +26,5 @@ class MediaObject extends Model
     /**
      * @var array
      */
-    protected $fillable = ['gid', 'group', 'titl', 'obje_id','rin', 'created_at', 'updated_at'];
+    protected $fillable = ['gid', 'group', 'titl', 'obje_id', 'rin', 'created_at', 'updated_at'];
 }

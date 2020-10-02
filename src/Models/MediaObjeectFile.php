@@ -4,11 +4,9 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class MediaObjeectFile extends Model
 {
     //
-
 
     /**
      * The table associated with the model.
@@ -28,5 +26,4 @@ class MediaObjeectFile extends Model
      * @var array
      */
     protected $fillable = ['gid', 'group', 'form', 'medi', 'type', 'created_at', 'updated_at'];
-
 }

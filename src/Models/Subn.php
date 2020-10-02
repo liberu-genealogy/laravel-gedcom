@@ -4,11 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Subn extends Model
 {
-
-
     /**
      * The table associated with the model.
      *

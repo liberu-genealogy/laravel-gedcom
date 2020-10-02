@@ -4,13 +4,12 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $name
- * @property int $addr_id
+ * @property int    $addr_id
  * @property string $rin
  * @property string $rfn
  * @property string $lang
@@ -23,8 +22,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Subm extends Model
 {
-
-
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -35,5 +32,5 @@ class Subm extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group', 'gid', 'name', 'addr_id', 'rin', 'rfn', 'lang','phon','email','fax','www', 'created_at', 'updated_at'];
+    protected $fillable = ['group', 'gid', 'name', 'addr_id', 'rin', 'rfn', 'lang', 'phon', 'email', 'fax', 'www', 'created_at', 'updated_at'];
 }

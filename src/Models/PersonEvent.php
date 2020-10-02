@@ -2,13 +2,11 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 use GenealogiaWebsite\LaravelGedcom\Observers\EventActionsObserver;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PersonEvent extends Event
 {
-
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
@@ -42,7 +40,7 @@ class PersonEvent extends Event
     {
         parent::boot();
 
-        self::observe(new EventActionsObserver);
+        self::observe(new EventActionsObserver());
     }
 
     public function person()

@@ -4,11 +4,8 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Repository extends Model
 {
-
-
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -16,7 +13,7 @@ class Repository extends Model
      */
     protected $keyType = 'integer';
 
-    protected $fillable = ['repo', 'name', 'addr_id', 'rin', 'phon','email','fax','www', 'name', 'description', 'type_id', 'is_active'];
+    protected $fillable = ['repo', 'name', 'addr_id', 'rin', 'phon', 'email', 'fax', 'www', 'name', 'description', 'type_id', 'is_active'];
 
     protected $attributes = ['is_active' => false];
 

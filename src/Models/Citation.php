@@ -2,14 +2,10 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Source;
 use Illuminate\Database\Eloquent\Model;
-
 
 class Citation extends Model
 {
-
-
     protected $fillable = ['name', 'description', 'repository_id', 'volume', 'page', 'is_active', 'confidence', 'source_id'];
 
     protected $attributes = ['is_active' => false];

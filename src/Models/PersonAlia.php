@@ -4,19 +4,16 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * @property int $id
+ * @property int    $id
  * @property string $group
- * @property int $gid
+ * @property int    $gid
  * @property string $alia
  * @property string $created_at
  * @property string $updated_at
  */
 class PersonAlia extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
@@ -34,5 +31,5 @@ class PersonAlia extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group', 'gid', 'alia','import_confirm', 'created_at', 'updated_at'];
+    protected $fillable = ['group', 'gid', 'alia', 'import_confirm', 'created_at', 'updated_at'];
 }
