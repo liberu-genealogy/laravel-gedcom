@@ -48,11 +48,11 @@ $parser->parse($filename, true);
 ## Documentation
 
 ### Database
-This package relies on the database tables already in genealogiawebsite/genealogy
- which map to models:
+This package will create the database tables, which map to models.
 
 ### `parse()` Method
-The `parse()` method takes two parameters, `string $filename`, and `bool $progressBar = false`. 
+The `parse()` method takes three parameters, `string $filename`, `bool $progressBar = false`
+and `string $conn` 
 If you set `$progressBar` to true, a ProgressBar will be output to `php://stdout`, which is useful when you are calling
 the parser from Artisan commands.
 
