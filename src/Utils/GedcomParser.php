@@ -31,6 +31,9 @@ class GedcomParser
 
     public function parse($conn, string $filename, string $slug, bool $progressBar = false)
     {
+        //start calculating the time
+        $time_start = microtime(true);
+
         $this->conn = $conn;
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new \PhpGedcom\Parser();
@@ -214,6 +217,11 @@ class GedcomParser
         }
 
         if ($progressBar === true) {
+            //Record end time and calculate total execution time
+            $time_end = microtime(true);
+            $execution_time = ($time_end - $time_start);
+            error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
+
             $bar->finish();
         }
     }
