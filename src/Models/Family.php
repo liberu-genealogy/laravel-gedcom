@@ -4,7 +4,7 @@ namespace GenealogiaWebsite\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\People\Models\Person;
-// use App\Person;
+// use GenealogiaWebsite\LaravelGedcom\Models\Person;
 
 
 class Family extends Model

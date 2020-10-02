@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonSubm;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonSubm;
 
 class Subm
 {

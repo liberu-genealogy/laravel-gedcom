@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonLds;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonLds;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 

@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
 
-use App\SourceData;
+use GenealogiaWebsite\LaravelGedcom\Models\SourceData;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour\Data\Even;
 

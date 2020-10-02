@@ -2,15 +2,15 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
-use App\Events\GedComProgressSent;
-use App\Family;
-use App\MediaObject;
-use App\Note;
-use App\Person;
-use App\Repository;
-use App\Source;
-use App\Subm;
-use App\Subn;
+use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
+use GenealogiaWebsite\LaravelGedcom\Models\Family;
+use GenealogiaWebsite\LaravelGedcom\Models\MediaObject;
+use GenealogiaWebsite\LaravelGedcom\Models\Note;
+use GenealogiaWebsite\LaravelGedcom\Models\Person;
+use GenealogiaWebsite\LaravelGedcom\Models\Repository;
+use GenealogiaWebsite\LaravelGedcom\Models\Source;
+use GenealogiaWebsite\LaravelGedcom\Models\Subm;
+use GenealogiaWebsite\LaravelGedcom\Models\Subn;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;

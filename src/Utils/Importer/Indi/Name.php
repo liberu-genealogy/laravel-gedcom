@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonName;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonName;
 
 class Name
 {

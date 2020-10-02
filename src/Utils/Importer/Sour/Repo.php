@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
 
-use App\SourceRepo;
+use GenealogiaWebsite\LaravelGedcom\Models\SourceRepo;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
 
 class Repo

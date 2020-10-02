@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonAlia;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
 
 class Alia
 {

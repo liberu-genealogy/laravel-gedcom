@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam;
 
-use App\FamilySlgs;
+use GenealogiaWebsite\LaravelGedcom\Models\FamilySlgs;
 
 class Slgs
 {

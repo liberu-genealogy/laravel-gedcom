@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam;
 
-use App\FamilyEvent;
+use GenealogiaWebsite\LaravelGedcom\Models\FamilyEvent;
 
 class Even
 {

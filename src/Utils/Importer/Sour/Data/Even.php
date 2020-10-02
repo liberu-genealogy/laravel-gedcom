@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour\Data;
 
-use App\SourceDataEven;
+use GenealogiaWebsite\LaravelGedcom\Models\SourceDataEven;
 
 class Even
 {

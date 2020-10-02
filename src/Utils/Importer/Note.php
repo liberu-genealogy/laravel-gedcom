@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Note as MNote;
+use GenealogiaWebsite\LaravelGedcom\Models\Note as MNote;
 
 class Note
 {

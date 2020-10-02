@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Source;
+use GenealogiaWebsite\LaravelGedcom\Models\Source;
 
 class Sour
 {

@@ -2,8 +2,8 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
-use App\Family;
-use App\Person;
+use GenealogiaWebsite\LaravelGedcom\Models\Family;
+use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use PhpGedcom\Gedcom;
 
 class GedcomGenerator

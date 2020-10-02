@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonAsso;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
 
 class Asso
 {

@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
 
-use App\PersonNameFone;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonNameFone;
 
 class Fone
 {

@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Refn as MRefn;
+use GenealogiaWebsite\LaravelGedcom\Models\Refn as MRefn;
 
 class Refn
 {

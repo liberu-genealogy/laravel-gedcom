@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonEvent;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonEvent;
 
 class Even
 {

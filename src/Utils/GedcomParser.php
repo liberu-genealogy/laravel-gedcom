@@ -2,11 +2,11 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
-use App\Events\GedComProgressSent;
-use App\Family;
-use App\Person;
-use App\PersonAlia;
-use App\PersonAsso;
+use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
+use GenealogiaWebsite\LaravelGedcom\Models\Family;
+use GenealogiaWebsite\LaravelGedcom\Models\Person;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Input\StringInput;

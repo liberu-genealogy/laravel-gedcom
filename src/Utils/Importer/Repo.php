@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Repository;
+use GenealogiaWebsite\LaravelGedcom\Models\Repository;
 
 class Repo
 {

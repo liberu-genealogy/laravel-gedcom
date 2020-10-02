@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Models;
 
-use App\Source;
+use GenealogiaWebsite\LaravelGedcom\Models\Source;
 use Illuminate\Database\Eloquent\Model;
 
 

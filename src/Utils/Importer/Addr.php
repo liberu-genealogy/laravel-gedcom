@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Addr as MAddr;
+use GenealogiaWebsite\LaravelGedcom\Models\Addr as MAddr;
 
 class Addr
 {

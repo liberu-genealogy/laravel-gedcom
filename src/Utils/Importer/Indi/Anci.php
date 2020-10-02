@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonAnci;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonAnci;
 
 class Anci
 {

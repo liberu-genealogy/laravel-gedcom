@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
 
-use App\PersonNameRomn;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonNameRomn;
 
 class Romn
 {

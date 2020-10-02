@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Chan as MChan;
+use GenealogiaWebsite\LaravelGedcom\Models\Chan as MChan;
 
 class Chan
 {

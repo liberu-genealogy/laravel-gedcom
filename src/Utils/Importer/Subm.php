@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\Subm as MSubm;
+use GenealogiaWebsite\LaravelGedcom\Models\Subm as MSubm;
 
 class Subm
 {

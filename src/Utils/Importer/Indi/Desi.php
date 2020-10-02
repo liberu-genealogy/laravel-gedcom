@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
 
-use App\PersonDesi;
+use GenealogiaWebsite\LaravelGedcom\Models\PersonDesi;
 
 class Desi
 {

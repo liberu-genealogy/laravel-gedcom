@@ -2,7 +2,7 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
 
-use App\MediaObject;
+use GenealogiaWebsite\LaravelGedcom\Models\MediaObject;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef\File;
 
 class ObjeRef
