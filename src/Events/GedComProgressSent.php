@@ -21,7 +21,9 @@ class GedComProgressSent implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param $slug
+     * @param $total
+     * @param $complete
      */
     public function __construct($slug, $total, $complete)
     {
@@ -34,7 +36,7 @@ class GedComProgressSent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {
