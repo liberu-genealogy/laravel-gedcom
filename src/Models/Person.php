@@ -63,7 +63,7 @@ class Person extends Model
 
     public static function getList()
     {
-        $persons = self::get();
+        $persons = self::query()->get();
         $result = [];
         foreach ($persons as $person) {
             $result[$person->id] = $person->fullname();
@@ -75,7 +75,7 @@ class Person extends Model
     public function addEvent($title, $date, $place, $description = '')
     {
         $place_id = Place::getIdByTitle($place);
-        $event = PersonEvent::updateOrCreate(
+        $event = PersonEvent::query()->updateOrCreate(
             [
                 'person_id' => $this->id,
                 'title'     => $title,
