@@ -34,14 +34,14 @@ class Family extends Model
 
     public function title()
     {
-        return (($this->husband) ? $this->husband->fullname() : '?').
+        return ($this->husband ? $this->husband->fullname() : '?').
             ' + '.
-            (($this->wife) ? $this->wife->fullname() : '?');
+            ($this->wife ? $this->wife->fullname() : '?');
     }
 
     public static function getList()
     {
-        $families = self::get();
+        $families = self::query()->get();
         $result = [];
         foreach ($families as $family) {
             $result[$family->id] = $family->title();
@@ -53,7 +53,7 @@ class Family extends Model
     public function addEvent($title, $date, $place, $description = '')
     {
         $place_id = Place::getIdByTitle($place);
-        $event = FamilyEvent::updateOrCreate(
+        $event = FamilyEvent::query()->updateOrCreate(
             [
                 'family_id' => $this->id,
                 'title'     => $title,
@@ -76,19 +76,11 @@ class Family extends Model
 
     public function getWifeName()
     {
-        if ($this->wife) {
-            return $this->wife->fullname();
-        } else {
-            return 'unknown woman';
-        }
+        return $this->wife ? $this->wife->fullname() : 'unknown woman';
     }
 
     public function getHusbandName()
     {
-        if ($this->husband) {
-            return $this->husband->fullname();
-        } else {
-            return 'unknown man';
-        }
+        return $this->husband ? $this->husband->fullname() : 'unknown man';
     }
 }
