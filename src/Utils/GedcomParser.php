@@ -364,7 +364,7 @@ class GedcomParser
         if ($subm && count($subm) > 0) {
             foreach ($subm as $item) {
                 if ($item) {
-                    Importer\Indi\Subm::read($this->conn, $item, $_group, $_gid, $this->subm_ids);
+                    Subm::read($this->conn, $item, $_group, $_gid, $this->subm_ids);
                 }
             }
         }
