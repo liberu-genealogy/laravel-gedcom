@@ -16,7 +16,7 @@ class CreateSourcesTable extends Migration
         Schema::create('sources', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
-            $table->text('description', 65535)->nullable();
+            $table->text('description')->nullable();
             $table->dateTime('date')->nullable();
             $table->integer('is_active')->nullable();
             $table->integer('author_id')->nullable();
@@ -24,16 +24,16 @@ class CreateSourcesTable extends Migration
             $table->integer('publication_id')->nullable();
             $table->integer('type_id')->nullable();
             $table->string('sour')->nullable();
-            $table->text('titl', 65535)->nullable();
+            $table->text('titl')->nullable();
             $table->string('auth')->nullable();
             $table->string('data')->nullable();
-            $table->text('text', 65535)->nullable();
-            $table->text('publ', 65535)->nullable();
+            $table->text('text')->nullable();
+            $table->text('publ')->nullable();
             $table->string('abbr')->nullable();
             $table->string('group')->nullable();
             $table->integer('gid')->nullable();
             $table->string('quay')->nullable();
-            $table->text('page', 65535)->nullable();
+            $table->text('page')->nullable();
             $table->string('rin')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
