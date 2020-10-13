@@ -12,6 +12,7 @@ use GenealogiaWebsite\LaravelGedcom\Models\Source;
 use GenealogiaWebsite\LaravelGedcom\Models\Subm;
 use GenealogiaWebsite\LaravelGedcom\Models\Subn;
 use Illuminate\Console\OutputStyle;
+use PhpGedcom\Parser;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -28,13 +29,12 @@ class GedcomWriter
 
     public function parse(string $filename, string $slug, bool $progressBar = false)
     {
-        $parser = new \PhpGedcom\Parser();
+        $parser = new Parser();
         $gedcom = @$parser->parse($filename);
 
         /**
          * work.
          */
-        $head = $gedcom->getHead();
         $subn = $gedcom->getSubn();
         $subm = $gedcom->getSubm();
         $sour = $gedcom->getSour();
@@ -190,25 +190,6 @@ class GedcomWriter
         $rfn = $individual->getRfn();
         $afn = $individual->getAfn();
 
-        // array value
-        $note = $individual->getNote();
-        $obje = $individual->getObje();
-        $sour = $individual->getSour();
-        $fams = $individual->getFams();
-        $famc = $individual->getFamc();
-        $alia = $individual->getAlia();
-        $asso = $individual->getAsso();
-        $subm = $individual->getSubm();
-        $anci = $individual->getAnci();
-        $desi = $individual->getDesi();
-        $refn = $individual->getRefn();
-
-        // object
-        $bapl = $individual->getBapl();
-        $conl = $individual->getConl();
-        $endl = $individual->getEndl();
-        $slgc = $individual->getSlgc();
-
         $sex = preg_replace('/[^MF]/', '', $individual->getSex());
         $attr = $individual->getAllAttr();
         $events = $individual->getAllEven();
@@ -216,7 +197,7 @@ class GedcomWriter
         if ($givn == '') {
             $givn = $name;
         }
-        $person = Person::updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid', 'chan', 'rin', 'resn', 'rfn', 'afn'));
+        $person = Person::query()->updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid', 'chan', 'rin', 'resn', 'rfn', 'afn'));
         $this->persons_id[$g_id] = $person->id;
 
         if ($events !== null) {
@@ -243,22 +224,12 @@ class GedcomWriter
 
     private function getFamily($family)
     {
-        $g_id = $family->getId();
         $husb = $family->getHusb();
         $wife = $family->getWife();
 
         // string
         $chan = $family->getChan();
         $nchi = $family->getNchi();
-
-        // array
-        $_slgs = $family->getSlgs();
-        $_subm = $family->getSubm();
-        $_refn = $family->getRefn();
-        $_rin = $family->getRin();
-        $_note = $family->getNote();
-        $_sour = $family->getSour();
-        $_obje = $family->getObje();
 
         $description = null;
         $type_id = 0;
@@ -268,12 +239,12 @@ class GedcomWriter
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
-        $family = Family::updateOrCreate(compact('husband_id', 'wife_id'), compact('husband_id', 'wife_id', 'description', 'type_id', 'chan', 'nchi'));
+        $family = Family::query()->updateOrCreate(compact('husband_id', 'wife_id'), compact('husband_id', 'wife_id', 'description', 'type_id', 'chan', 'nchi'));
 
         if ($children !== null) {
             foreach ($children as $child) {
                 if (isset($this->persons_id[$child])) {
-                    $person = Person::find($this->persons_id[$child]);
+                    $person = Person::query()->find($this->persons_id[$child]);
                     $person->child_in_family_id = $family->id;
                     $person->save();
                 }
@@ -298,7 +269,7 @@ class GedcomWriter
         $desc = $subn->getDesc();
         $ordi = $subn->getOrdi();
         $rin = $subn->getRin();
-        $_subn = Subn::updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'));
+        Subn::query()->updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'));
     }
 
     // insert subm data to model
@@ -359,26 +330,20 @@ class GedcomWriter
             array_push($arr_phon, $__phon);
         }
         $phon = json_encode($arr_phon);
-        Subm::updateOrCreate(compact('subm', 'name', 'addr', 'rin', 'rfn', 'lang', 'phon'), compact('subm', 'name', 'addr', 'rin', 'rfn', 'lang', 'phon'));
+        Subm::query()->updateOrCreate(compact('subm', 'name', 'addr', 'rin', 'rfn', 'lang', 'phon'), compact('subm', 'name', 'addr', 'rin', 'rfn', 'lang', 'phon'));
     }
 
     // insert sour data to database
     private function getSour($_sour)
     {
         $sour = $_sour->getSour(); // string
-        $chan = $_sour->getChan(); // Record/Chan
         $titl = $_sour->getTitl(); // string
         $auth = $_sour->getAuth(); // string
         $data = $_sour->getData(); // string
         $text = $_sour->getText(); // string
         $publ = $_sour->getPubl(); // string
-        $repo = $_sour->getRepo(); // Repo
         $abbr = $_sour->getAbbr(); // string
-        $rin = $_sour->getRin(); // string
-        $refn = $_sour->getRefn(); // array
-        $note = $_sour->getNote(); // array
-        $obje = $_sour->getObje(); // array
-        Source::updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'));
+        Source::query()->updateOrCreate(compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'), compact('sour', 'titl', 'auth', 'data', 'text', 'publ', 'abbr'));
     }
 
     // insert note data to database
@@ -386,12 +351,8 @@ class GedcomWriter
     {
         $gid = $_note->getId(); // string
         $note = $_note->getNote(); // string
-        $chan = $_note->getChan(); // string ?
-        $even = $_note->getEven(); // string ?
-        $refn = $_note->getRefn(); // array
         $rin = $_note->getRin(); // string
-        $sour = $_note->getSour(); // array
-        Note::updateOrCreate(compact('gid', 'note', 'rin'), compact('gid', 'note', 'rin'));
+        Note::query()->updateOrCreate(compact('gid', 'note', 'rin'), compact('gid', 'note', 'rin'));
     }
 
     // insert repo data to database
@@ -401,10 +362,7 @@ class GedcomWriter
         $name = $_repo->getName(); // string
         $_addr = $_repo->getAddr(); // Record/Addr
         $rin = $_repo->getRin(); // string
-        $chan = $_repo->getChan(); // Record / Chan --
         $_phon = $_repo->getPhon(); // array
-        $refn = $_repo->getRefn(); // array --
-        $note = $_repo->getNote(); // array --
         $arr_addr = [
             'addr' => $_addr->getAddr(),
             'adr1' => $_addr->getAdr1(),
@@ -420,7 +378,7 @@ class GedcomWriter
             array_push($arr_phon, $__phon);
         }
         $phon = json_encode($arr_phon);
-        Repository::updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));
+        Repository::query()->updateOrCreate(compact('repo', 'name', 'addr', 'rin', 'phon'), compact('repo', 'name', 'addr', 'rin', 'phon'));
     }
 
     // insert obje data to database

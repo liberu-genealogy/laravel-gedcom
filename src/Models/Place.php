@@ -14,11 +14,11 @@ class Place extends Model
         if (empty($title)) {
             return $id;
         }
-        $place = self::where('title', $title)->first();
+        $place = self::query()->where('title', $title)->first();
         if ($place !== null) {
             $id = $place->id;
         } else {
-            $place = self::create(compact('title'));
+            $place = self::query()->create(compact('title'));
             $id = $place->id;
         }
 

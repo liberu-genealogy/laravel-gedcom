@@ -15,11 +15,7 @@ class Event extends Model
 
     public function getPlacename()
     {
-        if ($this->place) {
-            return $this->place->title;
-        } else {
-            return 'unknown place';
-        }
+        return $this->place ? $this->place->title : 'unknown place';
     }
 
     public function getTitle()
