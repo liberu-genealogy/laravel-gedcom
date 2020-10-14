@@ -7,10 +7,30 @@ use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\FamilyData;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Alia;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Anci;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Asso;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Desi;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Even;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Lds;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ParentData;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Repo;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
+use PhpGedcom\Parser;
 use DB;
 
 class GedcomParser
@@ -37,10 +57,11 @@ class GedcomParser
         //start calculating the time
         $time_start = microtime(true);
         $this->conn = $conn;
+        //start calculating the memory - https://www.php.net/manual/en/function.memory-get-usage.php
         $startMemoryUse = round(memory_get_usage()/1048576,2);
         error_log("\nMemory Usage: ".$startMemoryUse.''.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
-        $parser = new \PhpGedcom\Parser();
+        $parser = new Parser();
         $gedcom = @$parser->parse($filename);
         /**
          * work.
@@ -72,7 +93,7 @@ class GedcomParser
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
-            // event(new GedComProgressSent($slug, $total, $complete));
+            event(new GedComProgressSent($slug, $total, $complete));
         }
         Log::info('Individual:'.count($individuals));
         Log::info('Families:'.count($families));
@@ -87,7 +108,7 @@ class GedcomParser
             // $this->getObje($item);
             if ($item) {
                 $_obje_id = $item->getId();
-                $obje_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje::read($this->conn, $item);
+                $obje_id = Obje::read($this->conn, $item);
                 if ($obje_id != 0) {
                     $this->obje_ids[$_obje_id] = $obje_id;
                 }
@@ -95,32 +116,32 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
-        // store informaithttps://www.php.net/manual/en/function.memory-get-usage.phpon about all the submitters to the GEDCOM file.
+        // store information about all the submitters to the GEDCOM file.
         foreach ($subm as $item) {
             if ($item) {
                 $_subm_id = $item->getSubm();
-                $subm_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm::read($this->conn, $item, null, null, $this->obje_ids);
+                $subm_id = Subm::read($this->conn, $item, null, null, $this->obje_ids);
                 $this->subm_ids[$_subm_id] = $subm_id;
             }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
         if ($subn != null) {
             // store the submission information for the GEDCOM file.
             // $this->getSubn($subn);
-            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn::read($this->conn, $subn, $this->subm_ids);
+            Subn::read($this->conn, $subn, $this->subm_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -129,13 +150,13 @@ class GedcomParser
             // $this->getNote($item);
             if ($item) {
                 $note_id = $item->getId();
-                $_note_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note::read($this->conn, $item);
+                $_note_id = Note::read($this->conn, $item);
                 $this->note_ids[$note_id] = $_note_id;
             }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -144,13 +165,13 @@ class GedcomParser
             // $this->getRepo($item);
             if ($item) {
                 $repo_id = $item->getRepo();
-                $_repo_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Repo::read($this->conn, $item);
+                $_repo_id = Repo::read($this->conn, $item);
                 $this->repo_ids[$repo_id] = $_repo_id;
             }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -160,7 +181,7 @@ class GedcomParser
             // $this->getSour($item);
             if ($item) {
                 $_sour_id = $item->getSour();
-                $sour_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour::read($this->conn, $item, $this->obje_ids);
+                $sour_id = Sour::read($this->conn, $item, $this->obje_ids);
                 if ($sour_id != 0) {
                     $this->sour_ids[$_sour_id] = $sour_id;
                 }
@@ -168,16 +189,16 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
         foreach ($individuals as $individual) {
-            \GenealogiaWebsite\LaravelGedcom\Utils\ParentData::getPerson($this->conn,$individual,$this->obje_ids);
+            ParentData::getPerson($this->conn,$individual,$this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -208,11 +229,11 @@ class GedcomParser
 
         foreach ($families as $family) {
             // $this->getFamily($family);
-             \GenealogiaWebsite\LaravelGedcom\Utils\FamilyData::getFamily($this->conn,$family,$this->obje_ids);
+             FamilyData::getFamily($this->conn,$family,$this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                // event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
