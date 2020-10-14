@@ -81,7 +81,7 @@ class ParentData
         $subm = $individual->getSubm();
         $anci = $individual->getAnci();
         // $desi = $individual->getDesi();
-        $refn = $individual->getRefn(); // \PhpGedcom\Record\Refn array
+        $refn = $individual->getRefn(); // 
         $obje = $individual->getObje();
         // object
         $bapl = $individual->getBapl();
@@ -149,7 +149,7 @@ class ParentData
                 }
             }
         }
-        // ??
+       
         if ($asso && count($asso) > 0) {
             foreach ($asso as $item) {
                 if ($item) {

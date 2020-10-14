@@ -42,8 +42,6 @@ class GedcomParser
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
-        // var_dump($gedcom);
-
         /**
          * work.
          */
@@ -219,7 +217,6 @@ class GedcomParser
         }
 
         if ($progressBar === true) {
-            //Record end time and calculate total execution time
             $time_end = microtime(true);
             $endMemoryUse = round(memory_get_usage()/1048576,2);
             $execution_time = ($time_end - $time_start);
