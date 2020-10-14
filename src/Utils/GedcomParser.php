@@ -7,30 +7,11 @@ use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Alia;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Anci;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Asso;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Desi;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Even;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Lds;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Repo;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
-use PhpGedcom\Parser;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
+use DB;
 
 class GedcomParser
 {
@@ -51,18 +32,22 @@ class GedcomParser
 
     public function parse($conn, string $filename, string $slug, bool $progressBar = false)
     {
+        
+        DB::disableQueryLog();
         //start calculating the time
         $time_start = microtime(true);
-
         $this->conn = $conn;
+        $startMemoryUse = round(memory_get_usage()/1048576,2);
+        error_log("\nMemory Usage: ".$startMemoryUse.''.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
-        $parser = new Parser();
+        $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
         // var_dump($gedcom);
 
         /**
          * work.
          */
+        $head = $gedcom->getHead();
         $subn = $gedcom->getSubn();
         $subm = $gedcom->getSubm();
         $sour = $gedcom->getSour();
@@ -80,7 +65,6 @@ class GedcomParser
         $c_repo = count($repo);
         $c_obje = count($obje);
         if ($subn != null) {
-            //
             $c_subn = 1;
         }
 
@@ -90,7 +74,7 @@ class GedcomParser
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
-            event(new GedComProgressSent($slug, $total, $complete));
+            // event(new GedComProgressSent($slug, $total, $complete));
         }
         Log::info('Individual:'.count($individuals));
         Log::info('Families:'.count($families));
@@ -105,7 +89,7 @@ class GedcomParser
             // $this->getObje($item);
             if ($item) {
                 $_obje_id = $item->getId();
-                $obje_id = Obje::read($this->conn, $item);
+                $obje_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje::read($this->conn, $item);
                 if ($obje_id != 0) {
                     $this->obje_ids[$_obje_id] = $obje_id;
                 }
@@ -113,33 +97,32 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
-        // store information about all the submitters to the GEDCOM file.
+        // store informaithttps://www.php.net/manual/en/function.memory-get-usage.phpon about all the submitters to the GEDCOM file.
         foreach ($subm as $item) {
-            // $this->getSubm($item);
             if ($item) {
                 $_subm_id = $item->getSubm();
-                $subm_id = Subm::read($this->conn, $item, null, null, $this->obje_ids);
+                $subm_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm::read($this->conn, $item, null, null, $this->obje_ids);
                 $this->subm_ids[$_subm_id] = $subm_id;
             }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
         if ($subn != null) {
             // store the submission information for the GEDCOM file.
             // $this->getSubn($subn);
-            Subn::read($this->conn, $subn, $this->subm_ids);
+            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn::read($this->conn, $subn, $this->subm_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -148,14 +131,13 @@ class GedcomParser
             // $this->getNote($item);
             if ($item) {
                 $note_id = $item->getId();
-                $_note_id = Note::read($this->conn, $item);
+                $_note_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note::read($this->conn, $item);
                 $this->note_ids[$note_id] = $_note_id;
             }
-
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -164,13 +146,13 @@ class GedcomParser
             // $this->getRepo($item);
             if ($item) {
                 $repo_id = $item->getRepo();
-                $_repo_id = Repo::read($this->conn, $item);
+                $_repo_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Repo::read($this->conn, $item);
                 $this->repo_ids[$repo_id] = $_repo_id;
             }
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
@@ -180,7 +162,7 @@ class GedcomParser
             // $this->getSour($item);
             if ($item) {
                 $_sour_id = $item->getSour();
-                $sour_id = Sour::read($this->conn, $item, $this->obje_ids);
+                $sour_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour::read($this->conn, $item, $this->obje_ids);
                 if ($sour_id != 0) {
                     $this->sour_ids[$_sour_id] = $sour_id;
                 }
@@ -188,21 +170,21 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
         foreach ($individuals as $individual) {
-            $this->getPerson($individual);
+            \GenealogiaWebsite\LaravelGedcom\Utils\ParentData::getPerson($this->conn,$individual,$this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
         // complete person-alia and person-asso table with person table
-        $alia_list = PersonAlia::on($conn)->where('group', 'indi')->where('import_confirm', 0)->get();
+        $alia_list = PersonAlia::on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
         foreach ($alia_list as $item) {
             $alia = $item->alia;
             if (isset($this->person_ids[$alia])) {
@@ -214,7 +196,7 @@ class GedcomParser
             }
         }
 
-        $asso_list = PersonAsso::on($conn)->where('group', 'indi')->where('import_confirm', 0)->get();
+        $asso_list = PersonAsso::on($conn)->select('indi')->where('group', 'indi')->where('import_confirm', 0)->get();
         foreach ($asso_list as $item) {
             $_indi = $item->indi;
             if (isset($this->person_ids[$_indi])) {
@@ -227,20 +209,23 @@ class GedcomParser
         }
 
         foreach ($families as $family) {
-            $this->getFamily($family);
+            // $this->getFamily($family);
+             \GenealogiaWebsite\LaravelGedcom\Utils\FamilyData::getFamily($this->conn,$family,$this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                // event(new GedComProgressSent($slug, $total, $complete));
             }
         }
 
         if ($progressBar === true) {
             //Record end time and calculate total execution time
             $time_end = microtime(true);
+            $endMemoryUse = round(memory_get_usage()/1048576,2);
             $execution_time = ($time_end - $time_start);
+            $memory_usage = $endMemoryUse - $startMemoryUse;
             error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
-
+            error_log("\nMemory Usage: ".$memory_usage.''.' MB');
             $bar->finish();
         }
     }
@@ -253,288 +238,4 @@ class GedcomParser
         ))->createProgressBar($max);
     }
 
-    private function getPerson($individual)
-    {
-        $g_id = $individual->getId();
-
-        $name = '';
-        $givn = '';
-        $surn = '';
-        $fone = null; // PhpGedcom/
-        $romn = null;
-        $names = $individual->getName();
-
-        if (!empty($names)) {
-            $name = current($names)->getName();
-            $givn = current($names)->getGivn();
-            $surn = current($names)->getSurn();
-        }
-
-        // added to database
-        // string value
-        $sex = preg_replace('/[^MF]/', '', $individual->getSex());
-        $uid = $individual->getUid();
-        $resn = $individual->getResn();
-        $rin = $individual->getRin();
-        $rfn = $individual->getRfn();
-        $afn = $individual->getAfn();
-
-        $attr = $individual->getAllAttr();
-        $events = $individual->getAllEven();
-        $note = $individual->getNote();
-        $indv_sour = $individual->getSour();
-        $alia = $individual->getAlia(); // string array
-        $asso = $individual->getAsso();
-        $subm = $individual->getSubm();
-        $anci = $individual->getAnci();
-        $desi = $individual->getDesi();
-        $refn = $individual->getRefn(); // \PhpGedcom\Record\Refn array
-        $obje = $individual->getObje();
-        // object
-        $bapl = $individual->getBapl();
-        $conl = $individual->getConl();
-        $endl = $individual->getEndl();
-        $slgc = $individual->getSlgc();
-
-        $chan = $individual->getChan();
-
-        if ($givn == '') {
-            $givn = $name;
-        }
-
-        $person = Person::on($this->conn)->updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid', 'rin', 'resn', 'rfn', 'afn'));
-        $this->persons_id[$g_id] = $person->id;
-        if ($events !== null) {
-            foreach ($events as $event) {
-                if ($event && count($event) > 0) {
-                    $e_data = $event[0];
-                    Even::read($this->conn, $e_data, $person, $this->obje_ids);
-                }
-            }
-        }
-
-        if ($attr !== null) {
-            foreach ($attr as $event) {
-                $e_data = $event[0];
-                Even::read($this->conn, $e_data, $person);
-            }
-        }
-
-        $_group = 'indi';
-        $_gid = $person->id;
-        if ($names != null && count($names) > 0) {
-            foreach ($names as $item) {
-                if ($item) {
-                    Name::read($this->conn, $item, $_group, $_gid);
-                }
-            }
-        }
-        if ($note != null && count($note) > 0) {
-            foreach ($note as $item) {
-                if ($item) {
-                    NoteRef::read($this->conn, $item, $_group, $_gid);
-                }
-            }
-        }
-        if ($indv_sour != null && count($indv_sour) > 0) {
-            foreach ($indv_sour as $item) {
-                if ($item) {
-                    SourRef::read($this->conn, $item, $_group, $_gid, $this->sour_ids, $this->obje_ids);
-                }
-            }
-        }
-
-        // ??
-        if ($alia && count($alia) > 0) {
-            foreach ($alia as $item) {
-                if ($item) {
-                    Alia::read($this->conn, $item, $_group, $_gid);
-                }
-            }
-        }
-        // ??
-        if ($asso && count($asso) > 0) {
-            foreach ($asso as $item) {
-                if ($item) {
-                    Asso::read($this->conn, $item, $_group, $_gid);
-                }
-            }
-        }
-
-        if ($subm && count($subm) > 0) {
-            foreach ($subm as $item) {
-                if ($item) {
-                    Subm::read($this->conn, $item, $_group, $_gid, $this->subm_ids);
-                }
-            }
-        }
-
-        if ($anci && count($anci) > 0) {
-            foreach ($anci as $item) {
-                if ($item) {
-                    Anci::read($this->conn, $item, $_group, $_gid, $this->subm_ids);
-                }
-            }
-        }
-
-        if ($desi && count($desi) > 0) {
-            foreach ($desi as $item) {
-                if ($item) {
-                    Desi::read($this->conn, $item, $_group, $_gid, $this->subm_ids);
-                }
-            }
-        }
-
-        if ($refn && count($refn) > 0) {
-            foreach ($refn as $item) {
-                if ($item) {
-                    Refn::read($this->conn, $item, $_group, $_gid);
-                }
-            }
-        }
-
-        if ($obje && count($obje) > 0) {
-            foreach ($obje as $item) {
-                if ($item) {
-                    ObjeRef::read($this->conn, $item, $_group, $_gid, $this->obje_ids);
-                }
-            }
-        }
-
-        if ($bapl && count($bapl) > 0) {
-            foreach ($bapl as $item) {
-                if ($item) {
-                    Lds::read($this->conn, $item, $_group, $_gid, 'BAPL', $this->sour_ids, $this->obje_ids);
-                }
-            }
-        }
-
-        if ($conl && count($conl) > 0) {
-            foreach ($conl as $item) {
-                if ($item) {
-                    Lds::read($this->conn, $item, $_group, $_gid, 'CONL', $this->sour_ids, $this->obje_ids);
-                }
-            }
-        }
-
-        if ($endl && count($endl) > 0) {
-            foreach ($endl as $item) {
-                if ($item) {
-                    Lds::read($this->conn, $item, $_group, $_gid, 'ENDL', $this->sour_ids, $this->obje_ids);
-                }
-            }
-        }
-
-        if ($slgc && count($slgc) > 0) {
-            foreach ($slgc as $item) {
-                if ($item) {
-                    Lds::read($this->conn, $item, $_group, $_gid, 'SLGC', $this->sour_ids, $this->obje_ids);
-                }
-            }
-        }
-        if ($chan) {
-            Chan::read($this->conn, $chan, $_group, $_gid);
-        }
-    }
-
-    private function getFamily($family)
-    {
-        $husb = $family->getHusb();
-        $wife = $family->getWife();
-
-        // string
-        $nchi = $family->getNchi();
-        $rin = $family->getRin();
-
-        // array
-        $subm = $family->getSubm();
-        $_slgs = $family->getSlgs();
-
-        $description = null;
-        $type_id = 0;
-
-        $children = $family->getChil();
-        $events = $family->getAllEven();
-        $_note = $family->getNote();
-        $_obje = $family->getObje();
-        $_sour = $family->getSour();
-        $_refn = $family->getRefn();
-
-        // object
-        $chan = $family->getChan();
-
-        $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
-        $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
-
-        $family = Family::on($this->conn)->updateOrCreate(
-            compact('husband_id', 'wife_id'),
-            compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
-        );
-
-        if ($children !== null) {
-            foreach ($children as $child) {
-                if (isset($this->persons_id[$child])) {
-                    $person = Person::on($this->conn)->find($this->persons_id[$child]);
-                    $person->child_in_family_id = $family->id;
-                    $person->save();
-                }
-            }
-        }
-
-        if ($events !== null && count($events) > 0) {
-            foreach ($events as $item) {
-                if ($item) {
-                    Importer\Fam\Even::read($this->conn, $item, $family, $this->obje_ids);
-                }
-                // $date = $this->getDate($item->getDate());
-                // $place = $this->getPlace($item->getPlac());
-                // $family->addEvent($item->getType(), $date, $place);
-            }
-        }
-        $_group = 'fam';
-        $_gid = $family->id;
-        if ($_note != null && count($_note) > 0) {
-            foreach ($_note as $item) {
-                NoteRef::read($this->conn, $item, $_group, $_gid);
-            }
-        }
-        if ($_obje && count($_obje) > 0) {
-            foreach ($_obje as $item) {
-                if ($item) {
-                    ObjeRef::read($this->conn, $item, $_group, $_gid, $this->obje_ids);
-                }
-            }
-        }
-        if ($_refn && count($_refn) > 0) {
-            foreach ($_refn as $item) {
-                if ($item) {
-                    Refn::read($this->conn, $item, $_group, $_gid);
-                }
-            }
-        }
-        if ($_sour && count($_sour) > 0) {
-            foreach ($_sour as $item) {
-                if ($item) {
-                    SourRef::read($this->conn, $item, $_group, $_gid, $this->sour_ids, $this->obje_ids);
-                }
-            }
-        }
-        if ($_slgs && count($_slgs) > 0) {
-            foreach ($_slgs as $item) {
-                if ($item) {
-                    Slgs::read($this->conn, $item, $family);
-                }
-            }
-        }
-        if ($subm && count($subm) > 0) {
-            foreach ($subm as $item) {
-                if ($item) {
-                    Subm::read($this->conn, $item, $_group, $_gid, $this->obje_ids);
-                }
-            }
-        }
-        if ($chan) {
-            Chan::read($this->conn, $chan, 'family', $family->id);
-        }
-    }
 }
