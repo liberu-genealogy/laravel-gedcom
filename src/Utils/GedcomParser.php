@@ -8,8 +8,6 @@ use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
 use GenealogiaWebsite\LaravelGedcom\Utils\FamilyData;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Alia;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Asso;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje;
 use GenealogiaWebsite\LaravelGedcom\Utils\ParentData;
