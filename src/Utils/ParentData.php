@@ -11,11 +11,10 @@ use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Desi;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Even;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Lds;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
-
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 
 class ParentData
 {

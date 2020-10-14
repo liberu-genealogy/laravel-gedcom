@@ -7,10 +7,10 @@ use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Even;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
 
 class FamilyData
