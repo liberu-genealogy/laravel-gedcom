@@ -2,36 +2,24 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
+use DB;
 use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
-use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\FamilyData;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Alia;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Anci;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Asso;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Desi;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Even;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Lds;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ParentData;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Repo;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
 use PhpGedcom\Parser;
-use DB;
 
 class GedcomParser
 {
@@ -52,13 +40,12 @@ class GedcomParser
 
     public function parse($conn, string $filename, string $slug, bool $progressBar = false)
     {
-        
         DB::disableQueryLog();
         //start calculating the time
         $time_start = microtime(true);
         $this->conn = $conn;
         //start calculating the memory - https://www.php.net/manual/en/function.memory-get-usage.php
-        $startMemoryUse = round(memory_get_usage()/1048576,2);
+        $startMemoryUse = round(memory_get_usage() / 1048576, 2);
         error_log("\nMemory Usage: ".$startMemoryUse.''.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new Parser();
@@ -194,7 +181,7 @@ class GedcomParser
         }
 
         foreach ($individuals as $individual) {
-            ParentData::getPerson($this->conn,$individual,$this->obje_ids);
+            ParentData::getPerson($this->conn, $individual, $this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -229,7 +216,7 @@ class GedcomParser
 
         foreach ($families as $family) {
             // $this->getFamily($family);
-             FamilyData::getFamily($this->conn,$family,$this->obje_ids);
+            FamilyData::getFamily($this->conn, $family, $this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -239,7 +226,7 @@ class GedcomParser
 
         if ($progressBar === true) {
             $time_end = microtime(true);
-            $endMemoryUse = round(memory_get_usage()/1048576,2);
+            $endMemoryUse = round(memory_get_usage() / 1048576, 2);
             $execution_time = ($time_end - $time_start);
             $memory_usage = $endMemoryUse - $startMemoryUse;
             error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
@@ -255,5 +242,4 @@ class GedcomParser
             new StreamOutput(fopen('php://stdout', 'w'))
         ))->createProgressBar($max);
     }
-
 }

@@ -2,16 +2,8 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
-use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
 use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
-use Illuminate\Console\OutputStyle;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
-use DB;
 
 class FamilyData
 {
@@ -30,7 +22,7 @@ class FamilyData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getFamily($conn,$family,$obje_ids)
+    public static function getFamily($conn, $family, $obje_ids)
     {
         $g_id = $family->getId();
         $resn = $family->getResn();
@@ -58,7 +50,7 @@ class FamilyData
         $chan = $family->getChan();
 
         $husband_id = (isset($persons_id[$husb])) ? $persons_id[$husb] : 0;
-        $wife_id= (isset($persons_id[$wife])) ? $persons_id[$wife] : 0;
+        $wife_id = (isset($persons_id[$wife])) ? $persons_id[$wife] : 0;
 
         $family = Family::on($conn)->updateOrCreate(
             compact('husband_id', 'wife_id'),
