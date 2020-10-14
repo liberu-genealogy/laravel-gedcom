@@ -20,6 +20,8 @@ use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
 use PhpGedcom\Parser;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\StreamOutput;
 
 class GedcomParser
 {
