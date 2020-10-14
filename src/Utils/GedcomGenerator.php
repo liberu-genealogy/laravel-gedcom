@@ -32,6 +32,7 @@ class GedcomGenerator
 
     /**
      * Constructor with family_id.
+     *
      * @param int $p_id
      * @param int $family_id
      * @param int $up_nest
@@ -52,6 +53,7 @@ class GedcomGenerator
     {
         $this->setHead();
         $writer = new Writer();
+
         return $writer->convert($this->_gedcom);
     }
 
@@ -60,6 +62,7 @@ class GedcomGenerator
         $this->setHead();
         $this->addUpData($this->p_id);
         $writer = new Writer();
+
         return $writer->convert($this->_gedcom);
     }
 

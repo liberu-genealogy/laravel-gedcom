@@ -31,5 +31,5 @@ class PersonDesi extends Model
     /**
      * @var array
      */
-    protected $fillable = ['group', 'gid','desi', 'created_at', 'updated_at'];
+    protected $fillable = ['group', 'gid', 'desi', 'created_at', 'updated_at'];
 }

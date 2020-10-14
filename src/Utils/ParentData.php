@@ -2,16 +2,8 @@
 
 namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
-use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
 use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
-use Illuminate\Console\OutputStyle;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
-use DB;
 
 class ParentData
 {
@@ -30,8 +22,7 @@ class ParentData
     protected $repo_ids = [];
     protected $conn = '';
 
- 
-    public static function getPerson($conn,$individual,$obje_ids)
+    public static function getPerson($conn, $individual, $obje_ids)
     {
         $g_id = $individual->getId();
         $name = '';
@@ -81,7 +72,7 @@ class ParentData
         $subm = $individual->getSubm();
         $anci = $individual->getAnci();
         // $desi = $individual->getDesi();
-        $refn = $individual->getRefn(); // 
+        $refn = $individual->getRefn(); //
         $obje = $individual->getObje();
         // object
         $bapl = $individual->getBapl();
@@ -149,7 +140,7 @@ class ParentData
                 }
             }
         }
-       
+
         if ($asso && count($asso) > 0) {
             foreach ($asso as $item) {
                 if ($item) {
@@ -233,6 +224,4 @@ class ParentData
             \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
     }
-
-    
 }
