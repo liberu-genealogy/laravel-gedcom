@@ -4,6 +4,14 @@ namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
 use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Even;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
+use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
 
 class FamilyData
 {
@@ -70,7 +78,7 @@ class FamilyData
         if ($events !== null && count($events) > 0) {
             foreach ($events as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Even::read($conn, $item, $family, $obje_ids);
+                    Even::read($conn, $item, $family, $obje_ids);
                 }
                 // $date = $getDate($item->getDate());
                 // $place = $getPlace($item->getPlac());
@@ -81,46 +89,46 @@ class FamilyData
         $_gid = $family->id;
         if ($_note != null && count($_note) > 0) {
             foreach ($_note as $item) {
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
         if ($_obje && count($_obje) > 0) {
             foreach ($_obje as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
+                    ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
         }
         if ($_refn && count($_refn) > 0) {
             foreach ($_refn as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn::read($conn, $item, $_group, $_gid);
+                    Refn::read($conn, $item, $_group, $_gid);
                 }
             }
         }
         if ($_sour && count($_sour) > 0) {
             foreach ($_sour as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
+                    SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
                 }
             }
         }
         if ($_slgs && count($_slgs) > 0) {
             foreach ($_slgs as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs::read($conn, $item, $family);
+                    Slgs::read($conn, $item, $family);
                 }
             }
         }
         if ($subm && count($subm) > 0) {
             foreach ($subm as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm::read($conn, $item, $_group, $_gid, $obje_ids);
+                    Subm::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
         }
         if ($chan) {
-            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, 'family', $family->id);
+            Chan::read($conn, $chan, 'family', $family->id);
         }
     }
 }
