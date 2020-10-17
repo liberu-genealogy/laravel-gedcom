@@ -35,9 +35,9 @@ class otherFields
     protected $repo_ids = [];
     protected $conn = '';
 
-    
-    public static function insertOtherFields($conn,$individuals,$obje_ids){
-        foreach($individuals as $individual){
+    public static function insertOtherFields($conn, $individuals, $obje_ids)
+    {
+        foreach ($individuals as $individual) {
             $g_id = $individual->getId();
             $name = '';
             $givn = '';
@@ -71,7 +71,7 @@ class otherFields
             $slgc = $individual->getSlgc();
             $chan = $individual->getChan();
             $g_id = $individual->getId();
-        
+
             if (!empty($names)) {
                 $name = current($names)->getName();
                 $npfx = current($names)->getNpfx();
@@ -95,163 +95,162 @@ class otherFields
             $rin = $individual->getRin();
             $rfn = $individual->getRfn();
             $afn = $individual->getAfn();
-            
 
             if ($givn == '') {
                 $givn = $name;
             }
 
-            $person = Person::where('name',$name)->where('givn',$givn)->where('surn',$surn)->where('sex',$sex)->first();
+            $person = Person::where('name', $name)->where('givn', $givn)->where('surn', $surn)->where('sex', $sex)->first();
 
-                if ($events !== null) {
-                     Even::read($conn, $events, $person, $obje_ids);
-                    // foreach ($events as $event) {
+            if ($events !== null) {
+                Even::read($conn, $events, $person, $obje_ids);
+                // foreach ($events as $event) {
                     //     if ($event && count($event) > 0) {
                     //         $e_data = $event[0];
                     //         Even::read($conn, $e_data, $person, $obje_ids);
                     //     }
                     // }
-                }
+            }
 
-                if ($attr !== null) {
-                    Even::read($conn, $attr, $person);
-                    // foreach ($attr as $event) {
+            if ($attr !== null) {
+                Even::read($conn, $attr, $person);
+                // foreach ($attr as $event) {
                     //     $e_data = $event[0];
                     //     Even::read($conn, $e_data, $person);
                     // }
-                }
+            }
 
-                $_group = 'indi';
-                $_gid = $person->id;
-                if ($names != null && count($names) > 0) {
-                    // Name::read($conn, $names, $_group, $_gid);
-                    foreach ($names as $item) {
-                        if ($item) {
-                            Name::read($conn, $item, $_group, $_gid);
-                        }
+            $_group = 'indi';
+            $_gid = $person->id;
+            if ($names != null && count($names) > 0) {
+                // Name::read($conn, $names, $_group, $_gid);
+                foreach ($names as $item) {
+                    if ($item) {
+                        Name::read($conn, $item, $_group, $_gid);
                     }
                 }
+            }
 
-                if ($note != null && count($note) > 0) {
-                    // NoteRef::read($conn, $note, $_group, $_gid);
-                    foreach ($note as $item) {
-                        if ($item) {
-                            NoteRef::read($conn, $item, $_group, $_gid);
-                        }
+            if ($note != null && count($note) > 0) {
+                // NoteRef::read($conn, $note, $_group, $_gid);
+                foreach ($note as $item) {
+                    if ($item) {
+                        NoteRef::read($conn, $item, $_group, $_gid);
                     }
                 }
+            }
 
-                if ($indv_sour != null && count($indv_sour) > 0) {
-                     // SourRef::read($conn, $indv_sour, $_group, $_gid, $sour_ids, $obje_ids);
-                    foreach ($indv_sour as $item) {
-                        if ($item) {
-                            SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
-                        }
+            if ($indv_sour != null && count($indv_sour) > 0) {
+                // SourRef::read($conn, $indv_sour, $_group, $_gid, $sour_ids, $obje_ids);
+                foreach ($indv_sour as $item) {
+                    if ($item) {
+                        SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
                     }
                 }
+            }
 
-                // ??
-                if ($alia && count($alia) > 0) {
-                     Alia::read($conn, $alia, $_group, $_gid);
-                    // foreach ($alia as $item) {
+            // ??
+            if ($alia && count($alia) > 0) {
+                Alia::read($conn, $alia, $_group, $_gid);
+                // foreach ($alia as $item) {
                     //     if ($item) {
                     //         Alia::read($conn, $item, $_group, $_gid);
                     //     }
                     // }
-                }
+            }
 
-                if ($asso && count($asso) > 0) {
-                    // Asso::read($conn, $item, $_group, $_gid);
-                    foreach ($asso as $item) {
-                        if ($item) {
-                            Asso::read($conn, $item, $_group, $_gid);
-                        }
+            if ($asso && count($asso) > 0) {
+                // Asso::read($conn, $item, $_group, $_gid);
+                foreach ($asso as $item) {
+                    if ($item) {
+                        Asso::read($conn, $item, $_group, $_gid);
                     }
                 }
+            }
 
-                if ($subm && count($subm) > 0) {
-                     Subm::read($conn, $subm, $_group, $_gid, $subm_ids);
-                    // foreach ($subm as $item) {
+            if ($subm && count($subm) > 0) {
+                Subm::read($conn, $subm, $_group, $_gid, $subm_ids);
+                // foreach ($subm as $item) {
                     //     if ($item) {
                     //         Subm::read($conn, $item, $_group, $_gid, $subm_ids);
                     //     }
                     // }
-                }
+            }
 
-                if ($anci && count($anci) > 0) {
-                     Anci::read($conn, $anci, $_group, $_gid, $subm_ids);
-                    // foreach ($anci as $item) {
+            if ($anci && count($anci) > 0) {
+                Anci::read($conn, $anci, $_group, $_gid, $subm_ids);
+                // foreach ($anci as $item) {
                     //     if ($item) {
                     //         Anci::read($conn, $item, $_group, $_gid, $subm_ids);
                     //     }
                     // }
-                }
+            }
 
-                // if ($desi && count($desi) > 0) {
-                //     foreach ($desi as $item) {
-                //         if ($item) {
-                //             Desi::read($conn, $item, $_group, $_gid, $subm_ids);
-                //         }
-                //     }
-                // }
+            // if ($desi && count($desi) > 0) {
+            //     foreach ($desi as $item) {
+            //         if ($item) {
+            //             Desi::read($conn, $item, $_group, $_gid, $subm_ids);
+            //         }
+            //     }
+            // }
 
-                if ($refn && count($refn) > 0) {
-                      // Refn::read($conn, $refn, $_group, $_gid);
-                    foreach ($refn as $item) {
-                        if ($item) {
-                            Refn::read($conn, $item, $_group, $_gid);
-                        }
+            if ($refn && count($refn) > 0) {
+                // Refn::read($conn, $refn, $_group, $_gid);
+                foreach ($refn as $item) {
+                    if ($item) {
+                        Refn::read($conn, $item, $_group, $_gid);
                     }
                 }
+            }
 
-                if ($obje && count($obje) > 0) {
-                     // ObjeRef::read($conn, $obje, $_group, $_gid, $obje_ids);
-                    foreach ($obje as $item) {
-                        if ($item) {
-                            ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-                        }
+            if ($obje && count($obje) > 0) {
+                // ObjeRef::read($conn, $obje, $_group, $_gid, $obje_ids);
+                foreach ($obje as $item) {
+                    if ($item) {
+                        ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
                     }
                 }
+            }
 
-                if ($bapl && count($bapl) > 0) {
-                    // Lds::read($conn, $bapl, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
-                    foreach ($bapl as $item) {
-                        if ($item) {
-                            Lds::read($conn, $item, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
-                        }
+            if ($bapl && count($bapl) > 0) {
+                // Lds::read($conn, $bapl, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
+                foreach ($bapl as $item) {
+                    if ($item) {
+                        Lds::read($conn, $item, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
                     }
                 }
+            }
 
-                if ($conl && count($conl) > 0) {
-                     // Lds::read($conn, $conl, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
-                    foreach ($conl as $item) {
-                        if ($item) {
-                            Lds::read($conn, $item, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
-                        }
+            if ($conl && count($conl) > 0) {
+                // Lds::read($conn, $conl, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
+                foreach ($conl as $item) {
+                    if ($item) {
+                        Lds::read($conn, $item, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
                     }
                 }
+            }
 
-                if ($endl && count($endl) > 0) {
-                    // Lds::read($conn, $endl, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
-                    foreach ($endl as $item) {
-                        if ($item) {
-                            Lds::read($conn, $item, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
-                        }
+            if ($endl && count($endl) > 0) {
+                // Lds::read($conn, $endl, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
+                foreach ($endl as $item) {
+                    if ($item) {
+                        Lds::read($conn, $item, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
                     }
                 }
+            }
 
-                if ($slgc && count($slgc) > 0) {
-                     // Lds::read($conn, $slgc, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
+            if ($slgc && count($slgc) > 0) {
+                // Lds::read($conn, $slgc, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
 
-                    foreach ($slgc as $item) {
-                        if ($item) {
-                            Lds::read($conn, $item, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
-                        }
+                foreach ($slgc as $item) {
+                    if ($item) {
+                        Lds::read($conn, $item, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
                     }
                 }
-                if ($chan) {
-                    Chan::read($conn, $chan, $_group, $_gid);
-                }
+            }
+            if ($chan) {
+                Chan::read($conn, $chan, $_group, $_gid);
+            }
         }
     }
 }
