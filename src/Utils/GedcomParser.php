@@ -44,13 +44,16 @@ class GedcomParser
         $this->conn = $conn;
         //start calculating the memory - https://www.php.net/manual/en/function.memory-get-usage.php
         $startMemoryUse = round(memory_get_usage() / 1048576, 2);
-        error_log("\nMemory Usage: ".$startMemoryUse.''.' MB');
+
+        error_log("\n Memory Usage: ".$startMemoryUse.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new Parser();
         $gedcom = @$parser->parse($filename);
+        
         /**
          * work.
          */
+
         $head = $gedcom->getHead();
         $subn = $gedcom->getSubn();
         $subm = $gedcom->getSubm();
@@ -71,17 +74,20 @@ class GedcomParser
         if ($subn != null) {
             $c_subn = 1;
         }
+        $beforeInsert = round(memory_get_usage() / 1048576, 2);
 
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
-        $total = count($individuals) + count($families) + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
+        $indCount = count($individuals);
+        $famCount = count($families);
+        $total = $indCount + $famCount + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
         $complete = 0;
         if ($progressBar === true) {
-            $bar = $this->getProgressBar(count($individuals) + count($families));
-            event(new GedComProgressSent($slug, $total, $complete));
+            $bar = $this->getProgressBar($indCount + $famCount);
+             event(new GedComProgressSent($slug, $total, $complete));
         }
-        Log::info('Individual:'.count($individuals));
-        Log::info('Families:'.count($families));
+        Log::info('Individual:'.$indCount);
+        Log::info('Families:'.$famCount);
         Log::info('Subn:'.$c_subn);
         Log::info('Subm:'.$c_subm);
         Log::info('Sour:'.$c_sour);
@@ -177,9 +183,10 @@ class GedcomParser
                 event(new GedComProgressSent($slug, $total, $complete));
             }
         }
+        ParentData::getPerson($this->conn, $individuals, $this->obje_ids);
 
         foreach ($individuals as $individual) {
-            ParentData::getPerson($this->conn, $individual, $this->obje_ids);
+            // ParentData::getPerson($this->conn, $individual, $this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -211,10 +218,12 @@ class GedcomParser
                 $item->delete();
             }
         }
-
+        
+        FamilyData::getFamily($this->conn, $families, $this->obje_ids);
+        
         foreach ($families as $family) {
-            // $this->getFamily($family);
-            FamilyData::getFamily($this->conn, $family, $this->obje_ids);
+        //     // $this->getFamily($family);
+            // FamilyData::getFamily($this->conn, $family, $this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
@@ -226,6 +235,7 @@ class GedcomParser
             $time_end = microtime(true);
             $endMemoryUse = round(memory_get_usage() / 1048576, 2);
             $execution_time = ($time_end - $time_start);
+            $beform_insert_memory = $beforeInsert - $startMemoryUse;
             $memory_usage = $endMemoryUse - $startMemoryUse;
             error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
             error_log("\nMemory Usage: ".$memory_usage.''.' MB');
@@ -240,4 +250,5 @@ class GedcomParser
             new StreamOutput(fopen('php://stdout', 'w'))
         ))->createProgressBar($max);
     }
+
 }
