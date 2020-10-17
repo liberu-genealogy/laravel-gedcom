@@ -21,7 +21,7 @@ class Subm
                     $subm_id = $subm_ids[$subm];
                     $key = ['group'=>$group, 'gid'=>$group_id, 'subm'=>$subm_id];
                     $data = ['group'=>$group, 'gid'=>$group_id, 'subm'=>$subm_id];
-                    $record [] = $data;
+                    $record[] = $data;
                 }
             }
         }

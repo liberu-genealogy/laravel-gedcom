@@ -4,20 +4,6 @@ namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
 use GenealogiaWebsite\LaravelGedcom\Models\Family;
 use GenealogiaWebsite\LaravelGedcom\Models\Person;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Anci;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Alia;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Asso;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Desi;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Even;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Lds;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
-use GenealogiaWebsite\LaravelGedcom\Utils\otherFields;
 
 class ParentData
 {
@@ -39,7 +25,7 @@ class ParentData
     public static function getPerson($conn, $individuals, $obje_ids)
     {
         $ParentData = [];
-        foreach($individuals as $k=>$individual){
+        foreach ($individuals as $k=>$individual) {
             $g_id = $individual->getId();
             $name = '';
             $givn = '';
@@ -73,7 +59,6 @@ class ParentData
             $slgc = $individual->getSlgc();
             $chan = $individual->getChan();
             $g_id = $individual->getId();
-        
 
             if (!empty($names)) {
                 $name = current($names)->getName();
@@ -98,18 +83,17 @@ class ParentData
             $rin = $individual->getRin();
             $rfn = $individual->getRfn();
             $afn = $individual->getAfn();
-            
 
             if ($givn == '') {
                 $givn = $name;
             }
             $config = json_encode(config('database.connections.'.$conn));
             $key = [
-                    ['name',$name],['givn',$givn],['surn',$surn],['sex',$sex]
-                ];
+                ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex],
+            ];
             $check = Person::where($key)->first();
-            if(empty($check)){
-                $value = ['name'=>$name,'givn'=>$givn,'surn'=>$surn,'sex'=>$sex,'uid'=>$uid,'rin'=>$rin,'resn'=>$resn,'rfn'=>$rfn,'afn'=>$afn];
+            if (empty($check)) {
+                $value = ['name'=>$name, 'givn'=>$givn, 'surn'=>$surn, 'sex'=>$sex, 'uid'=>$uid, 'rin'=>$rin, 'resn'=>$resn, 'rfn'=>$rfn, 'afn'=>$afn];
 
                 $ParentData[] = $value;
             }
@@ -118,7 +102,6 @@ class ParentData
         }
 
         Person::insert($ParentData);
-        otherFields::insertOtherFields($conn,$individuals,$obje_ids);
+        otherFields::insertOtherFields($conn, $individuals, $obje_ids);
     }
-
 }
