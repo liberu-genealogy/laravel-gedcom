@@ -100,7 +100,7 @@ class otherFields
                 $givn = $name;
             }
 
-            $person = Person::where('name', $name)->where('givn', $givn)->where('surn', $surn)->where('sex', $sex)->first();
+            $person = Person::on($conn)->where('name',$name)->where('givn',$givn)->where('surn',$surn)->where('sex',$sex)->first();
 
             if ($events !== null) {
                 Even::read($conn, $events, $person, $obje_ids);
@@ -247,10 +247,10 @@ class otherFields
                         Lds::read($conn, $item, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
                     }
                 }
-            }
-            if ($chan) {
-                Chan::read($conn, $chan, $_group, $_gid);
-            }
+                
+                if ($chan) {
+                    Chan::read($conn, $chan, $_group, $_gid);
+                }
         }
     }
 }
