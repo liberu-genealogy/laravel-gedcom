@@ -100,11 +100,10 @@ class ParentData
             // $person = Person::on($conn)->updateOrCreate($key,$value);
             // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
         }
-        
-        foreach (array_chunk($ParentData, 200) as $chunk)
-        {
-          Person::on($conn)->insert($chunk);
+
+        foreach (array_chunk($ParentData, 200) as $chunk) {
+            Person::on($conn)->insert($chunk);
         }
-        otherFields::insertOtherFields($conn,$individuals,$obje_ids);
+        otherFields::insertOtherFields($conn, $individuals, $obje_ids);
     }
 }
