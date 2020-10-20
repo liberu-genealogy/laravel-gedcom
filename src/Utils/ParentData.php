@@ -38,7 +38,7 @@ class ParentData
 
     public static function getPerson($conn, $individuals, $obje_ids)
     {
-        $data = [];
+        $ParentData = [];
         foreach($individuals as $k=>$individual){
             $g_id = $individual->getId();
             $name = '';
@@ -111,15 +111,14 @@ class ParentData
             if(empty($check)){
                 $value = ['name'=>$name,'givn'=>$givn,'surn'=>$surn,'sex'=>$sex,'uid'=>$uid,'rin'=>$rin,'resn'=>$resn,'rfn'=>$rfn,'afn'=>$afn];
 
-                $data[] = $value;
+                $ParentData[] = $value;
             }
             // $person = Person::on($conn)->updateOrCreate($key,$value);
             // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
         }
-
-        foreach (array_chunk($data, 200) as $chunk)
+        foreach (array_chunk($ParentData, 200) as $chunk)
         {
-          Person::insert($chunk->toArray());
+          Person::on($conn)->insert($chunk->toArray());
         }
         otherFields::insertOtherFields($conn,$individuals,$obje_ids);
     }

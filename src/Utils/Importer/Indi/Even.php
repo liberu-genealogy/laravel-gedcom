@@ -136,7 +136,7 @@ class Even
                 ['adop_famc' , $adop_famc],
                 ['birt_famc' , $birt_famc]
             ];
-                $check = PersonEvent::where($key)->first();
+                $check = PersonEvent::on($conn)->where($key)->first();
                 if(empty($check)){
                     $data = [
                         'person_id' => $person_id,
@@ -159,7 +159,7 @@ class Even
                 }
             }
         }
-        PersonEvent::insert($eventData);
+        PersonEvent::on($conn)->insert($eventData);
         $new = new Even;
         $new->otherField($conn,$events,$person);
     }
@@ -285,7 +285,7 @@ class Even
                 ['birt_famc' , $birt_famc],
             ];
 
-            $record = PersonEvent::where($key)->first();
+            $record = PersonEvent::on($conn)->where($key)->first();
 
             $_group = 'indi_even';
             $_gid = $record->id;
