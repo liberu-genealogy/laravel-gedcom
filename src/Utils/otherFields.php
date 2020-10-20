@@ -253,4 +253,5 @@ class otherFields
                 }
         }
     }
+  }
 }
