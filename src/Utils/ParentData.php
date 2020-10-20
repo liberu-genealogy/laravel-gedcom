@@ -91,7 +91,7 @@ class ParentData
             $key = [
                 ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex],
             ];
-            $check = Person::where($key)->first();
+            $check = Person::on($conn)->where($key)->first();
             if (empty($check)) {
                 $value = ['name'=>$name, 'givn'=>$givn, 'surn'=>$surn, 'sex'=>$sex, 'uid'=>$uid, 'rin'=>$rin, 'resn'=>$resn, 'rfn'=>$rfn, 'afn'=>$afn];
 
