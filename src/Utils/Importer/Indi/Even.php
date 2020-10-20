@@ -117,28 +117,27 @@ class Even
                 break;
                 default:
             }
-            $adop = '';
-            $adop_famc = '';
-            $birt_famc = '';
-            // store Even
-            $key = [
-                ['person_id' , $person_id],
-                ['title'     , $class_name],
-                ['type'      , $type],
-                ['attr'      , $attr],
-                ['date'      , $date],
-                ['plac'      , $plac],
-                ['phon'      , $phon],
-                ['caus'      , $caus],
-                ['age'       , $age],
-                ['agnc'      , $agnc],
-                ['adop'      , $adop],
-                ['adop_famc' , $adop_famc],
-                ['birt_famc' , $birt_famc]
-            ];
+                $adop = '';
+                $adop_famc = '';
+                $birt_famc = '';
+                // store Even
+                $key = [
+                    ['person_id', $person_id],
+                    ['title', $class_name],
+                    ['type', $type],
+                    ['attr', $attr],
+                    ['date', $date],
+                    ['plac', $plac],
+                    ['phon', $phon],
+                    ['caus', $caus],
+                    ['age', $age],
+                    ['agnc', $agnc],
+                    ['adop', $adop],
+                    ['adop_famc', $adop_famc],
+                    ['birt_famc', $birt_famc],
+                ];
                 $check = PersonEvent::on($conn)->where($key)->first();
-                if(empty($check)){
-                  
+                if (empty($check)) {
                     $data = [
                         'person_id' => $person_id,
                         'title'     => $class_name,
@@ -161,8 +160,8 @@ class Even
             }
         }
         PersonEvent::on($conn)->insert($eventData);
-        $new = new Even;
-        $new->otherField($conn,$events,$person);
+        $new = new Even();
+        $new->otherField($conn, $events, $person);
     }
 
     public static function otherField($conn, $events, $person)
@@ -288,7 +287,7 @@ class Even
                     ['birt_famc', $birt_famc],
                 ];
 
-            $record = PersonEvent::on($conn)->where($key)->first();
+                $record = PersonEvent::on($conn)->where($key)->first();
 
                 $_group = 'indi_even';
                 $_gid = $record->id;
