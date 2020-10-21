@@ -20,7 +20,7 @@ class Date
                 return $input_date->getDate();
             }
         } else {
-            // $input_date = Carbon::parse($input_date)->timestamp; 
+            // $input_date = Carbon::parse($input_date)->timestamp;
             return "$input_date";
         }
     }
