@@ -36,7 +36,7 @@ class ParentData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getPerson($conn, $individuals, $obje_ids)
+    public static function getPerson($conn, $individuals, $obje_ids,$sour_ids)
     {
         $ParentData = [];
         foreach($individuals as $k=>$individual){
@@ -73,7 +73,6 @@ class ParentData
             $slgc = $individual->getSlgc();
             $chan = $individual->getChan();
             $g_id = $individual->getId();
-        
 
             if (!empty($names)) {
                 $name = current($names)->getName();
@@ -98,16 +97,16 @@ class ParentData
             $rin = $individual->getRin();
             $rfn = $individual->getRfn();
             $afn = $individual->getAfn();
-            
 
             if ($givn == '') {
                 $givn = $name;
             }
+
             $config = json_encode(config('database.connections.'.$conn));
             $key = [
                     ['name',$name],['givn',$givn],['surn',$surn],['sex',$sex],['uid',$uid]
                 ];
-            $check = Person::where($key)->first();
+            $check = Person::on($conn)->where($key)->first();
             if(empty($check)){
                 $value = ['name'=>$name,'givn'=>$givn,'surn'=>$surn,'sex'=>$sex,'uid'=>$uid,'rin'=>$rin,'resn'=>$resn,'rfn'=>$rfn,'afn'=>$afn];
 

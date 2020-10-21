@@ -30,9 +30,8 @@ class otherFamRecord
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function insertFamilyData($conn, $families, $obje_ids)
-    {
-        foreach ($families as $family) {
+    public static function insertFamilyData($conn,$families,$obje_ids){
+        foreach($families as $family){
             $g_id = $family->getId();
             $husb = $family->getHusb();
             $wife = $family->getWife();
@@ -47,9 +46,7 @@ class otherFamRecord
             $_sour = $family->getSour();
             $_refn = $family->getRefn();
             $chan = $family->getChan();
-
-            $familie = Family::on($conn)->where('husband_id', $husband_id)->where('wife_id', $wife_id)->first();
-
+            $familie = Family::on($conn)->where('husband_id',$husband_id)->where('wife_id',$wife_id)->first();
             if ($children !== null) {
                 foreach ($children as $child) {
                     if (isset($persons_id[$child])) {
@@ -117,4 +114,5 @@ class otherFamRecord
             }
         }
     }
+
 }
