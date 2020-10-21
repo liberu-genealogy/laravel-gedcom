@@ -21,7 +21,7 @@ class Anci
                     $subm_id = $subm_ids[$anci];
                     $key = ['group'=>$group, 'gid'=>$group_id, 'anci'=>$subm_id];
                     $data = ['group'=>$group, 'gid'=>$group_id, 'anci'=>$subm_id];
-                    $record[] = $data;
+                    $record [] = $data;
                 }
             }
         }

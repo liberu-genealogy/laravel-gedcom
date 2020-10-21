@@ -19,27 +19,30 @@ class Even
             return;
         }
         $class_name = get_class($even);
-
         $type = $even->getType();
         $_date = $even->getDate();
         $date = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Date::read($conn, $_date);
+        if(strpos($date,'BEF') !== false){
+          $newdate = trim(str_replace('BEF','',$date));
+          $date_cnvert = strtotime($newdate);
+        } elseif(strpos($date,'AFT') !== false){
+           $newdate = trim(str_replace('AFT','',$date));
+           $date_cnvert = strtotime($newdate);
+        } else{
+            $date_cnvert = strtotime($date);
+        }
         $_plac = $even->getPlac();
         $plac = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Even\Plac::read($conn, $_plac);
-
         $_phon = $even->getPhon();
         $phon = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Phon::read($conn, $_phon);
-
         $_addr = $even->getAddr();
         $addr_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
-
         $caus = $even->getCaus();
         $age = $even->getAge();
         $agnc = $even->getAgnc();
-
         $fam_id = $fam->id;
         $husb_id = $fam->husband_id;
         $wife_id = $fam->wife_id;
-
         // update husb age
         $_husb = $even->getHusb();
         if ($_husb) {
@@ -94,6 +97,7 @@ class Even
             'title'    => $class_name,
             'type'     => $type,
             'date'     => $date,
+            'converted_date' => $date_cnvert,
             'plac'     => $plac,
             'phon'     => $phon,
             'caus'     => $caus,
@@ -107,6 +111,7 @@ class Even
             'title'    => $class_name,
             'type'     => $type, //
             'date'     => $date,
+            'converted_date' => $date_cnvert,
             'plac'     => $plac, //
             'addr_id'  => $addr_id, //
             'phon'     => $phon, //
@@ -116,6 +121,7 @@ class Even
             'husb'     => $husb_id, //
             'wife'     => $wife_id, //
         ];
+
         $record = FamilyEvent::on($conn)->updateOrCreate($key, $data);
 
         $_group = 'fam_even';

@@ -22,6 +22,7 @@ class FamilyEvent extends Event
         'family_id',
         'places_id',
         'date',
+        'created_date',
         'title',
         'description',
         'year',
