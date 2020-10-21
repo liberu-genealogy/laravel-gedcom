@@ -120,7 +120,7 @@ class ParentData
         {
           Person::on($conn)->insert($chunk);
         }
-        otherFields::insertOtherFields($conn,$individuals,$obje_ids);
+        otherFields::insertOtherFields($conn,$individuals,$obje_ids,$sour_ids);
     }
 
 }
