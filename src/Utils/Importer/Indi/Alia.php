@@ -12,12 +12,12 @@ class Alia
      * Integer $group_id.
      */
     public static function read($conn, $item, $group = '', $group_id = 0)
-    {
+    { 
         $aliaData = [];
         foreach ($item as $alia) {
             if ($alia) {
                 $data = ['group'=>$group, 'gid'=>$group_id, 'alia'=>$alia];
-                $aliaData[] = $data;
+                $aliaData [] = $data;
             }
         }
         PersonAlia::on($conn)->insert($aliaData);

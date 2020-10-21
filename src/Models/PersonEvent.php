@@ -19,6 +19,7 @@ class PersonEvent extends Event
         'type',
         'attr',
         'date',
+        'created_date',
         'plac',
         'phon',
         'caus',
