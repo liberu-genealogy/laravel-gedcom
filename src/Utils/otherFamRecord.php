@@ -30,9 +30,9 @@ class otherFamRecord
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function insertFamilyData($conn, $families, $obje_ids)
-    {
-        foreach ($families as $family) {
+    public static function insertFamilyData($conn,$families,$obje_ids,$sour_ids){
+        foreach($families as $family){
+          
             $g_id = $family->getId();
             $husb = $family->getHusb();
             $wife = $family->getWife();

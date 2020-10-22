@@ -53,7 +53,6 @@ class GedcomGenerator
     {
         $this->setHead();
         $writer = new Writer();
-
         return $writer->convert($this->_gedcom);
     }
 
@@ -62,7 +61,6 @@ class GedcomGenerator
         $this->setHead();
         $this->addUpData($this->p_id);
         $writer = new Writer();
-
         return $writer->convert($this->_gedcom);
     }
 
@@ -71,6 +69,7 @@ class GedcomGenerator
         if (empty($p_id) || $p_id < 1) {
             return;
         }
+
         if ($this->up_nest < $nest) {
             return;
         }

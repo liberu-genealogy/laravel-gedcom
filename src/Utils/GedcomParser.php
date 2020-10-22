@@ -217,8 +217,8 @@ class GedcomParser
                 $item->delete();
             }
         }
-
-        FamilyData::getFamily($this->conn, $families, $this->obje_ids);
+        
+        FamilyData::getFamily($this->conn, $families, $this->obje_ids,$this->sour_ids);
 
         foreach ($families as $family) {
             //     // $this->getFamily($family);
