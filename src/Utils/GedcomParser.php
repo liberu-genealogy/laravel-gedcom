@@ -49,11 +49,10 @@ class GedcomParser
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new Parser();
         $gedcom = @$parser->parse($filename);
-        
+
         /**
          * work.
          */
-
         $head = $gedcom->getHead();
         $subn = $gedcom->getSubn();
         $subm = $gedcom->getSubm();
@@ -84,7 +83,7 @@ class GedcomParser
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar($indCount + $famCount);
-             event(new GedComProgressSent($slug, $total, $complete));
+            event(new GedComProgressSent($slug, $total, $complete));
         }
         Log::info('Individual:'.$indCount);
         Log::info('Families:'.$famCount);
@@ -220,8 +219,9 @@ class GedcomParser
         }
         
         FamilyData::getFamily($this->conn, $families, $this->obje_ids,$this->sour_ids);
+
         foreach ($families as $family) {
-        //     // $this->getFamily($family);
+            //     // $this->getFamily($family);
             // FamilyData::getFamily($this->conn, $family, $this->obje_ids);
             if ($progressBar === true) {
                 $bar->advance();
@@ -249,5 +249,4 @@ class GedcomParser
             new StreamOutput(fopen('php://stdout', 'w'))
         ))->createProgressBar($max);
     }
-
 }

@@ -25,7 +25,8 @@ class AddColumnsForPeopleTable extends Migration
             $table->integer('child_in_family_id')->references('id')->on('families')->nullable();
             $table->softDeletes();
             //    $table->dropColumn('bank');
-      //    $table->dropColumn('bank_account');
+            //    $table->dropColumn('bank_account');
+            $table->dropUnique(['uid']);
         });
     }
 

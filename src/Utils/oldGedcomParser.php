@@ -44,11 +44,11 @@ class GedcomParser
         unset($argc);
         unset($argv);
         gc_collect_cycles();
-        $startMemoryUse = round(memory_get_usage()/1048576,2);
+        $startMemoryUse = round(memory_get_usage() / 1048576, 2);
         //start calculating the time
         $time_start = microtime(true);
         $this->conn = $conn;
-        error_log("\nMemory Usage: ".round(memory_get_usage()/1048576,2).''.' MB');
+        error_log("\nMemory Usage: ".round(memory_get_usage() / 1048576, 2).''.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
@@ -231,7 +231,7 @@ class GedcomParser
         if ($progressBar === true) {
             //Record end time and calculate total execution time
             $time_end = microtime(true);
-            $endMemoryUse = round(memory_get_usage()/1048576,2);
+            $endMemoryUse = round(memory_get_usage() / 1048576, 2);
             $execution_time = ($time_end - $time_start);
             $memory_usage = $endMemoryUse - $startMemoryUse;
             error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');

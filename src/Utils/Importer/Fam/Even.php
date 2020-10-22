@@ -22,13 +22,13 @@ class Even
         $type = $even->getType();
         $_date = $even->getDate();
         $date = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Date::read($conn, $_date);
-        if(strpos($date,'BEF') !== false){
-          $newdate = trim(str_replace('BEF','',$date));
-          $date_cnvert = strtotime($newdate);
-        } elseif(strpos($date,'AFT') !== false){
-           $newdate = trim(str_replace('AFT','',$date));
-           $date_cnvert = strtotime($newdate);
-        } else{
+        if (strpos($date, 'BEF') !== false) {
+            $newdate = trim(str_replace('BEF', '', $date));
+            $date_cnvert = strtotime($newdate);
+        } elseif (strpos($date, 'AFT') !== false) {
+            $newdate = trim(str_replace('AFT', '', $date));
+            $date_cnvert = strtotime($newdate);
+        } else {
             $date_cnvert = strtotime($date);
         }
         $_plac = $even->getPlac();
@@ -93,33 +93,33 @@ class Even
         $birt_famc = '';
         // store Fam/Even
         $key = [
-            'family_id'=> $fam_id,
-            'title'    => $class_name,
-            'type'     => $type,
-            'date'     => $date,
+            'family_id'      => $fam_id,
+            'title'          => $class_name,
+            'type'           => $type,
+            'date'           => $date,
             'converted_date' => $date_cnvert,
-            'plac'     => $plac,
-            'phon'     => $phon,
-            'caus'     => $caus,
-            'age'      => $age,
-            'agnc'     => $agnc,
-            'husb'     => $husb_id,
-            'wife'     => $wife_id,
+            'plac'           => $plac,
+            'phon'           => $phon,
+            'caus'           => $caus,
+            'age'            => $age,
+            'agnc'           => $agnc,
+            'husb'           => $husb_id,
+            'wife'           => $wife_id,
         ];
         $data = [
-            'family_id'=> $fam_id,
-            'title'    => $class_name,
-            'type'     => $type, //
-            'date'     => $date,
+            'family_id'      => $fam_id,
+            'title'          => $class_name,
+            'type'           => $type, //
+            'date'           => $date,
             'converted_date' => $date_cnvert,
-            'plac'     => $plac, //
-            'addr_id'  => $addr_id, //
-            'phon'     => $phon, //
-            'caus'     => $caus, //
-            'age'      => $age, //
-            'agnc'     => $agnc, //
-            'husb'     => $husb_id, //
-            'wife'     => $wife_id, //
+            'plac'           => $plac, //
+            'addr_id'        => $addr_id, //
+            'phon'           => $phon, //
+            'caus'           => $caus, //
+            'age'            => $age, //
+            'agnc'           => $agnc, //
+            'husb'           => $husb_id, //
+            'wife'           => $wife_id, //
         ];
 
         $record = FamilyEvent::on($conn)->updateOrCreate($key, $data);
