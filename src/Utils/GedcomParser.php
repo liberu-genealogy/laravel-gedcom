@@ -219,8 +219,7 @@ class GedcomParser
             }
         }
         
-        FamilyData::getFamily($this->conn, $families, $this->obje_ids);
-        
+        FamilyData::getFamily($this->conn, $families, $this->obje_ids,$this->sour_ids);
         foreach ($families as $family) {
         //     // $this->getFamily($family);
             // FamilyData::getFamily($this->conn, $family, $this->obje_ids);
