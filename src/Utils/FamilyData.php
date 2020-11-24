@@ -21,7 +21,7 @@ class FamilyData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getFamily($conn, $families, $obje_ids,$sour_ids)
+    public static function getFamily($conn, $families, $obje_ids, $sour_ids)
     {
         $familyData = [];
         foreach ($families as $family) {
@@ -62,6 +62,6 @@ class FamilyData
             // $familydata [] = $value;
         }
         // Family::insert($familyData);
-        otherFamRecord::insertFamilyData($conn,$families,$obje_ids,$sour_ids);
+        otherFamRecord::insertFamilyData($conn, $families, $obje_ids, $sour_ids);
     }
 }
