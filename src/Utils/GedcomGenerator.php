@@ -53,6 +53,7 @@ class GedcomGenerator
     {
         $this->setHead();
         $writer = new Writer();
+
         return $writer->convert($this->_gedcom);
     }
 
@@ -61,6 +62,7 @@ class GedcomGenerator
         $this->setHead();
         $this->addUpData($this->p_id);
         $writer = new Writer();
+
         return $writer->convert($this->_gedcom);
     }
 
