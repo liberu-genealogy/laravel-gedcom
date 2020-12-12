@@ -460,7 +460,7 @@ class GedcomParser
 
         $family = Family::on($this->conn)->updateOrCreate(
             compact('husband_id', 'wife_id'),
-            compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
+            compact('husband_id', 'wife_id', 'description', 'nchi', 'rin')
         );
 
         if ($children !== null) {
