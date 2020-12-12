@@ -50,8 +50,8 @@ class FamilyData
 
             $chan = $family->getChan();
 
-           $husband_id = (isset($persons_id[$husb])) ? $persons_id[$husb] : 0;
-           $wife_id = (isset($persons_id[$wife])) ? $persons_id[$wife] : 0;
+           $husband_id = (isset($husb) ? $husb : 0);
+           $wife_id = (isset($wife) ? $wife : 0);
 
     //        $family = Family::on($conn)->updateOrCreate(
     //            compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
