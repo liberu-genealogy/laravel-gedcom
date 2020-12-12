@@ -50,17 +50,36 @@ class FamilyData
 
             $chan = $family->getChan();
 
-            $husband_id = (isset($persons_id[$husb])) ? $persons_id[$husb] : 0;
-            $wife_id = (isset($persons_id[$wife])) ? $persons_id[$wife] : 0;
+           $husband_id = (isset($persons_id[$husb])) ? $persons_id[$husb] : 0;
+           $wife_id = (isset($persons_id[$wife])) ? $persons_id[$wife] : 0;
 
-            Family::on($conn)->updateOrCreate(
-                compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
-            );
+    //        $family = Family::on($conn)->updateOrCreate(
+    //            compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
+    //        );
 
             // $value = ['husband_id'=>$husband_id, 'wife_id'=>$wife_id, 'description'=>$description, 'type_id'=>$type_id, 'nchi'=>$nchi, 'rin'=>$rin];
             // $familydata [] = $value;
         }
         // Family::insert($familyData);
+
+        $key = [
+            ['husband_id', $husband_id], ['wife_id', $wife_id], ['description', $description], ['type_id', $type_id], ['nchi', $nchi],
+            ['rin', $rin]
+        ];
+        $check = Family::on($conn)->where($key)->first();
+        if (empty($check)) {
+            $value = ['husband_id'=>$husband_id, 'wife_id'=>$wife_id];
+
+            $FamilyData[] = $value;
+        }
+        // $person = Person::on($conn)->updateOrCreate($key,$value);
+        // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
+
+
+foreach (array_chunk($FamilyData, 200) as $chunk) {
+Family::on($conn)->insert($chunk);
+}
         otherFamRecord::insertFamilyData($conn, $families, $obje_ids, $sour_ids);
     }
 }
+

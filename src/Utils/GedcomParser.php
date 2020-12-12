@@ -36,7 +36,7 @@ class GedcomParser
     protected $repo_ids = [];
     protected $conn = '';
 
-    public function parse($conn, string $filename, string $slug, bool $progressBar = false)
+    public function parse($conn, string $filename, string $slug, bool $progressBar = NULL)
     {
         DB::disableQueryLog();
         //start calculating the time
