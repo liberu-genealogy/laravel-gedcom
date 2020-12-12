@@ -21,7 +21,7 @@ class FamilyData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getFamily($conn, $families, $obje_ids, $sour_ids)
+    public static function getFamily($conn, $families, $obje_ids, $sour_ids, $persons_id, $note_ids, $repo_ids)
     {
         $familyData = [];
         foreach ($families as $family) {
