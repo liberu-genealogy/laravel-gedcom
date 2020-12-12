@@ -31,24 +31,7 @@ class GedcomParser
 
     public function parse($conn, string $filename, string $slug, bool $progressBar = false)
     {
-        unset($GLOBALS);
-        unset($_SERVER);
-        unset($_GET);
-        unset($_POST);
-        unset($_FILES);
-        unset($_REQUEST);
-        unset($_ENV);
-        unset($_COOKIE);
-        unset($HTTP_RAW_POST_DATA);
-        unset($http_response_header);
-        unset($argc);
-        unset($argv);
-        gc_collect_cycles();
-        $startMemoryUse = round(memory_get_usage() / 1048576, 2);
-        //start calculating the time
-        $time_start = microtime(true);
         $this->conn = $conn;
-        error_log("\nMemory Usage: ".round(memory_get_usage() / 1048576, 2).''.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
         $parser = new \PhpGedcom\Parser();
         $gedcom = @$parser->parse($filename);
@@ -75,6 +58,7 @@ class GedcomParser
         $c_repo = count($repo);
         $c_obje = count($obje);
         if ($subn != null) {
+            //
             $c_subn = 1;
         }
 
@@ -111,8 +95,9 @@ class GedcomParser
             }
         }
 
-        // store informaithttps://www.php.net/manual/en/function.memory-get-usage.phpon about all the submitters to the GEDCOM file.
+        // store information about all the submitters to the GEDCOM file.
         foreach ($subm as $item) {
+            // $this->getSubm($item);
             if ($item) {
                 $_subm_id = $item->getSubm();
                 $subm_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm::read($this->conn, $item, null, null, $this->obje_ids);
@@ -229,13 +214,6 @@ class GedcomParser
         }
 
         if ($progressBar === true) {
-            //Record end time and calculate total execution time
-            $time_end = microtime(true);
-            $endMemoryUse = round(memory_get_usage() / 1048576, 2);
-            $execution_time = ($time_end - $time_start);
-            $memory_usage = $endMemoryUse - $startMemoryUse;
-            error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
-            error_log("\nMemory Usage: ".$memory_usage.''.' MB');
             $bar->finish();
         }
     }
@@ -254,6 +232,7 @@ class GedcomParser
         $name = '';
         $givn = '';
         $surn = '';
+
         $name = '';
         $npfx = '';
         $givn = '';
@@ -289,6 +268,7 @@ class GedcomParser
         $rin = $individual->getRin();
         $rfn = $individual->getRfn();
         $afn = $individual->getAfn();
+
         $attr = $individual->getAllAttr();
         $events = $individual->getAllEven();
         $note = $individual->getNote();
@@ -312,10 +292,8 @@ class GedcomParser
             $givn = $name;
         }
         $config = json_encode(config('database.connections.'.$this->conn));
-
         $person = Person::on($this->conn)->updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid', 'rin', 'resn', 'rfn', 'afn'));
         $this->persons_id[$g_id] = $person->id;
-
         if ($events !== null) {
             foreach ($events as $event) {
                 if ($event && count($event) > 0) {
@@ -341,7 +319,6 @@ class GedcomParser
                 }
             }
         }
-
         if ($note != null && count($note) > 0) {
             foreach ($note as $item) {
                 if ($item) {
@@ -349,7 +326,6 @@ class GedcomParser
                 }
             }
         }
-
         if ($indv_sour != null && count($indv_sour) > 0) {
             foreach ($indv_sour as $item) {
                 if ($item) {

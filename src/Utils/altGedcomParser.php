@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
-class newGedcomParser
+class GedcomParser
 {
     /**
      * Array of persons ID
@@ -29,7 +29,7 @@ class newGedcomParser
     protected $repo_ids = [];
     protected $conn = '';
 
-    public function parse($conn, string $filename, string $slug, bool $progressBar = NULL)
+    public function parse($conn, string $filename, string $slug, bool $progressBar = false)
     {
         unset($GLOBALS);
         unset($_SERVER);
@@ -311,25 +311,10 @@ class newGedcomParser
         if ($givn == '') {
             $givn = $name;
         }
-        $config = json_encode(config('database.connections.' . $this->conn));
+        $config = json_encode(config('database.connections.'.$this->conn));
 
-        $key = [
-            ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex], ['uid', $uid],
-        ];
-        $check = Person::on($this->conn)->where($key)->first();
-        if (empty($check)) {
-            $value = ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn];
-
-            $person[] = $value;
-        }
-        // $person = Person::on($this->conn)->updateOrCreate($key,$value);
-        // otherFields::insertOtherFields($this->conn,$individual,$obje_ids,$person);
-
-
-        foreach (array_chunk($person, 200) as $chunk) {
-            Person::on($this->conn)->insert($chunk);
-        }
-
+        $person = Person::on($this->conn)->updateOrCreate(compact('name', 'givn', 'surn', 'sex'), compact('name', 'givn', 'surn', 'sex', 'uid', 'rin', 'resn', 'rfn', 'afn'));
+        $this->persons_id[$g_id] = $person->id;
 
         if ($events !== null) {
             foreach ($events as $event) {
@@ -497,25 +482,10 @@ class newGedcomParser
         $husband_id = (isset($this->persons_id[$husb])) ? $this->persons_id[$husb] : 0;
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
-        $key = [
-            ['husband_id', $husband_id], ['wife_id', $wife_id], ['description', $description], ['type_id', $type_id], ['nchi', $nchi],
-            ['rin', $rin]
-        ];
-        $check = Family::on($this->conn)->where($key)->first();
-        if (empty($check)) {
-            $value = [['husband_id', $husband_id], ['wife_id', $wife_id], ['description', $description], ['type_id', $type_id], ['nchi', $nchi],
-                ['rin', $rin]];
-
-            $FamilyData[] = $value;
-        }
-        // $person = Person::on($this->conn)->updateOrCreate($key,$value);
-        // otherFields::insertOtherFields($this->conn,$individual,$obje_ids,$person);
-
-
-        foreach (array_chunk($FamilyData, 200) as $chunk) {
-            Family::on($this->conn)->insert($chunk);
-        }
-
+        $family = Family::on($this->conn)->updateOrCreate(
+            compact('husband_id', 'wife_id'),
+            compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
+        );
 
         if ($children !== null) {
             foreach ($children as $child) {
