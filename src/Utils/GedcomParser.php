@@ -459,7 +459,6 @@ class GedcomParser
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
         $family = Family::on($this->conn)->updateOrCreate(
-            compact('husband_id', 'wife_id'),
             compact('husband_id', 'wife_id', 'description', 'nchi', 'rin')
         );
 
