@@ -68,7 +68,8 @@ class FamilyData
         ];
         $check = Family::on($conn)->where($key)->first();
         if (empty($check)) {
-            $value = ['husband_id'=>$husband_id, 'wife_id'=>$wife_id];
+            $value = [['husband_id', $husband_id], ['wife_id', $wife_id], ['description', $description], ['type_id', $type_id], ['nchi', $nchi],
+            ['rin', $rin]];
 
             $FamilyData[] = $value;
         }
