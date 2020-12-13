@@ -40,13 +40,36 @@ class GedcomParser
         /**
          * work.
          */
-        $head = $gedcom->getHead();
-        $subn = $gedcom->getSubn();
-        $subm = $gedcom->getSubm();
-        $sour = $gedcom->getSour();
-        $note = $gedcom->getNote();
-        $repo = $gedcom->getRepo();
-        $obje = $gedcom->getObje();
+        if ($gedcom->getHead())
+        {
+            $head = $gedcom->getHead();
+        }
+        if ($gedcom->getSubn())
+        {
+            $subn = $gedcom->getSubn();
+        }
+        if ($gedcom->getSubm())
+        {
+            $subm = $gedcom->getSubm();
+        }
+        if ($gedcom->getSour())
+        {
+            $sour = $gedcom->getSour();
+        }
+        if ($gedcom->getNote())
+        {
+            $note = $gedcom->getNote();
+        }
+        if ($gedcom->getRepo())
+        {
+            $repo = $gedcom->getRepo();
+        }
+        if ($gedcom->getObje())
+        {
+            $obje = $gedcom->getObje();
+        }
+
+
 
         /**
          * work end.
