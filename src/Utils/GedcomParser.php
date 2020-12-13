@@ -437,6 +437,7 @@ class GedcomParser
         // string
         $nchi = $family->getNchi();
         $rin = $family->getRin();
+        $type_id = 1;
 
         // array
         $subm = $family->getSubm();
@@ -444,6 +445,7 @@ class GedcomParser
 
         $description = null;
         $type_id = 0;
+        $is_active = 1;
 
         $children = $family->getChil();
         $events = $family->getAllEven();
@@ -459,7 +461,7 @@ class GedcomParser
         $wife_id = (isset($this->persons_id[$wife])) ? $this->persons_id[$wife] : 0;
 
         $family = Family::on($this->conn)->updateOrCreate(
-            compact('husband_id', 'wife_id', 'description', 'nchi', 'rin')
+            compact('husband_id', 'wife_id', 'description', 'nchi', 'rin', 'type_id', 'is_active')
         );
 
         if ($children !== null) {
