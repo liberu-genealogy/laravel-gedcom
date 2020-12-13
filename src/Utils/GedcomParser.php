@@ -469,7 +469,7 @@ class GedcomParser
         $_slgs = $family->getSlgs();
 
         $description = null;
-        $type_id = 0;
+        $type_id = 1;
         $is_active = 1;
 
         $children = $family->getChil();
