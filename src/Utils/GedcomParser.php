@@ -40,10 +40,12 @@ class GedcomParser
         /**
          * work.
          */
+        /**
         if ($gedcom->getHead())
         {
             $head = $gedcom->getHead();
         }
+         **/
         if ($gedcom->getSubn())
         {
             $subn = $gedcom->getSubn();
