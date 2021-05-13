@@ -46,6 +46,14 @@ class GedcomParser
             $head = $gedcom->getHead();
         }
          **/
+        
+        $subn = [];
+        $subm = [];
+        $sour = [];
+        $note = [];
+        $repo = [];
+        $obje = [];
+        
         if ($gedcom->getSubn())
         {
             $subn = $gedcom->getSubn();
