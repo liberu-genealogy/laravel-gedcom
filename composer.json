@@ -1,21 +1,22 @@
 {
-  "name": "genealogiawebsite/laravel-gedcom",
-  "description": "A package that converts gedcom files to Eloquent models",
-  "type": "library",
-  "require": {
-    "genealogiawebsite/php-gedcom": "^1.0"
-  },
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "GenealogiaWebsite\\LaravelGedcom\\": "src"
+    "name": "genealogiawebsite/laravel-gedcom",
+    "description": "A package that converts gedcom files to Eloquent models",
+    "type": "library",
+    "require": {
+        "genealogiawebsite/php-gedcom": "^1.0",
+        "doctrine/dbal": "^2.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "GenealogiaWebsite\\LaravelGedcom\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GenealogiaWebsite\\LaravelGedcom\\ServiceProvider"
+            ]
+        }
     }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "GenealogiaWebsite\\LaravelGedcom\\ServiceProvider"
-      ]
-    }
-  }
 }
