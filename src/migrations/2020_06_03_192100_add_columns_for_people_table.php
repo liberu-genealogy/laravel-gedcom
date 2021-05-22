@@ -11,8 +11,8 @@ class AddColumnsForPeopleTable extends Migration
         Schema::table('people', function (Blueprint $table) {
             $table->string('gid')->nullable();
             $table->string('givn')->nullable();
-            $table->string('surn', 255)->nullable();
-            $table->string('name', 255)->nullable()->change();
+            $table->string('surn', 191)->nullable();
+            $table->string('name', 191)->nullable()->change();
 
             $table->string('type')->nullable();
             $table->string('npfx')->nullable();
