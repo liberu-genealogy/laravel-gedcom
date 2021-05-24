@@ -29,7 +29,13 @@ class GedcomParser
     protected $repo_ids = [];
     protected $conn = '';
 
-    public function parse($conn, string $filename, string $slug, bool $progressBar = false)
+    public function parse(
+        $conn,
+        string $filename,
+        string $slug,
+        bool $progressBar = false,
+        $channel = ['name' => 'gedcom-progress', 'eventName' => 'newMessage']
+    )
     {
         $this->conn = $conn;
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
@@ -46,14 +52,14 @@ class GedcomParser
             $head = $gedcom->getHead();
         }
          **/
-        
+
         $subn = [];
         $subm = [];
         $sour = [];
         $note = [];
         $repo = [];
         $obje = [];
-        
+
         if ($gedcom->getSubn())
         {
             $subn = $gedcom->getSubn();
@@ -101,7 +107,7 @@ class GedcomParser
         $complete = 0;
         if ($progressBar === true) {
             $bar = $this->getProgressBar(count($individuals) + count($families));
-            event(new GedComProgressSent($slug, $total, $complete));
+            event(new GedComProgressSent($slug, $total, $complete, $channel));
         }
         Log::info('Individual:'.count($individuals));
         Log::info('Families:'.count($families));
@@ -124,7 +130,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -139,7 +145,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -150,7 +156,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -166,7 +172,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -181,7 +187,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -199,7 +205,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -208,7 +214,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 
@@ -242,7 +248,7 @@ class GedcomParser
             if ($progressBar === true) {
                 $bar->advance();
                 $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
+                event(new GedComProgressSent($slug, $total, $complete, $channel));
             }
         }
 

@@ -17,6 +17,7 @@ class GedComProgressSent implements ShouldBroadcast
     public $slug;
     public $total;
     public $complete;
+    public $channel;
 
     /**
      * Create a new event instance.
@@ -25,12 +26,33 @@ class GedComProgressSent implements ShouldBroadcast
      * @param $total
      * @param $complete
      */
-    public function __construct($slug, $total, $complete)
+    public function __construct(
+      $slug,
+      $total,
+      $complete,
+      $channel = ['name' => 'gedcom-progress', 'eventName' => 'newMessage']
+    )
     {
         $this->slug = $slug;
         $this->total = $total;
         $this->complete = $complete;
         $this->queue = 'low';
+
+        $this->channel = $channel;
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return [
+          'slug' => $this->slug,
+          'total' => $this->total,
+          'complete' => $this->complete,
+        ];
     }
 
     /**
@@ -40,11 +62,11 @@ class GedComProgressSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('gedcom-progress');
+        return new Channel($this->channel['name']);
     }
 
     public function broadcastAs()
     {
-        return 'newMessage';
+        return $this->channel['eventName'];
     }
 }
