@@ -4,7 +4,6 @@ namespace GenealogiaWebsite\LaravelGedcom\Utils;
 
 use DB;
 use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
-use GenealogiaWebsite\LaravelGedcom\Models\Person;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
 use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
 use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note;
