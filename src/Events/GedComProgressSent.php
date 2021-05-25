@@ -1,6 +1,6 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Events;
+namespace FamilyTree365\LaravelGedcom\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;

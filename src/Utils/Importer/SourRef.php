@@ -1,10 +1,10 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\SourceRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour\Data;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef\Even;
+use FamilyTree365\LaravelGedcom\Models\SourceRef;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Sour\Data;
+use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef\Even;
 
 class SourRef
 {

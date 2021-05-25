@@ -1,6 +1,6 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Models;
+namespace FamilyTree365\LaravelGedcom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi;
 
-use GenealogiaWebsite\LaravelGedcom\Models\PersonSubm;
+use FamilyTree365\LaravelGedcom\Models\PersonSubm;
 
 class Subm
 {

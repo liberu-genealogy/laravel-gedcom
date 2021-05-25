@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Models;
+namespace FamilyTree365\LaravelGedcom\Models;
 
-use GenealogiaWebsite\LaravelGedcom\Observers\EventActionsObserver;
+use FamilyTree365\LaravelGedcom\Observers\EventActionsObserver;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FamilyEvent extends Event

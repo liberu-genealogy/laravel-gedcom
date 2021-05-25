@@ -1,9 +1,9 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom;
+namespace FamilyTree365\LaravelGedcom;
 
-use GenealogiaWebsite\LaravelGedcom\Commands\GedcomImporter;
-use GenealogiaWebsite\LaravelGedcom\Utils\GedcomParser;
+use FamilyTree365\LaravelGedcom\Commands\GedcomImporter;
+use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -13,7 +13,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             GedcomImporter::class,
         ]);
 
-        $this->app->bind('genealogiawebsite/laravel-gedcom:parser', function () {
+        $this->app->bind('FamilyTree365/laravel-gedcom:parser', function () {
             return new GedcomParser();
         });
     }

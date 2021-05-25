@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Note as MNote;
+use FamilyTree365\LaravelGedcom\Models\Note as MNote;
 
 class Note
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour\Data;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Sour\Data;
 
-use GenealogiaWebsite\LaravelGedcom\Models\SourceDataEven;
+use FamilyTree365\LaravelGedcom\Models\SourceDataEven;
 
 class Even
 {

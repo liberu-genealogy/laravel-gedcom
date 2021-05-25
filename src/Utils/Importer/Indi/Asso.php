@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi;
 
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
+use FamilyTree365\LaravelGedcom\Models\PersonAsso;
 
 class Asso
 {
@@ -29,7 +29,7 @@ class Asso
         if ($note && count($note) > 0) {
             foreach ($note as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                    \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }
@@ -39,7 +39,7 @@ class Asso
         if ($sour && count($sour) > 0) {
             foreach ($sour as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
+                    \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }

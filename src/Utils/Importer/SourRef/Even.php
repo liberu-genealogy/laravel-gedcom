@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
 
-use GenealogiaWebsite\LaravelGedcom\Models\SourceRefEven;
+use FamilyTree365\LaravelGedcom\Models\SourceRefEven;
 
 class Even
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils;
+namespace FamilyTree365\LaravelGedcom\Utils;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Family;
-use GenealogiaWebsite\LaravelGedcom\Models\Person;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Even;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam\Slgs;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Refn;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
+use FamilyTree365\LaravelGedcom\Models\Family;
+use FamilyTree365\LaravelGedcom\Models\Person;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Chan;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Fam\Even;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Fam\Slgs;
+use FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef;
+use FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Refn;
+use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Subm;
 
 class otherFamRecord
 {

@@ -9,13 +9,13 @@
 [![Build Status](https://travis-ci.org/genealogiawebsite/laravel-gedcom.svg?branch=master)](https://travis-ci.org/genealogiawebsite/laravel-gedcom)
 
 
-genealogiawebsite/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
+familytree365/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
 as Laravel models, inside your Laravel application. It is used by:
-(https://github.com/genealogiawebsite/genealogy)
+(https://github.com/familytree365/backend)
 
 ## Installation
 ```
-composer require genealogiawebsite/laravel-gedcom
+composer require familytree365/laravel-gedcom
 ```
 
 ## Usage
@@ -32,14 +32,14 @@ php artisan gedcom:import /path/to/your/gedcom/file.ged
 
 ### via Facade
 ```
-use GenealogiaWebsite\LaravelGedcom\Facades\GedcomParserFacade;
+use FamilyTree365\LaravelGedcom\Facades\GedcomParserFacade;
 $filename = '/path/to/your/gedcom/file.ged';
 GedcomParserFacade::parse($filename, true);
 ```
 
 ### via Instantiation
 ```
-use \GenealogiaWebsite\LaravelGedcom\Utils\GedcomParser;
+use \FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 $filename = '/path/to/your/gedcom/file.ged';
 $parser = new GedcomParser();
 $parser->parse($filename, true);

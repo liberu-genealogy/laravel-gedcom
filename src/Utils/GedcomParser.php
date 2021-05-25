@@ -1,17 +1,17 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils;
+namespace FamilyTree365\LaravelGedcom\Utils;
 
 use DB;
-use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAlia;
-use GenealogiaWebsite\LaravelGedcom\Models\PersonAsso;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Note;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Obje;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Repo;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subm;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\Subn;
+use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
+use FamilyTree365\LaravelGedcom\Models\PersonAlia;
+use FamilyTree365\LaravelGedcom\Models\PersonAsso;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Note;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Obje;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Repo;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Sour;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Subm;
+use FamilyTree365\LaravelGedcom\Utils\Importer\Subn;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
 use PhpGedcom\Parser;

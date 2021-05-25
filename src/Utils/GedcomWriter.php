@@ -1,16 +1,16 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils;
+namespace FamilyTree365\LaravelGedcom\Utils;
 
-use GenealogiaWebsite\LaravelGedcom\Events\GedComProgressSent;
-use GenealogiaWebsite\LaravelGedcom\Models\Family;
-use GenealogiaWebsite\LaravelGedcom\Models\MediaObject;
-use GenealogiaWebsite\LaravelGedcom\Models\Note;
-use GenealogiaWebsite\LaravelGedcom\Models\Person;
-use GenealogiaWebsite\LaravelGedcom\Models\Repository;
-use GenealogiaWebsite\LaravelGedcom\Models\Source;
-use GenealogiaWebsite\LaravelGedcom\Models\Subm;
-use GenealogiaWebsite\LaravelGedcom\Models\Subn;
+use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
+use FamilyTree365\LaravelGedcom\Models\Family;
+use FamilyTree365\LaravelGedcom\Models\MediaObject;
+use FamilyTree365\LaravelGedcom\Models\Note;
+use FamilyTree365\LaravelGedcom\Models\Person;
+use FamilyTree365\LaravelGedcom\Models\Repository;
+use FamilyTree365\LaravelGedcom\Models\Source;
+use FamilyTree365\LaravelGedcom\Models\Subm;
+use FamilyTree365\LaravelGedcom\Models\Subn;
 use Illuminate\Console\OutputStyle;
 use PhpGedcom\Parser;
 use Symfony\Component\Console\Input\StringInput;

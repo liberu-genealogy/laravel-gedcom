@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Addr as MAddr;
+use FamilyTree365\LaravelGedcom\Models\Addr as MAddr;
 
 class Addr
 {

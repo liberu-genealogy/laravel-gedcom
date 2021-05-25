@@ -1,9 +1,9 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\MediaObject;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef\File;
+use FamilyTree365\LaravelGedcom\Models\MediaObject;
+use FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef\File;
 
 class ObjeRef
 {

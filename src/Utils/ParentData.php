@@ -1,9 +1,9 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils;
+namespace FamilyTree365\LaravelGedcom\Utils;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Family;
-use GenealogiaWebsite\LaravelGedcom\Models\Person;
+use FamilyTree365\LaravelGedcom\Models\Family;
+use FamilyTree365\LaravelGedcom\Models\Person;
 
 class ParentData
 {

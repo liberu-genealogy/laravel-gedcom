@@ -1,10 +1,10 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi;
 
-use GenealogiaWebsite\LaravelGedcom\Models\PersonLds;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef;
+use FamilyTree365\LaravelGedcom\Models\PersonLds;
+use FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef;
+use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
 
 class Lds
 {

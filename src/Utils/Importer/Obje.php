@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\MediaObject;
+use FamilyTree365\LaravelGedcom\Models\MediaObject;
 
 class Obje
 {
@@ -58,13 +58,13 @@ class Obje
         $files = $obje->getFile(); // Record/NoteRef array
         if (($files && count((is_countable($files) ? $files : [])))) {
             foreach ($files as $item) {
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\ObjeRef\File::read($conn, $item, $_group, $_gid);
+                \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef\File::read($conn, $item, $_group, $_gid);
             }
         }
 
         $chan = $obje->getChan(); // Recore/Chan
         if ($chan !== null) {
-            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
+            \FamilyTree365\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
 
         return $_gid;

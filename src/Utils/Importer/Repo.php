@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Repository;
+use FamilyTree365\LaravelGedcom\Models\Repository;
 
 class Repo
 {
@@ -19,7 +19,7 @@ class Repo
         $name = $repo->getName(); // string
         $rin = $repo->getRin(); // string
         $addr = $repo->getAddr(); // Record/Addr
-        $addr_id = \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Addr::read($conn, $addr);
+        $addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $addr);
         $_phon = $repo->getPhon(); // Record/Phon array
         $phon = implode(',', $_phon);
         $_email = $repo->getEmail();
@@ -72,7 +72,7 @@ class Repo
 
         $chan = $repo->getChan(); // Recore/Chan
         if ($chan !== null) {
-            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
+            \FamilyTree365\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
 
         return $_gid;
