@@ -109,8 +109,9 @@ class ParentData
         otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
         }
     }
+}
             catch (\Exception $e) {
             $error = $e->getMessage();
             return \Log::error($error);
-        }
+        
 }
