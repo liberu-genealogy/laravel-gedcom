@@ -25,6 +25,7 @@ class ParentData
     public static function getPerson($conn, $individuals, $obje_ids, $sour_ids)
     {
         $ParentData = [];
+        try {
         foreach ($individuals as $k=>$individual) {
             $g_id = $individual->getId();
             $name = '';
@@ -106,5 +107,10 @@ class ParentData
             Person::on($conn)->insert($chunk);
         }
         otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
+        }
     }
+            catch (\Exception $e) {
+            $error = $e->getMessage();
+            return \Log::error($error);
+        }
 }
