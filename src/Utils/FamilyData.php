@@ -24,6 +24,7 @@ class FamilyData
     public static function getFamily($conn, $families, $obje_ids, $sour_ids, $persons_id, $note_ids, $repo_ids)
     {
         $familyData = [];
+        try {
         foreach ($families as $family) {
             $g_id = $family->getId();
             $resn = $family->getResn();
@@ -82,5 +83,10 @@ Family::on($conn)->insert($chunk);
 }
         otherFamRecord::insertFamilyData($conn, $families, $obje_ids, $sour_ids);
     }
+    }
+            catch (\Exception $e) {
+            $error = $e->getMessage();
+            return \Log::error($error);
+        }
 }
 
