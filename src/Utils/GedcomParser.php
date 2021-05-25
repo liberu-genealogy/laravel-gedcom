@@ -261,7 +261,7 @@ class GedcomParser
             }
         }
         catch (\Exception $e) {
-            $error = sprintf('[%s],[%d] ERROR:[%s]', __METHOD__, __LINE__, json_encode($e->getMessage(), true));
+            $error = $e->getMessage();
             return \Log::error($error);
         }
 
