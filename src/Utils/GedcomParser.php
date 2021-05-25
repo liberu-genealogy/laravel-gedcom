@@ -122,141 +122,147 @@ class GedcomParser
         Log::info('Note:'.$c_note);
         Log::info('Repo:'.$c_repo);
 
-        // store all the media objects that are contained within the GEDCOM file.
-        foreach ($obje as $item) {
-            // $this->getObje($item);
-            if ($item) {
-                $_obje_id = $item->getId();
-                $obje_id = Obje::read($this->conn, $item);
-                if ($obje_id != 0) {
-                    $this->obje_ids[$_obje_id] = $obje_id;
+        try {
+            // store all the media objects that are contained within the GEDCOM file.
+            foreach ($obje as $item) {
+                // $this->getObje($item);
+                if ($item) {
+                    $_obje_id = $item->getId();
+                    $obje_id = Obje::read($this->conn, $item);
+                    if ($obje_id != 0) {
+                        $this->obje_ids[$_obje_id] = $obje_id;
+                    }
+                }
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
+                }
+
+            }
+            // store information about all the submitters to the GEDCOM file.
+            foreach ($subm as $item) {
+                if ($item) {
+                    $_subm_id = $item->getSubm();
+                    $subm_id = Subm::read($this->conn, $item, null, null, $this->obje_ids);
+                    $this->subm_ids[$_subm_id] = $subm_id;
+                }
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
                 }
             }
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
-        }
 
-        // store information about all the submitters to the GEDCOM file.
-        foreach ($subm as $item) {
-            if ($item) {
-                $_subm_id = $item->getSubm();
-                $subm_id = Subm::read($this->conn, $item, null, null, $this->obje_ids);
-                $this->subm_ids[$_subm_id] = $subm_id;
-            }
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
-        }
-
-        if ($subn != null) {
-            // store the submission information for the GEDCOM file.
-            // $this->getSubn($subn);
-            Subn::read($this->conn, $subn, $this->subm_ids);
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
-        }
-
-        // store all the notes contained within the GEDCOM file that are not inline.
-        foreach ($note as $item) {
-            // $this->getNote($item);
-            if ($item) {
-                $note_id = $item->getId();
-                $_note_id = Note::read($this->conn, $item);
-                $this->note_ids[$note_id] = $_note_id;
-            }
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
-        }
-
-        // store all repositories that are contained within the GEDCOM file and referenced by sources.
-        foreach ($repo as $item) {
-            // $this->getRepo($item);
-            if ($item) {
-                $repo_id = $item->getRepo();
-                $_repo_id = Repo::read($this->conn, $item);
-                $this->repo_ids[$repo_id] = $_repo_id;
-            }
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
-        }
-
-        // store sources cited throughout the GEDCOM file.
-        // obje import before sour import
-        foreach ($sour as $item) {
-            // $this->getSour($item);
-            if ($item) {
-                $_sour_id = $item->getSour();
-                $sour_id = Sour::read($this->conn, $item, $this->obje_ids);
-                if ($sour_id != 0) {
-                    $this->sour_ids[$_sour_id] = $sour_id;
+            if ($subn != null) {
+                // store the submission information for the GEDCOM file.
+                // $this->getSubn($subn);
+                Subn::read($this->conn, $subn, $this->subm_ids);
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
                 }
             }
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
+
+            // store all the notes contained within the GEDCOM file that are not inline.
+            foreach ($note as $item) {
+                // $this->getNote($item);
+                if ($item) {
+                    $note_id = $item->getId();
+                    $_note_id = Note::read($this->conn, $item);
+                    $this->note_ids[$note_id] = $_note_id;
+                }
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
+                }
+            }
+
+            // store all repositories that are contained within the GEDCOM file and referenced by sources.
+            foreach ($repo as $item) {
+                // $this->getRepo($item);
+                if ($item) {
+                    $repo_id = $item->getRepo();
+                    $_repo_id = Repo::read($this->conn, $item);
+                    $this->repo_ids[$repo_id] = $_repo_id;
+                }
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
+                }
+            }
+
+            // store sources cited throughout the GEDCOM file.
+            // obje import before sour import
+            foreach ($sour as $item) {
+                // $this->getSour($item);
+                if ($item) {
+                    $_sour_id = $item->getSour();
+                    $sour_id = Sour::read($this->conn, $item, $this->obje_ids);
+                    if ($sour_id != 0) {
+                        $this->sour_ids[$_sour_id] = $sour_id;
+                    }
+                }
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
+                }
+            }
+            ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
+
+            foreach ($individuals as $individual) {
+                // ParentData::getPerson($this->conn, $individual, $this->obje_ids);
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
+                }
+            }
+
+            // complete person-alia and person-asso table with person table
+            $alia_list = PersonAlia::on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
+            foreach ($alia_list as $item) {
+                $alia = $item->alia;
+                if (isset($this->person_ids[$alia])) {
+                    $item->alia = $this->person_ids[$alia];
+                    $item->import_confirm = 1;
+                    $item->save();
+                } else {
+                    $item->delete();
+                }
+            }
+
+            $asso_list = PersonAsso::on($conn)->select('indi')->where('group', 'indi')->where('import_confirm', 0)->get();
+            foreach ($asso_list as $item) {
+                $_indi = $item->indi;
+                if (isset($this->person_ids[$_indi])) {
+                    $item->indi = $this->person_ids[$_indi];
+                    $item->import_confirm = 1;
+                    $item->save();
+                } else {
+                    $item->delete();
+                }
+            }
+
+            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids);
+
+            foreach ($families as $family) {
+                //     // $this->getFamily($family);
+                // FamilyData::getFamily($this->conn, $family, $this->obje_ids);
+                if ($progressBar === true) {
+                    $bar->advance();
+                    $complete++;
+                    event(new GedComProgressSent($slug, $total, $complete, $channel));
+                }
             }
         }
-        ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
-
-        foreach ($individuals as $individual) {
-            // ParentData::getPerson($this->conn, $individual, $this->obje_ids);
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
-        }
-
-        // complete person-alia and person-asso table with person table
-        $alia_list = PersonAlia::on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
-        foreach ($alia_list as $item) {
-            $alia = $item->alia;
-            if (isset($this->person_ids[$alia])) {
-                $item->alia = $this->person_ids[$alia];
-                $item->import_confirm = 1;
-                $item->save();
-            } else {
-                $item->delete();
-            }
-        }
-
-        $asso_list = PersonAsso::on($conn)->select('indi')->where('group', 'indi')->where('import_confirm', 0)->get();
-        foreach ($asso_list as $item) {
-            $_indi = $item->indi;
-            if (isset($this->person_ids[$_indi])) {
-                $item->indi = $this->person_ids[$_indi];
-                $item->import_confirm = 1;
-                $item->save();
-            } else {
-                $item->delete();
-            }
-        }
-
-        FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids);
-
-        foreach ($families as $family) {
-            //     // $this->getFamily($family);
-            // FamilyData::getFamily($this->conn, $family, $this->obje_ids);
-            if ($progressBar === true) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete, $channel));
-            }
+        catch (\Exception $e) {
+            $error = sprintf('[%s],[%d] ERROR:[%s]', __METHOD__, __LINE__, json_encode($e->getMessage(), true));
+            return \Log::error($error);
         }
 
         if ($progressBar === true) {
