@@ -3,7 +3,7 @@
     "description": "A package that converts gedcom files to Eloquent models",
     "type": "library",
     "require": {
-        "genealogiawebsite/php-gedcom": "^1.0",
+        "familytree365/php-gedcom": "^1.0",
         "doctrine/dbal": "^3.0"
     },
     "license": "MIT",
