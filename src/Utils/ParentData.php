@@ -97,15 +97,16 @@ class ParentData
                 if (empty($check)) {
                     $value = ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn];
 
-                    $ParentData[] = $value;
+                    //$ParentData[] = $value;
+                    Person::on($conn)->insert($value);
                 }
                 // $person = Person::on($conn)->updateOrCreate($key,$value);
                 // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
             }
 
-            foreach (array_chunk($ParentData, 200) as $chunk) {
+            /* foreach (array_chunk($ParentData, 200) as $chunk) {
                 Person::on($conn)->insert($chunk);
-            }
+            } */
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
         }
         catch (\Exception $e) {
