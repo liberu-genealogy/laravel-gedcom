@@ -37,9 +37,9 @@ class GedcomParser
 
     public function parse(
       /* $conn, */
-      $conn = "",
       string $filename,
       string $slug,
+      $conn = "",
       bool $progressBar = NULL,
       $channel = ['name' => 'gedcom-progress1', 'eventName' => 'newMessage']
     )
