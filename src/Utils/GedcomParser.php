@@ -36,7 +36,8 @@ class GedcomParser
     protected $conn = '';
 
     public function parse(
-      $conn,
+      /* $conn, */
+      $conn = "",
       string $filename,
       string $slug,
       bool $progressBar = NULL,
