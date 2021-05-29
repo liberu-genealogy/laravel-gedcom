@@ -39,7 +39,12 @@ class Even
                 $_phon = $even->getPhon();
                 $phon = \FamilyTree365\LaravelGedcom\Utils\Importer\Phon::read($conn, $_phon);
                 $_addr = $even->getAddr();
-                $addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
+                //$addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
+                if(!empty($_addr)){
+                    $addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
+                } else {
+                    $addr_id = null;
+                }
 
                 $caus = $even->getCaus();
                 $age = $even->getAge();
@@ -190,7 +195,12 @@ class Even
                 $_phon = $even->getPhon();
                 $phon = \FamilyTree365\LaravelGedcom\Utils\Importer\Phon::read($conn, $_phon);
                 $_addr = $even->getAddr();
-                $addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
+                //$addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
+                if(!empty($_addr)){
+                    $addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $_addr);
+                } else {
+                    $addr_id = null;
+                }
 
                 $caus = $even->getCaus();
                 $age = $even->getAge();
@@ -297,11 +307,6 @@ class Even
                     ['birt_famc', $birt_famc],
                 ];
 
-                $record = PersonEvent::on($conn)->where($key)->first();
-
-                $_group = 'indi_even';
-                $_gid = $record->id;
-
                 // update person's record
                 if ($class_name == 'BIRT' && !empty($date)) {
                     $person->birthday = date('Y-m-d', strtotime($date));
@@ -311,9 +316,19 @@ class Even
                     $person->deathday = date('Y-m-d', strtotime($date));
                 }
                 $person->save();
+                
+                $sour = $even->getSour();
+                $notes = $even->getNote();
+                $obje = $even->getObje();
+                $_chan = $even->getChan() ?? null;
+                if((!empty($sour) && count($sour) > 0) || (!empty($obje) && count($obje) > 0) || (!empty($notes) && count($notes) > 0) || !empty($_chan))    {
+                    $record = PersonEvent::on($conn)->where($key)->first();
+                    $_group = 'indi_even';
+                    $_gid = $record->id;
+                }
 
                 // array
-                $sour = $even->getSour();
+                //$sour = $even->getSour();
                 if ($sour && count($sour) > 0) {
                     foreach ($sour as $item) {
                         if ($item) {
@@ -321,7 +336,7 @@ class Even
                         }
                     }
                 }
-                $obje = $even->getObje();
+                //$obje = $even->getObje();
                 if ($obje && count($obje) > 0) {
                     foreach ($obje as $item) {
                         if ($item) {
@@ -329,14 +344,14 @@ class Even
                         }
                     }
                 }
-                $notes = $even->getNote();
+                //$notes = $even->getNote();
                 if ($notes && count($notes) > 0) {
                     foreach ($notes as $item) {
                         \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
                     }
                 }
                 // object
-                $_chan = $even->getChan() ?? null;
+                //$_chan = $even->getChan() ?? null;
                 if ($_chan !== null) {
                     \FamilyTree365\LaravelGedcom\Utils\Importer\Chan::read($conn, $_chan, $_group, $_gid);
                 }
