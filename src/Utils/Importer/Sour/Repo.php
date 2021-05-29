@@ -1,9 +1,9 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Sour;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Sour;
 
-use GenealogiaWebsite\LaravelGedcom\Models\SourceRepo;
-use GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef;
+use FamilyTree365\LaravelGedcom\Models\SourceRepo;
+use FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef;
 
 class Repo
 {

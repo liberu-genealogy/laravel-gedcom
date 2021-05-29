@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Indi\Name;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi\Name;
 
-use GenealogiaWebsite\LaravelGedcom\Models\PersonNameRomn;
+use FamilyTree365\LaravelGedcom\Models\PersonNameRomn;
 
 class Romn
 {

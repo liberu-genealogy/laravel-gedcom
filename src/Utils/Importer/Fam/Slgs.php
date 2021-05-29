@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer\Fam;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer\Fam;
 
-use GenealogiaWebsite\LaravelGedcom\Models\FamilySlgs;
+use FamilyTree365\LaravelGedcom\Models\FamilySlgs;
 
 class Slgs
 {
@@ -49,7 +49,7 @@ class Slgs
         if ($sour && count($sour) > 0) {
             foreach ($sour as $item) {
                 if ($item) {
-                    \GenealogiaWebsite\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
+                    \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
         }
@@ -57,7 +57,7 @@ class Slgs
         $note = $slgs->getNote();
         if ($note && count($note) > 0) {
             foreach ($note as $item) {
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
     }

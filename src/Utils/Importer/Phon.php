@@ -1,6 +1,6 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
 class Phon
 {

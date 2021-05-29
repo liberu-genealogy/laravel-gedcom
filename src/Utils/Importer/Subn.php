@@ -1,8 +1,8 @@
 <?php
 
-namespace GenealogiaWebsite\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 
-use GenealogiaWebsite\LaravelGedcom\Models\Subn as MSubn;
+use FamilyTree365\LaravelGedcom\Models\Subn as MSubn;
 
 class Subn
 {
@@ -36,12 +36,12 @@ class Subn
 
         if ($note != null && count($note) > 0) {
             foreach ($note as $item) {
-                \GenealogiaWebsite\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
+                \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
         $chan = $subn->getChan() ?? null; // Record\Chan---
         if ($chan !== null) {
-            \GenealogiaWebsite\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
+            \FamilyTree365\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
     }
 }
