@@ -90,15 +90,15 @@ class ParentData
                 }
 
                 $config = json_encode(config('database.connections.' . $conn));
-                $key = [
+                /* $key = [
                     ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex], ['uid', $uid],
-                ];
-                $check = Person::on($conn)->where($key)->first();
-                if (empty($check)) {
+                ]; */
+                //$check = Person::on($conn)->where($key)->first();
+                //if (empty($check)) {
                     $value = ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn];
 
                     $ParentData[] = $value;
-                }
+                //}
                 // $person = Person::on($conn)->updateOrCreate($key,$value);
                 // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
             }
