@@ -103,9 +103,11 @@ class ParentData
                 // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
             }
 
-            foreach (array_chunk($ParentData, 200) as $chunk) {
+            /* foreach (array_chunk($ParentData, 200) as $chunk) {
                 Person::on($conn)->insert($chunk);
-            }
+            } */
+            // it's take only 1 second for 3010 record
+            Person::on($conn)->insert($ParentData);
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
         }
         catch (\Exception $e) {
