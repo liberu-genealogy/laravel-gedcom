@@ -7,6 +7,7 @@ use FamilyTree365\LaravelGedcom\Models\Person;
 use PhpGedcom\Gedcom;
 use PhpGedcom\Record\Fam;
 use PhpGedcom\Record\Fam\Even;
+use PhpGedcom\Record\Indi\Even as Personal;
 use PhpGedcom\Record\Fam\Slgs;
 use PhpGedcom\Record\Head;
 use PhpGedcom\Record\Head\Sour;
@@ -76,22 +77,29 @@ class GedcomGenerator
             return;
         }
 
-        $person = Person::query()->find($p_id);
+        /* $person = Person::query()->find($p_id);
         if ($person == null) {
             return;
+        } */
+        $persons = Person::query()->get();
+        if ($persons == null) {
+            return;
+        }
+        foreach ($persons as $key => $person) {
+            $this->setIndi($person->id);
         }
 
         // add self to indi
-        if (!in_array($p_id, $this->arr_indi_id)) {
+        /* if (!in_array($p_id, $this->arr_indi_id)) {
             array_push($this->arr_indi_id, $p_id);
             $this->setIndi($p_id);
         } else {
             // already processed this person
             return;
-        }
+        } */
 
         // process family ( partner, children )
-        $_families = Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
+        /* $_families = Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
         foreach ($_families as $item) {
             // add family
             $f_id = $item->id;
@@ -118,9 +126,9 @@ class GedcomGenerator
                     $this->setIndi($child_id);
                 }
             }
-        }
+        } */
 
-        $parent_family_id = $person->child_in_family_id;
+        /* $parent_family_id = $person->child_in_family_id;
         $p_family = Family::query()->find($parent_family_id);
 
         // there is not parent data.
@@ -143,7 +151,7 @@ class GedcomGenerator
         $father_id = $p_family->husband_id;
         $mother_id = $p_family->wife_id;
         $this->addUpData($father_id, $nest);
-        $this->addUpData($mother_id, $nest);
+        $this->addUpData($mother_id, $nest); */
     }
 
     public function addDownData($p_id, $nest = 0)
@@ -306,15 +314,28 @@ class GedcomGenerator
         $sex = $person->sex;
         $indi->setSex($sex);
 
+        $place = PersonEvent::query()->find($p_id);
+        $_plac = new Personal;
+        if(!empty($place->type)){
+            $_plac->setType($place->type);
+        }
+        if(!empty($place->date)){
+            $date = \FamilyTree365\LaravelGedcom\Utils\Importer\Date::read("", $place->date);
+            $_plac->setDate($date);
+        }
+        if(!empty($place->type) && !empty($place->date)){
+            $indi->getAllEven($_plac);
+        }
+
         /**
          * @var Fams[]
          */
-        $fams = Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
+        /* $fams = Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
         foreach ($fams as $item) {
             $fam = new Fams();
             $fam->setFams($item->id);
             $indi->addFams($fam);
-        }
+        } */
 
         $this->_gedcom->addIndi($indi);
     }
