@@ -27,12 +27,11 @@ class GedComProgressSent implements ShouldBroadcast
      * @param $complete
      */
     public function __construct(
-      $slug,
-      $total,
-      $complete,
-      $channel = ['name' => 'gedcom-progress', 'eventName' => 'newMessage']
-    )
-    {
+        $slug,
+        $total,
+        $complete,
+        $channel = ['name' => 'gedcom-progress', 'eventName' => 'newMessage']
+    ) {
         $this->slug = $slug;
         $this->total = $total;
         $this->complete = $complete;
@@ -49,9 +48,9 @@ class GedComProgressSent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-          'slug' => $this->slug,
-          'total' => $this->total,
-          'complete' => $this->complete,
+            'slug'     => $this->slug,
+            'total'    => $this->total,
+            'complete' => $this->complete,
         ];
     }
 

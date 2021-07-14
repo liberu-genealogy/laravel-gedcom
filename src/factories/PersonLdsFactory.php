@@ -23,9 +23,9 @@ class PersonLdsFactory extends Factory
     {
         return [
             'group' => $this->faker->word(), 'gid' => $this->faker->randomElement('1', '2'),
-            'type' => $this->faker->word(), 'stat' => $this->faker->word(),
-            'date' => $this->faker->date(), 'plac' => $this->faker->word(),
-            'temp' => $this->faker->text(), 'slac_famc' => $this->faker->word(), 'created_at', 'updated_at'
+            'type'  => $this->faker->word(), 'stat' => $this->faker->word(),
+            'date'  => $this->faker->date(), 'plac' => $this->faker->word(),
+            'temp'  => $this->faker->text(), 'slac_famc' => $this->faker->word(), 'created_at', 'updated_at',
         ];
     }
 }

@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\Person;
 use PhpGedcom\Gedcom;
 use PhpGedcom\Record\Fam;
 use PhpGedcom\Record\Fam\Even;
-use PhpGedcom\Record\Indi\Even as Personal;
 use PhpGedcom\Record\Fam\Slgs;
 use PhpGedcom\Record\Head;
 use PhpGedcom\Record\Head\Sour;
 use PhpGedcom\Record\Indi;
+use PhpGedcom\Record\Indi\Even as Personal;
 use PhpGedcom\Record\Indi\Fams;
 use PhpGedcom\Record\Indi\Name;
 use PhpGedcom\Record\NoteRef;
@@ -315,15 +315,15 @@ class GedcomGenerator
         $indi->setSex($sex);
 
         $place = PersonEvent::query()->find($p_id);
-        $_plac = new Personal;
-        if(!empty($place->type)){
+        $_plac = new Personal();
+        if (!empty($place->type)) {
             $_plac->setType($place->type);
         }
-        if(!empty($place->date)){
-            $date = \FamilyTree365\LaravelGedcom\Utils\Importer\Date::read("", $place->date);
+        if (!empty($place->date)) {
+            $date = \FamilyTree365\LaravelGedcom\Utils\Importer\Date::read('', $place->date);
             $_plac->setDate($date);
         }
-        if(!empty($place->type) && !empty($place->date)){
+        if (!empty($place->type) && !empty($place->date)) {
             $indi->getAllEven($_plac);
         }
 

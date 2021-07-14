@@ -24,9 +24,9 @@ class PersonNameRomnFactory extends Factory
         return [
             //
             'group' => $this->faker->word(), 'gid' => $this->faker->randomElement('1', '2'),
-            'type' => $this->faker->word(), 'name' => $this->faker->name(),
-            'npfx' => $this->faker->word(), 'givn' => $this->faker->firstName(),
-            'nick' => $this->faker->userName(), 'spfx', 'surn' => $this->faker->lastName(),  'nsfx', 'created_at', 'updated_at'
+            'type'  => $this->faker->word(), 'name' => $this->faker->name(),
+            'npfx'  => $this->faker->word(), 'givn' => $this->faker->firstName(),
+            'nick'  => $this->faker->userName(), 'spfx', 'surn' => $this->faker->lastName(),  'nsfx', 'created_at', 'updated_at',
         ];
     }
 }

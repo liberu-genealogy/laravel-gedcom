@@ -27,7 +27,7 @@ class AddrFactory extends Factory
             'city' => $this->faker->city(),
             'stae' => $this->faker->state(),
             'post' => $this->faker->postcode(),
-            'ctry' => $this->faker->countryCode(), 'created_at', 'updated_at'
+            'ctry' => $this->faker->countryCode(), 'created_at', 'updated_at',
         ];
     }
 }

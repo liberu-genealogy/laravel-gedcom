@@ -25,6 +25,7 @@ class ParentData
     public static function getPerson($conn, $individuals, $obje_ids, $sour_ids)
     {
         $ParentData = [];
+
         try {
             foreach ($individuals as $k => $individual) {
                 $g_id = $individual->getId();
@@ -89,15 +90,15 @@ class ParentData
                     $givn = $name;
                 }
 
-                $config = json_encode(config('database.connections.' . $conn));
+                $config = json_encode(config('database.connections.'.$conn));
                 /* $key = [
                     ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex], ['uid', $uid],
                 ]; */
                 //$check = Person::on($conn)->where($key)->first();
                 //if (empty($check)) {
-                    $value = ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn];
+                $value = ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn];
 
-                    $ParentData[] = $value;
+                $ParentData[] = $value;
                 //}
                 // $person = Person::on($conn)->updateOrCreate($key,$value);
                 // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
@@ -109,11 +110,10 @@ class ParentData
             // it's take only 1 second for 3010 record
             Person::on($conn)->insert($ParentData);
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
+
             return \Log::error($error);
         }
     }
 }
-

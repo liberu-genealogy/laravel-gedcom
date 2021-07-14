@@ -24,21 +24,21 @@ class FamilyEventFactory extends Factory
     public function definition()
     {
         return [
-            'family_id'=> Family::factory(),
-            'places_id' => Place::factory(),
-            'date' => $this->faker->date(),
-            'title' => $this->faker->word(),
+            'family_id'   => Family::factory(),
+            'places_id'   => Place::factory(),
+            'date'        => $this->faker->date(),
+            'title'       => $this->faker->word(),
             'description' => $this->faker->text(),
-            'year' => $this->faker->year(),
-            'month' => $this->faker->month(),
-            'day' => $this->faker->dayOfMonth(),
-            'type' => $this->faker->word(),
-            'plac'  => $this->faker->word(),
-            'phon' => $this->faker->phoneNumber(),
-            'caus'  => $this->faker->word(),
-            'age' => $this->faker->numberBetween(10, 79),
-            'husb' => $this->faker->word(),
-            'wife' => $this->faker->word(),
+            'year'        => $this->faker->year(),
+            'month'       => $this->faker->month(),
+            'day'         => $this->faker->dayOfMonth(),
+            'type'        => $this->faker->word(),
+            'plac'        => $this->faker->word(),
+            'phon'        => $this->faker->phoneNumber(),
+            'caus'        => $this->faker->word(),
+            'age'         => $this->faker->numberBetween(10, 79),
+            'husb'        => $this->faker->word(),
+            'wife'        => $this->faker->word(),
         ];
     }
 }
