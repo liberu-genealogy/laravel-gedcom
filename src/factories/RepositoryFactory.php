@@ -24,18 +24,18 @@ class RepositoryFactory extends Factory
     public function definition()
     {
         return [
-            'repo' => $this->faker->word(),
-            'name' => $this->faker->word(),
+            'repo'    => $this->faker->word(),
+            'name'    => $this->faker->word(),
             'addr_id' => Addr::factory(),
-            'rin' => $this->faker->word(),
-            'phon' => $this->faker->phoneNumber(),
-            'email' => $this->faker->email(),
+            'rin'     => $this->faker->word(),
+            'phon'    => $this->faker->phoneNumber(),
+            'email'   => $this->faker->email(),
             'fax',
-            'www' => $this->faker->url(),
-            'name' => $this->faker->name(),
+            'www'         => $this->faker->url(),
+            'name'        => $this->faker->name(),
             'description' => $this->faker->text(),
-            'type_id' => Type::factory(),
-            'is_active'
+            'type_id'     => Type::factory(),
+            'is_active',
         ];
     }
 }

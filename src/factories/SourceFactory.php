@@ -1,6 +1,6 @@
 @<?php
 
-    namespace Database\Factories;
+namespace Database\Factories;
 
     use App\Models\Author;
     use App\Models\Publication;
@@ -29,20 +29,20 @@
                 'sour' => $this->faker->word(),
                 'titl' => $this->faker->word(),
                 'auth',
-                'data' => $this->faker->word(),
-                'text' => $this->faker->word(),
-                'publ' => $this->faker->text(),
-                'abbr' => $this->faker->word(),
-                'name' => $this->faker->word(),
-                'description' => $this->faker->word(),
-                'repository_id' => Repository::factory(),
-                'author_id' => Author::factory(),
+                'data'           => $this->faker->word(),
+                'text'           => $this->faker->word(),
+                'publ'           => $this->faker->text(),
+                'abbr'           => $this->faker->word(),
+                'name'           => $this->faker->word(),
+                'description'    => $this->faker->word(),
+                'repository_id'  => Repository::factory(),
+                'author_id'      => Author::factory(),
                 'publication_id' => Publication::factory(),
-                'type_id' => Type::factory(),
+                'type_id'        => Type::factory(),
                 'is_active', 'group' => $this->faker->word(),
-                'gid' => $this->faker->word(),
+                'gid'  => $this->faker->word(),
                 'quay' => $this->faker->word(),
-                'page' => $this->faker->word()
+                'page' => $this->faker->word(),
             ];
         }
     }
