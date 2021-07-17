@@ -36,13 +36,12 @@ class GedcomParser
     protected $conn = '';
 
     public function parse(
-      $conn,
-      string $filename,
-      string $slug,
-      bool $progressBar = NULL,
-      $channel = ['name' => 'gedcom-progress1', 'eventName' => 'newMessage']
-    )
-    {
+        $conn,
+        string $filename,
+        string $slug,
+        bool $progressBar = null,
+        $channel = ['name' => 'gedcom-progress1', 'eventName' => 'newMessage']
+    ) {
         DB::disableQueryLog();
         //start calculating the time
         $time_start = microtime(true);
@@ -65,28 +64,22 @@ class GedcomParser
         $repo = [];
         $obje = [];
 
-        if ($gedcom->getSubn())
-        {
+        if ($gedcom->getSubn()) {
             $subn = $gedcom->getSubn();
         }
-        if ($gedcom->getSubm())
-        {
+        if ($gedcom->getSubm()) {
             $subm = $gedcom->getSubm();
         }
-        if ($gedcom->getSour())
-        {
+        if ($gedcom->getSour()) {
             $sour = $gedcom->getSour();
         }
-        if ($gedcom->getNote())
-        {
+        if ($gedcom->getNote()) {
             $note = $gedcom->getNote();
         }
-        if ($gedcom->getRepo())
-        {
+        if ($gedcom->getRepo()) {
             $repo = $gedcom->getRepo();
         }
-        if ($gedcom->getObje())
-        {
+        if ($gedcom->getObje()) {
             $obje = $gedcom->getObje();
         }
 
@@ -138,7 +131,6 @@ class GedcomParser
                     $complete++;
                     event(new GedComProgressSent($slug, $total, $complete, $channel));
                 }
-
             }
             // store information about all the submitters to the GEDCOM file.
             foreach ($subm as $item) {
@@ -259,9 +251,9 @@ class GedcomParser
                     event(new GedComProgressSent($slug, $total, $complete, $channel));
                 }
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
+
             return \Log::error($error);
         }
 

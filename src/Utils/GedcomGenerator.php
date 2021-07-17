@@ -4,21 +4,21 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
-use Gedcom\Gedcom;
-use Gedcom\Record\Fam;
-use Gedcom\Record\Fam\Even;
-use Gedcom\Record\Indi\Even as Personal;
-use Gedcom\Record\Fam\Slgs;
-use Gedcom\Record\Head;
-use Gedcom\Record\Head\Sour;
-use Gedcom\Record\Indi;
-use Gedcom\Record\Indi\Fams;
-use Gedcom\Record\Indi\Name;
-use Gedcom\Record\NoteRef;
-use Gedcom\Record\ObjeRef;
-use Gedcom\Record\SourRef;
-use Gedcom\Record\Subm;
-use Gedcom\Writer;
+use PhpGedcom\Gedcom;
+use PhpGedcom\Record\Fam;
+use PhpGedcom\Record\Fam\Even;
+use PhpGedcom\Record\Fam\Slgs;
+use PhpGedcom\Record\Head;
+use PhpGedcom\Record\Head\Sour;
+use PhpGedcom\Record\Indi;
+use PhpGedcom\Record\Indi\Even as Personal;
+use PhpGedcom\Record\Indi\Fams;
+use PhpGedcom\Record\Indi\Name;
+use PhpGedcom\Record\NoteRef;
+use PhpGedcom\Record\ObjeRef;
+use PhpGedcom\Record\SourRef;
+use PhpGedcom\Record\Subm;
+use PhpGedcom\Writer;
 
 class GedcomGenerator
 {
@@ -315,15 +315,15 @@ class GedcomGenerator
         $indi->setSex($sex);
 
         $place = PersonEvent::query()->find($p_id);
-        $_plac = new Personal;
-        if(!empty($place->type)){
+        $_plac = new Personal();
+        if (!empty($place->type)) {
             $_plac->setType($place->type);
         }
-        if(!empty($place->date)){
-            $date = \FamilyTree365\LaravelGedcom\Utils\Importer\Date::read("", $place->date);
+        if (!empty($place->date)) {
+            $date = \FamilyTree365\LaravelGedcom\Utils\Importer\Date::read('', $place->date);
             $_plac->setDate($date);
         }
-        if(!empty($place->type) && !empty($place->date)){
+        if (!empty($place->type) && !empty($place->date)) {
             $indi->getAllEven($_plac);
         }
 
@@ -379,17 +379,17 @@ class GedcomGenerator
             $even = new Even();
             $_type = null; // string
             $_date = null; // string
-            $_plac = null; // \Gedcom\Record\Indi\Even\Plac
+            $_plac = null; // \PhpGedcom\Record\Indi\Even\Plac
             $_caus = null; // string
             $_age = null;  // string
-            $_addr = null; // \Gedcom\Record\Addr
-            $_phon = []; // \Gedcom\Record\Phon
+            $_addr = null; // \PhpGedcom\Record\Addr
+            $_phon = []; // \PhpGedcom\Record\Phon
             $_agnc = null; // string
-            $_husb = null; // \Gedcom\Record\Fam\Even\Husb
-            $_wife = null; // \Gedcom\Record\Fam\Even\Wife
-            $_obje = []; // \Gedcom\Writer\ObjeRef
-            $_sour = []; // \Gedcom\Writer\SourRef
-            $_note = []; // \Gedcom\Writer\NoteRef
+            $_husb = null; // \PhpGedcom\Record\Fam\Even\Husb
+            $_wife = null; // \PhpGedcom\Record\Fam\Even\Wife
+            $_obje = []; // \PhpGedcom\Writer\ObjeRef
+            $_sour = []; // \PhpGedcom\Writer\SourRef
+            $_note = []; // \PhpGedcom\Writer\NoteRef
             $even->setType($_type);
             $even->setDate($_date);
             $even->setPlac($_plac);

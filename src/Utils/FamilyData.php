@@ -24,6 +24,7 @@ class FamilyData
     public static function getFamily($conn, $families, $obje_ids, $sour_ids, $persons_id, $note_ids, $repo_ids)
     {
         $familyData = [];
+
         try {
             foreach ($families as $family) {
                 $g_id = $family->getId();
@@ -65,29 +66,26 @@ class FamilyData
 
             $key = [
                 ['husband_id', $husband_id], ['wife_id', $wife_id], ['description', $description], ['type_id', $type_id], ['nchi', $nchi],
-                ['rin', $rin]
+                ['rin', $rin],
             ];
             $check = Family::on($conn)->where($key)->first();
             if (empty($check)) {
                 $value = [['husband_id', $husband_id], ['wife_id', $wife_id], ['description', $description], ['type_id', $type_id], ['nchi', $nchi],
-                    ['rin', $rin]];
+                    ['rin', $rin], ];
 
                 $FamilyData[] = $value;
             }
             // $person = Person::on($conn)->updateOrCreate($key,$value);
             // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
 
-
             foreach (array_chunk($FamilyData, 200) as $chunk) {
                 Family::on($conn)->insert($chunk);
             }
             otherFamRecord::insertFamilyData($conn, $families, $obje_ids, $sour_ids);
-
         } catch (\Exception $e) {
             $error = $e->getMessage();
+
             return \Log::error($error);
         }
-
     }
 }
-
