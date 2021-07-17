@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\MediaObject;
 class Obje
 {
     /**
-     * PhpGedcom\Record\Obje $obje
+     * Gedcom\Record\Obje $obje
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Obje $obje, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Obje $obje, $group = '', $group_id = 0)
     {
         if ($obje == null) {
             return 0;

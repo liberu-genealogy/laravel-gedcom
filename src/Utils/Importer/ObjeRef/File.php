@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\MediaObjeectFile;
 class File
 {
     /**
-     * PhpGedcom\Record\Sour\Data\Even $even
+     * Gedcom\Record\Sour\Data\Even $even
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\ObjeRef\File $file, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\ObjeRef\File $file, $group = '', $group_id = 0)
     {
         $form = $file->getForm();
         $medi = null;

@@ -12,7 +12,7 @@ use FamilyTree365\LaravelGedcom\Models\Source;
 use FamilyTree365\LaravelGedcom\Models\Subm;
 use FamilyTree365\LaravelGedcom\Models\Subn;
 use Illuminate\Console\OutputStyle;
-use PhpGedcom\Parser;
+use Gedcom\Parser;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 

@@ -7,7 +7,7 @@ use FamilyTree365\LaravelGedcom\Models\Addr as MAddr;
 class Addr
 {
     /**
-     * PhpGedcom\Record\Refn $noteref
+     * Gedcom\Record\Refn $noteref
      * String $group
      * Integer $group_id.
      */

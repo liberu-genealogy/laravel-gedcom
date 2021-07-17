@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\PersonNameRomn;
 class Romn
 {
     /**
-     * \PhpGedcom\Record\Indi\Asso $asso
+     * \Gedcom\Record\Indi\Asso $asso
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Indi\Name\Romn $item, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Indi\Name\Romn $item, $group = '', $group_id = 0)
     {
         $type = $item->getType();
         $npfx = $item->getNpfx();

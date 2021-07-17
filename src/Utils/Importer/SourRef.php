@@ -9,11 +9,11 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef\Even;
 class SourRef
 {
     /**
-     * PhpGedcom\Record\SourRef $sourref
+     * Gedcom\Record\SourRef $sourref
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\SourRef $sourref, $group = '', $group_id = 0, $sour_ids = [], $obje_ids = [])
+    public static function read($conn, \Gedcom\Record\SourRef $sourref, $group = '', $group_id = 0, $sour_ids = [], $obje_ids = [])
     {
         if ($sourref == null) {
             return;
@@ -64,7 +64,7 @@ class SourRef
             Data::read($conn, $data, $_group, $_gid);
         }
 
-        // store \PhpGedcom\Record\SourRef\Even
+        // store \Gedcom\Record\SourRef\Even
         $even = $sourref->getEven();
         if ($even) {
             Even::read($conn, $even, $_group, $_gid);

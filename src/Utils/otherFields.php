@@ -50,7 +50,7 @@ class otherFields
             $surn = '';
             $nsfx = '';
             $type = '';
-            $fone = null; // PhpGedcom/
+            $fone = null; // Gedcom/
             $romn = null;
             $names = $individual->getName();
             $attr = $individual->getAllAttr();

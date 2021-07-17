@@ -9,11 +9,11 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
 class Lds
 {
     /**
-     * PhpGedcom\Record\Indi\Lds $lds
+     * Gedcom\Record\Indi\Lds $lds
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Indi\Lds $lds, $group = '', $group_id = 0, $type = '', $sour_ids = [], $obje_ids = [])
+    public static function read($conn, \Gedcom\Record\Indi\Lds $lds, $group = '', $group_id = 0, $type = '', $sour_ids = [], $obje_ids = [])
     {
         $stat = $lds->getStat();
         $date = $lds->getDate();

@@ -5,7 +5,7 @@ namespace FamilyTree365\LaravelGedcom\Utils\Importer;
 class Caln
 {
     /**
-     * PhpGedcom\Record\Caln $caln
+     * Gedcom\Record\Caln $caln
      * String $group
      * Integer $group_id.
      */

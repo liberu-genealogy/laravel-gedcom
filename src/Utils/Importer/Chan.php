@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\Chan as MChan;
 class Chan
 {
     /**
-     * PhpGedcom\Record\Chan $chan
+     * Gedcom\Record\Chan $chan
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Chan $chan, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Chan $chan, $group = '', $group_id = 0)
     {
         $date = $chan->getDate();
         $time = $chan->getTime();

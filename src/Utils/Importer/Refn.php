@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\Refn as MRefn;
 class Refn
 {
     /**
-     * PhpGedcom\Record\Refn $noteref
+     * Gedcom\Record\Refn $noteref
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Refn $refn, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Refn $refn, $group = '', $group_id = 0)
     {
         $_refn = $refn->getRefn();
         $type = $refn->getType();

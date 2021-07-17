@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\SourceRefEven;
 class Even
 {
     /**
-     * PhpGedcom\Record\Sour\Data\Even $even
+     * Gedcom\Record\Sour\Data\Even $even
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\SourRef\Even $even, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\SourRef\Even $even, $group = '', $group_id = 0)
     {
         $_even = $even->getEven();
         $role = $even->getRole();

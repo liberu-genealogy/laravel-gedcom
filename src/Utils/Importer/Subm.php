@@ -7,7 +7,7 @@ use FamilyTree365\LaravelGedcom\Models\Subm as MSubm;
 class Subm
 {
     /**
-     * PhpGedcom\Record\Subm $noteref
+     * Gedcom\Record\Subm $noteref
      * String $group
      * Integer $group_id.
      */

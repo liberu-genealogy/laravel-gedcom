@@ -8,11 +8,11 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef;
 class Repo
 {
     /**
-     * PhpGedcom\Record\Sour\Data $data
+     * Gedcom\Record\Sour\Data $data
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Sour\Repo $data, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Sour\Repo $data, $group = '', $group_id = 0)
     {
         $repo_id = $data->getRepo();
         if (empty($repo_id)) {
@@ -41,7 +41,7 @@ class Repo
         $_group = 'sourcerepo';
         $_gid = $record->id;
 
-        // \PhpGedcom\Record\NoteRef array
+        // \Gedcom\Record\NoteRef array
         $note = $data->getNote();
         if ($note && count($note) > 0) {
             foreach ($note as $item) {

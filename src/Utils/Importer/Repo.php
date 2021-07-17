@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\Repository;
 class Repo
 {
     /**
-     * PhpGedcom\Record\Repo $repo
+     * Gedcom\Record\Repo $repo
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Repo $repo, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Repo $repo, $group = '', $group_id = 0)
     {
         if ($repo == null) {
             return;

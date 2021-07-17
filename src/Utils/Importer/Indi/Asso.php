@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\PersonAsso;
 class Asso
 {
     /**
-     * \PhpGedcom\Record\Indi\Asso $asso
+     * \Gedcom\Record\Indi\Asso $asso
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Indi\Asso $asso, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Indi\Asso $asso, $group = '', $group_id = 0)
     {
         $indi = $group_id;
         $_indi = $asso->getIndi();

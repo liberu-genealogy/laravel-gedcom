@@ -7,7 +7,7 @@ use FamilyTree365\LaravelGedcom\Models\Subn as MSubn;
 class Subn
 {
     /**
-     * PhpGedcom\Record\Subn $subn
+     * Gedcom\Record\Subn $subn
      * String $group
      * Integer $group_id.
      */

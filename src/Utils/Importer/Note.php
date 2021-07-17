@@ -7,11 +7,11 @@ use FamilyTree365\LaravelGedcom\Models\Note as MNote;
 class Note
 {
     /**
-     * PhpGedcom\Record\NoteRef $noteref
+     * Gedcom\Record\NoteRef $noteref
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\Note $note, $group = '', $group_id = 0)
+    public static function read($conn, \Gedcom\Record\Note $note, $group = '', $group_id = 0)
     {
         $_note = $note->getNote();
         $rin = $note->getRin();

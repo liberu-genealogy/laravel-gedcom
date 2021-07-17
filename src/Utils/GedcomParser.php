@@ -14,7 +14,7 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\Subm;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Subn;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
-use PhpGedcom\Parser;
+use Gedcom\Parser;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 

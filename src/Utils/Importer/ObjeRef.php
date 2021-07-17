@@ -8,11 +8,11 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef\File;
 class ObjeRef
 {
     /**
-     * \PhpGedcom\Record\ObjeRef $objeref
+     * \Gedcom\Record\ObjeRef $objeref
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, \PhpGedcom\Record\ObjeRef $objeref, $group = '', $group_id = 0, $obje_ids = [])
+    public static function read($conn, \Gedcom\Record\ObjeRef $objeref, $group = '', $group_id = 0, $obje_ids = [])
     {
         if ($objeref == null) {
             return;
