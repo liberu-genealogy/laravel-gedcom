@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "familytree365/php-gedcom": "^1.0",
-        "doctrine/dbal": "^3.0"
+        "doctrine/dbal": "^2.8|^3.0"
     },
     "license": "MIT",
     "autoload": {
