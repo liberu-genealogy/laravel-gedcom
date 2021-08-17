@@ -17,8 +17,9 @@ class AddIndexKeyPeopleTable extends Migration
             if (Schema::hasColumn('people', 'uid'))
         {
             $table->index(['id', 'uid']);
-        });
         }
+        });
+        
     }
 
     /**
