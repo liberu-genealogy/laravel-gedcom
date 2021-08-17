@@ -11,8 +11,8 @@ use FamilyTree365\LaravelGedcom\Models\Repository;
 use FamilyTree365\LaravelGedcom\Models\Source;
 use FamilyTree365\LaravelGedcom\Models\Subm;
 use FamilyTree365\LaravelGedcom\Models\Subn;
-use Illuminate\Console\OutputStyle;
 use Gedcom\Parser;
+use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
