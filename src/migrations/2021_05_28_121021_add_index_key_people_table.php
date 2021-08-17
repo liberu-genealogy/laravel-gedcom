@@ -14,6 +14,7 @@ class AddIndexKeyPeopleTable extends Migration
     public function up()
     {
         if (Schema::hasColumn('people', 'uid'))
+        {
         
         Schema::table('people', function (Blueprint $table) {
         {
