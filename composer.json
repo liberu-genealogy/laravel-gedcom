@@ -3,6 +3,7 @@
     "description": "A package that converts gedcom files to Eloquent models",
     "type": "library",
     "require": {
+        "php": ">=8.0"
         "familytree365/php-gedcom": "^1.0",
         "doctrine/dbal": "^2.8|^3.0"
     },
