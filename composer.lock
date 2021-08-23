@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf3142b198f67869e879715010342765",
+    "content-hash": "6d6b5a41f198765c809bc76c77f07aca",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -350,17 +350,17 @@
             "time": "2020-05-29T18:28:51+00:00"
         },
         {
-            "name": "genealogiawebsite/php-gedcom",
-            "version": "v1.2.4",
+            "name": "familytree365/php-gedcom",
+            "version": "v1.3.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/familytree365/php-gedcom.git",
-                "reference": "22971cf79241e991858a1bfd1badd661830eefde"
+                "reference": "5d6ecbf89cd57bcbcf1091468456b6b08fe349d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/familytree365/php-gedcom/zipball/22971cf79241e991858a1bfd1badd661830eefde",
-                "reference": "22971cf79241e991858a1bfd1badd661830eefde",
+                "url": "https://api.github.com/repos/familytree365/php-gedcom/zipball/5d6ecbf89cd57bcbcf1091468456b6b08fe349d3",
+                "reference": "5d6ecbf89cd57bcbcf1091468456b6b08fe349d3",
                 "shasum": ""
             },
             "require": {
@@ -372,8 +372,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "PhpGedcom\\": "library/"
+                "psr-4": {
+                    "Gedcom\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -381,14 +381,14 @@
                 "MIT"
             ],
             "description": "A GEDCOM file parser (read + write) for PHP 7.3+",
-            "homepage": "http://github.com/genealogiawebsite/php-gedcom",
+            "homepage": "http://github.com/familytree365/php-gedcom",
             "keywords": [
                 "gedcom",
                 "parser"
             ],
             "support": {
                 "issues": "https://github.com/familytree365/php-gedcom/issues",
-                "source": "https://github.com/familytree365/php-gedcom/tree/v1.2.4"
+                "source": "https://github.com/familytree365/php-gedcom/tree/v1.3.17"
             },
             "funding": [
                 {
@@ -396,10 +396,134 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-21T13:21:41+00:00"
+            "time": "2021-07-18T19:44:46+00:00"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "phpstan/phpstan",
+            "version": "0.12.95",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "4ffddfe86e85dcc494a47e5f3dcfd1a2dccdce58"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4ffddfe86e85dcc494a47e5f3dcfd1a2dccdce58",
+                "reference": "4ffddfe86e85dcc494a47e5f3dcfd1a2dccdce58",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.95"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-08-20T12:53:41+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "0.11.49",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "fdf11ed923d79c1777f993ef755fc8fe111a25a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/fdf11ed923d79c1777f993ef755fc8fe111a25a2",
+                "reference": "fdf11ed923d79c1777f993ef755fc8fe111a25a2",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0",
+                "phpstan/phpstan": "0.12.95"
+            },
+            "conflict": {
+                "phpstan/phpdoc-parser": "<=0.5.3",
+                "phpstan/phpstan": "<=0.12.82",
+                "rector/rector-cakephp": "*",
+                "rector/rector-doctrine": "*",
+                "rector/rector-nette": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-prefixed": "*",
+                "rector/rector-symfony": "*"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.11-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/0.11.49"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-08-23T11:18:30+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
@@ -407,5 +531,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

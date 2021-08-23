@@ -19,10 +19,7 @@ class Phon
             }
         } else {
             if (is_array($phon)) {
-                $ret = '';
-                $ret = json_encode($phon);
-
-                return $ret;
+                return json_encode($phon);
             } else {
                 return "$phon";
             }
