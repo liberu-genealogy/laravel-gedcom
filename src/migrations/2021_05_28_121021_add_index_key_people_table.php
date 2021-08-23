@@ -13,9 +13,13 @@ class AddIndexKeyPeopleTable extends Migration
      */
     public function up()
     {
-        Schema::table('people', function (Blueprint $table) {
-            $table->index(['id', 'uid']);
-        });
+        if (Schema::hasTable('people')) {
+            Schema::table('people', function (Blueprint $table) {
+                if (Schema::hasColumn('people', 'uid')) {
+                    $table->index(['id', 'uid']);
+                }
+            });
+        }
     }
 
     /**
@@ -25,8 +29,12 @@ class AddIndexKeyPeopleTable extends Migration
      */
     public function down()
     {
-        Schema::table('people', function (Blueprint $table) {
-            $table->dropIndex(['id', 'uid']);
-        });
+        if (Schema::hasTable('people')) {
+            Schema::table('people', function (Blueprint $table) {
+                if (Schema::hasColumn('people', 'uid')) {
+                    $table->dropIndex(['id', 'uid']);
+                }
+            });
+        }
     }
 }
