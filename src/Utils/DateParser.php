@@ -7,10 +7,10 @@ class DateParser
     private $year;
     private $month;
     private $day;
+    private $date_string;
 
     public function __construct()
-    {
-        private $date_string = '';
+    {       
     }
 
     public function parse_date()
