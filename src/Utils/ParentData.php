@@ -98,17 +98,17 @@ class ParentData
                 //$check = Person::on($conn)->where($key)->first();
                 //if (empty($check)) {
                 $value = [
-                    'gid' => $g_id,
-                    'name' => $name,
-                    'givn' => $givn,
-                    'surn' => $surn,
-                    'sex' => $sex,
-                    'uid' => $uid,
-                    'rin' => $rin,
-                    'resn' => $resn,
-                    'rfn' => $rfn,
-                    'afn' => $afn,
-                    'birthday' => $birthday
+                    'gid'      => $g_id,
+                    'name'     => $name,
+                    'givn'     => $givn,
+                    'surn'     => $surn,
+                    'sex'      => $sex,
+                    'uid'      => $uid,
+                    'rin'      => $rin,
+                    'resn'     => $resn,
+                    'rfn'      => $rfn,
+                    'afn'      => $afn,
+                    'birthday' => $birthday,
                 ];
 
                 $ParentData[] = $value;

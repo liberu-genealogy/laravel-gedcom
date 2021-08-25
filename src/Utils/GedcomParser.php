@@ -204,7 +204,7 @@ class GedcomParser
                     event(new GedComProgressSent($slug, $total, $complete, $channel));
                 }
             }
-            
+
             ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
 
             foreach ($individuals as $individual) {
@@ -245,7 +245,7 @@ class GedcomParser
 
             foreach ($families as $family) {
 //                      $this->getFamily($family);
-                 FamilyData::getFamily($this->conn, $family, $this->obje_ids);
+                FamilyData::getFamily($this->conn, $family, $this->obje_ids);
                 if ($progressBar === true) {
                     $bar->advance();
                     $complete++;
