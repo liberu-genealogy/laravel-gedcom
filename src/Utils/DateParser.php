@@ -8,8 +8,9 @@ class DateParser
     private $month;
     private $day;
 
-    public function __construct(private $date_string = '')
+    public function __construct()
     {
+        private $date_string = '';
     }
 
     public function parse_date()
