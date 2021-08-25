@@ -51,8 +51,7 @@ class ParentData
                 $asso = $individual->getAsso();
                 $subm = $individual->getSubm();
                 $anci = $individual->getAnci();
-                // $desi = $individual->getDesi();
-                $refn = $individual->getRefn(); //
+                $refn = $individual->getRefn();
                 $obje = $individual->getObje();
                 // object
                 $bapl = $individual->getBapl();
@@ -85,41 +84,46 @@ class ParentData
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
                 $afn = $individual->getAfn();
-                $birthday = $individual->getBirthDay();
+                $birthday = strlen($individual->getBirthday()) > 4 ? $individual->getBirthday() : null;
+                $birth_year = strlen($individual->getBirthday()) === 4 ? $individual->getBirthday() : null;
+                $deathday = strlen($individual->getDeathday()) > 4 ? $individual->getDeathday() : null;
+                $death_year = strlen($individual->getDeathday()) === 4 ? $individual->getDeathday() : null;
+                $burial_day = strlen($individual->getBurialday()) > 4 ? $individual->getBurialday() : null;
+                $burial_year = strlen($individual->getBurialday()) === 4 ? $individual->getBurialday() : null;
 
                 if ($givn == '') {
                     $givn = $name;
                 }
 
                 $config = json_encode(config('database.connections.'.$conn));
-                /* $key = [
-                    ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex], ['uid', $uid],
-                ]; */
-                //$check = Person::on($conn)->where($key)->first();
-                //if (empty($check)) {
                 $value = [
-                    'gid'      => $g_id,
-                    'name'     => $name,
-                    'givn'     => $givn,
-                    'surn'     => $surn,
-                    'sex'      => $sex,
-                    'uid'      => $uid,
-                    'rin'      => $rin,
-                    'resn'     => $resn,
-                    'rfn'      => $rfn,
-                    'afn'      => $afn,
+                    'gid' => $g_id,
+                    'name' => $name,
+                    'givn' => $givn,
+                    'surn' => $surn,
+                    'sex' => $sex,
+                    'uid' => $uid,
+                    'rin' => $rin,
+                    'resn' => $resn,
+                    'rfn' => $rfn,
+                    'afn' => $afn,
                     'birthday' => $birthday,
+                    'birth_year' => $birth_year,
+                    'deathday' => $deathday,
+                    'death_year' => $death_year,
+                    'burial_day' => $burial_day,
+                    'burial_year' => $burial_year,
+                    'nick' => $nick,
+                    'type' => $type,
+                    'chan' => $chan->getDatetime(),
+                    'nsfx' => $nsfx,
+                    'npfx' => $npfx,
+                    'spfx' => $spfx
                 ];
 
                 $ParentData[] = $value;
-                //}
-                // $person = Person::on($conn)->updateOrCreate($key,$value);
-                // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
             }
 
-            /* foreach (array_chunk($ParentData, 200) as $chunk) {
-                Person::on($conn)->insert($chunk);
-            } */
             // it's take only 1 second for 3010 record
             Person::on($conn)->insert($ParentData);
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);

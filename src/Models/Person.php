@@ -22,9 +22,9 @@ class Person extends Model
         'sex',
         'child_in_family_id',
         'description',
-        'title', 'name', 'appellative', 'uid', 'email', 'phone', 'birthday',
-        'deathday', 'bank', 'bank_account',
-        'uid', 'chan', 'rin', 'resn', 'rfn', 'afn',
+        'title', 'name', 'appellative', 'uid', 'email', 'phone', 'birthday', 'birth_year',
+        'deathday', 'death_year', 'burial_day', 'burial_year', 'bank', 'bank_account',
+        'uid', 'chan', 'rin', 'resn', 'rfn', 'afn', 'type'
     ];
 
     public function events()
