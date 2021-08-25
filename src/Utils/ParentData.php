@@ -51,8 +51,7 @@ class ParentData
                 $asso = $individual->getAsso();
                 $subm = $individual->getSubm();
                 $anci = $individual->getAnci();
-                // $desi = $individual->getDesi();
-                $refn = $individual->getRefn(); //
+                $refn = $individual->getRefn();
                 $obje = $individual->getObje();
                 // object
                 $bapl = $individual->getBapl();
@@ -97,11 +96,6 @@ class ParentData
                 }
 
                 $config = json_encode(config('database.connections.'.$conn));
-                /* $key = [
-                    ['name', $name], ['givn', $givn], ['surn', $surn], ['sex', $sex], ['uid', $uid],
-                ]; */
-                //$check = Person::on($conn)->where($key)->first();
-                //if (empty($check)) {
                 $value = [
                     'gid' => $g_id,
                     'name' => $name,
@@ -121,18 +115,15 @@ class ParentData
                     'burial_year' => $burial_year,
                     'nick' => $nick,
                     'type' => $type,
-                    'chan' => $chan->getDatetime()
+                    'chan' => $chan->getDatetime(),
+                    'nsfx' => $nsfx,
+                    'npfx' => $npfx,
+                    'spfx' => $spfx
                 ];
 
                 $ParentData[] = $value;
-                //}
-                // $person = Person::on($conn)->updateOrCreate($key,$value);
-                // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
             }
 
-            /* foreach (array_chunk($ParentData, 200) as $chunk) {
-                Person::on($conn)->insert($chunk);
-            } */
             // it's take only 1 second for 3010 record
             Person::on($conn)->insert($ParentData);
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
