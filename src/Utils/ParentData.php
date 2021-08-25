@@ -85,7 +85,12 @@ class ParentData
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
                 $afn = $individual->getAfn();
-                $birthday = $individual->getBirthDay();
+                $birthday = strlen($individual->getBirthday()) > 4 ? $individual->getBirthday() : null;
+                $birth_year = strlen($individual->getBirthday()) === 4 ? $individual->getBirthday() : null;
+                $deathday = strlen($individual->getDeathday()) > 4 ? $individual->getDeathday() : null;
+                $death_year = strlen($individual->getDeathday()) === 4 ? $individual->getDeathday() : null;
+                $burial_day = strlen($individual->getBurialday()) > 4 ? $individual->getBurialday() : null;
+                $burial_year = strlen($individual->getBurialday()) === 4 ? $individual->getBurialday() : null;
 
                 if ($givn == '') {
                     $givn = $name;
@@ -108,7 +113,13 @@ class ParentData
                     'resn' => $resn,
                     'rfn' => $rfn,
                     'afn' => $afn,
-                    'birthday' => $birthday
+                    'birthday' => $birthday,
+                    'birth_year' => $birth_year,
+                    'deathday' => $deathday,
+                    'death_year' => $death_year,
+                    'burial_day' => $burial_day,
+                    'burial_year' => $burial_year,
+                    'nick' => $nick
                 ];
 
                 $ParentData[] = $value;
