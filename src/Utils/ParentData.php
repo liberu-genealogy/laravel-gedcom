@@ -119,7 +119,9 @@ class ParentData
                     'death_year' => $death_year,
                     'burial_day' => $burial_day,
                     'burial_year' => $burial_year,
-                    'nick' => $nick
+                    'nick' => $nick,
+                    'type' => $type,
+                    'chan' => $chan->getDatetime()
                 ];
 
                 $ParentData[] = $value;
