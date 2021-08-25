@@ -11,6 +11,7 @@ class DateParser
 
     public function __construct()
     {
+        $date_string = '';
     }
 
     public function parse_date()
