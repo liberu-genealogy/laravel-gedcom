@@ -204,10 +204,11 @@ class GedcomParser
                     event(new GedComProgressSent($slug, $total, $complete, $channel));
                 }
             }
+            
             ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
 
             foreach ($individuals as $individual) {
-                // ParentData::getPerson($this->conn, $individual, $this->obje_ids);
+//                 ParentData::getPerson($this->conn, $individual, $this->obje_ids);
                 if ($progressBar === true) {
                     $bar->advance();
                     $complete++;
@@ -243,8 +244,8 @@ class GedcomParser
             FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids);
 
             foreach ($families as $family) {
-                //     // $this->getFamily($family);
-                // FamilyData::getFamily($this->conn, $family, $this->obje_ids);
+//                      $this->getFamily($family);
+                 FamilyData::getFamily($this->conn, $family, $this->obje_ids);
                 if ($progressBar === true) {
                     $bar->advance();
                     $complete++;

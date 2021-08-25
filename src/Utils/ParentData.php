@@ -22,7 +22,7 @@ class ParentData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getPerson($conn, $individuals, $obje_ids, $sour_ids)
+    public static function getPerson($conn, $individuals, $obje_ids = [], $sour_ids = [])
     {
         $ParentData = [];
 
@@ -85,6 +85,7 @@ class ParentData
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
                 $afn = $individual->getAfn();
+                $birthday = $individual->getBirthDay();
 
                 if ($givn == '') {
                     $givn = $name;
@@ -96,7 +97,19 @@ class ParentData
                 ]; */
                 //$check = Person::on($conn)->where($key)->first();
                 //if (empty($check)) {
-                $value = ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn];
+                $value = [
+                    'gid' => $g_id,
+                    'name' => $name,
+                    'givn' => $givn,
+                    'surn' => $surn,
+                    'sex' => $sex,
+                    'uid' => $uid,
+                    'rin' => $rin,
+                    'resn' => $resn,
+                    'rfn' => $rfn,
+                    'afn' => $afn,
+                    'birthday' => $birthday
+                ];
 
                 $ParentData[] = $value;
                 //}
