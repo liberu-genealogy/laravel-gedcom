@@ -10,7 +10,7 @@ class DateParser
     private $date_string;
 
     public function __construct()
-    {       
+    {
     }
 
     public function parse_date()
