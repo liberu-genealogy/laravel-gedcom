@@ -4,14 +4,14 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 
 class DateParser
 {
+    private $year;
+    private $month;
+    private $day;
     private $date_string;
-    private $year = null;
-    private $month = null;
-    private $day = null;
 
-    public function __construct($date_string = '')
+    public function __construct()
     {
-        $this->date_string = $date_string;
+        $date_string = '';
     }
 
     public function parse_date()

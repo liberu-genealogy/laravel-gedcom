@@ -59,16 +59,16 @@ class FamilyData
 //                    compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
 //                );
 
-                 $value = [
-                     'husband_id' => $husband_id,
-                     'wife_id' => $wife_id,
-                     'description' => $description,
-                     'type_id' => $type_id,
-                     'nchi' => $nchi,
-                     'rin' => $rin
-                 ];
+                $value = [
+                    'husband_id'  => $husband_id,
+                    'wife_id'     => $wife_id,
+                    'description' => $description,
+                    'type_id'     => $type_id,
+                    'nchi'        => $nchi,
+                    'rin'         => $rin,
+                ];
 
-                 $familydata [] = $value;
+                $familydata[] = $value;
             }
             // Family::insert($familyData);
 
@@ -80,16 +80,16 @@ class FamilyData
                 ['nchi', $nchi],
                 ['rin', $rin],
             ];
-            
+
             $check = Family::on($conn)->where($key)->first();
             if (empty($check)) {
                 $value = [
-                    ['husband_id', $husband_id], 
-                    ['wife_id', $wife_id], 
-                    ['description', $description], 
-                    ['type_id', $type_id], 
+                    ['husband_id', $husband_id],
+                    ['wife_id', $wife_id],
+                    ['description', $description],
+                    ['type_id', $type_id],
                     ['nchi', $nchi],
-                    ['rin', $rin], 
+                    ['rin', $rin],
                 ];
 
                 $FamilyData[] = $value;
@@ -102,9 +102,6 @@ class FamilyData
             }
             // $person = Person::on($conn)->updateOrCreate($key,$value);
             // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
-
-
-
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
