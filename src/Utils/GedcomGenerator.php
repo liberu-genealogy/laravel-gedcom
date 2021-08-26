@@ -2,8 +2,10 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
+use Carbon\Carbon;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
+use FamilyTree365\LaravelGedcom\Models\PersonEvent;
 use Gedcom\Gedcom;
 use Gedcom\Record\Fam;
 use Gedcom\Record\Fam\Even;
@@ -304,8 +306,18 @@ class GedcomGenerator
         $id = $person->id;
         $indi->setId($id);
 
+        $gid = $person->gid;
+        $indi->setGid($gid);
+        
+        $uid = $person->uid;
+        $indi->setUid($uid);
+
         $_name = new Name();
         $_name->setName($person->name);
+        $_name->setGivn($person->givn);
+        $_name->setNick($person->nick);
+        $_name->setSurn($person->surn);
+        $_name->setNsfx($person->nsfx);
         $indi->addName($_name);
 
         /**
@@ -313,6 +325,30 @@ class GedcomGenerator
          */
         $sex = $person->sex;
         $indi->setSex($sex);
+
+        if ($person->birthday || $person->birth_year) {
+            $birthday = $person->birthday ? strtoupper($person->birthday->format('j M Y')) : $person->birth_year;
+            $indi->setBirthday($birthday);
+        }
+
+        if ($person->deathday || $person->death_year) {
+            $deathday = $person->deathday ? strtoupper($person->deathday->format('j M Y')) : $person->death_year;
+            $indi->setDeathday($deathday);
+        }
+
+        if ($person->burial_day || $person->burial_year) {
+            $burialday = $person->burial_day ? strtoupper(Carbon::parse($person->burial_day)->format('j M Y')) : $person->burial_year;
+            $indi->setBurialday($burialday);
+        }
+
+        if ($person->chan) {
+            $chan = Carbon::parse($person->chan);
+            $chan = [
+                strtoupper($chan->format('j M Y')),
+                $chan->format('H:i:s.v')
+            ];
+            $indi->setChan($chan);
+        }
 
         $place = PersonEvent::query()->find($p_id);
         $_plac = new Personal();
