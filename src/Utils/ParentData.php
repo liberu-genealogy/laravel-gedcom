@@ -86,15 +86,18 @@ class ParentData
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
                 $afn = $individual->getAfn();
+                $titl = $individual->getAttr();
                 
                 $birt = $individual->getBirt();
                 $birthday = $birt->dateFormatted ?? null;
+                $birth_month = $birt->month ?? null;
                 $birth_year = $birt->year ?? null;
                 $birthday_dati = $birt->dati ?? null;
                 $birthday_plac = $birt->plac ?? null;
                 
                 $deat = $individual->getDeat();
                 $deathday = $deat->dateFormatted ?? null;
+                $death_month = $deat->month ?? null;
                 $death_year = $deat->year ?? null;
                 $deathday_dati = $deat->dati ?? null;
                 $deathday_plac = $deat->plac ?? null;
@@ -102,9 +105,13 @@ class ParentData
 
                 $buri = $individual->getBuri();
                 $burial_day = $buri->dateFormatted ?? null;
+                $burial_month = $buri->month ?? null;
                 $burial_year = $buri->year ?? null;
                 $burial_day_dati = $buri->dati ?? null;
                 $burial_day_plac = $buri->plac ?? null;
+
+                $chr = $individual->getChr();
+                $chr = $chr->dateFormatted ?? null;
 
                 if ($givn == '') {
                     $givn = $name;
@@ -129,25 +136,37 @@ class ParentData
                     'npfx' => $npfx,
                     'spfx' => $spfx,
                     'birthday' => $birthday,
+                    'birth_month' => $birth_month,
                     'birth_year' => $birth_year,
                     'birthday_dati' => $birthday_dati,
                     'birthday_plac' => $birthday_plac,
                     'deathday' => $deathday,
+                    'death_month' => $death_month,
                     'death_year' => $death_year,
                     'deathday_dati' => $deathday_dati,
                     'deathday_plac' => $deathday_plac,
                     'deathday_caus' => $deathday_caus,
                     'burial_day' => $burial_day,
+                    'burial_month' => $burial_month,
                     'burial_year' => $burial_year,
                     'burial_day_dati' => $burial_day_dati,
                     'burial_day_plac' => $burial_day_plac,
+                    'titl' => $attr ? $attr['TITL'][0]->getAttr('TITL') : null,
+                    'famc' => $famc ? $famc[0]->getFamc() : null,
+                    'fams' => $fams ? $fams[0]->getFams() : null,
+                    'chr' => $chr
                 ];
 
                 $ParentData[] = $value;
             }
 
-            // it's take only 1 second for 3010 record
-            Person::on($conn)->upsert($ParentData, ['uid']);
+            $chunk = array_chunk($ParentData, 1000);
+
+            foreach ($chunk as $ParentData) {
+                // it's take only 1 second for 3010 record
+                Person::on($conn)->upsert($ParentData, ['uid']);
+            }
+
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
         } catch (\Exception $e) {
             $error = $e->getMessage();
