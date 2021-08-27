@@ -25,6 +25,7 @@ class ParentData
     public static function getPerson($conn, $individuals, $obje_ids = [], $sour_ids = [])
     {
         $ParentData = [];
+        $a = [];
 
         try {
             foreach ($individuals as $k => $individual) {
@@ -59,6 +60,7 @@ class ParentData
                 $endl = $individual->getEndl();
                 $slgc = $individual->getSlgc();
                 $chan = $individual->getChan();
+//                $a = $chan->getDatetime() ? '' : '';
                 $g_id = $individual->getId();
 
                 if (!empty($names)) {
@@ -84,12 +86,25 @@ class ParentData
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
                 $afn = $individual->getAfn();
-                $birthday = strlen($individual->getBirthday()) > 4 ? $individual->getBirthday() : null;
-                $birth_year = strlen($individual->getBirthday()) === 4 ? $individual->getBirthday() : null;
-                $deathday = strlen($individual->getDeathday()) > 4 ? $individual->getDeathday() : null;
-                $death_year = strlen($individual->getDeathday()) === 4 ? $individual->getDeathday() : null;
-                $burial_day = strlen($individual->getBurialday()) > 4 ? $individual->getBurialday() : null;
-                $burial_year = strlen($individual->getBurialday()) === 4 ? $individual->getBurialday() : null;
+                
+                $birt = $individual->getBirt();
+                $birthday = $birt->dateFormatted ?? null;
+                $birth_year = $birt->year ?? null;
+                $birthday_dati = $birt->dati ?? null;
+                $birthday_plac = $birt->plac ?? null;
+                
+                $deat = $individual->getDeat();
+                $deathday = $deat->dateFormatted ?? null;
+                $death_year = $deat->year ?? null;
+                $deathday_dati = $deat->dati ?? null;
+                $deathday_plac = $deat->plac ?? null;
+                $deathday_caus = $deat->caus ?? null;
+
+                $buri = $individual->getBuri();
+                $burial_day = $buri->dateFormatted ?? null;
+                $burial_year = $buri->year ?? null;
+                $burial_day_dati = $buri->dati ?? null;
+                $burial_day_plac = $buri->plac ?? null;
 
                 if ($givn == '') {
                     $givn = $name;
@@ -107,25 +122,32 @@ class ParentData
                     'resn' => $resn,
                     'rfn' => $rfn,
                     'afn' => $afn,
-                    'birthday' => $birthday,
-                    'birth_year' => $birth_year,
-                    'deathday' => $deathday,
-                    'death_year' => $death_year,
-                    'burial_day' => $burial_day,
-                    'burial_year' => $burial_year,
                     'nick' => $nick,
                     'type' => $type,
-                    'chan' => $chan->getDatetime(),
+                    'chan' => $chan ? $chan->getDatetime() : null,
                     'nsfx' => $nsfx,
                     'npfx' => $npfx,
-                    'spfx' => $spfx
+                    'spfx' => $spfx,
+                    'birthday' => $birthday,
+                    'birth_year' => $birth_year,
+                    'birthday_dati' => $birthday_dati,
+                    'birthday_plac' => $birthday_plac,
+                    'deathday' => $deathday,
+                    'death_year' => $death_year,
+                    'deathday_dati' => $deathday_dati,
+                    'deathday_plac' => $deathday_plac,
+                    'deathday_caus' => $deathday_caus,
+                    'burial_day' => $burial_day,
+                    'burial_year' => $burial_year,
+                    'burial_day_dati' => $burial_day_dati,
+                    'burial_day_plac' => $burial_day_plac,
                 ];
 
                 $ParentData[] = $value;
             }
 
             // it's take only 1 second for 3010 record
-            Person::on($conn)->insert($ParentData);
+            Person::on($conn)->upsert($ParentData, ['uid']);
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
         } catch (\Exception $e) {
             $error = $e->getMessage();
