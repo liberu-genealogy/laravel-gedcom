@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
 use FamilyTree365\LaravelGedcom\Models\PersonEvent;
+use FamilyTree365\LaravelGedcom\Models\Source;
 use Gedcom\Gedcom;
 use Gedcom\Record\Fam;
 use Gedcom\Record\Fam\Even;
@@ -71,9 +72,9 @@ class GedcomGenerator
 
     public function addUpData($p_id, $nest = 0)
     {
-        if (empty($p_id) || $p_id < 1) {
-            return;
-        }
+//        if (empty($p_id) || $p_id < 1) {
+//            return;
+//        }
 
         if ($this->up_nest < $nest) {
             return;
@@ -101,7 +102,10 @@ class GedcomGenerator
         } */
 
         // process family ( partner, children )
-        /* $_families = Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
+        $_families = $p_id
+            ? Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get()
+            : Family::all();
+
         foreach ($_families as $item) {
             // add family
             $f_id = $item->id;
@@ -116,8 +120,8 @@ class GedcomGenerator
             $this->log .= $nest.' f_id='.$f_id."\n";
             $this->log .= $nest.' husb_id='.$husb_id."\n";
             $this->log .= $nest.' wife_id='.$wife_id."\n";
-            $this->addUpData($husb_id, $nest);
-            $this->addUpData($wife_id, $nest);
+//            $this->addUpData($husb_id, $nest);
+//            $this->addUpData($wife_id, $nest);
 
             // add chidrent to indi
             $children = Person::query()->where('child_in_family_id', $f_id)->get();
@@ -128,7 +132,9 @@ class GedcomGenerator
                     $this->setIndi($child_id);
                 }
             }
-        } */
+        }
+
+        $this->setSour();
 
         /* $parent_family_id = $person->child_in_family_id;
         $p_family = Family::query()->find($parent_family_id);
@@ -327,18 +333,18 @@ class GedcomGenerator
         $indi->setSex($sex);
 
         if ($person->birthday || $person->birth_year) {
-            $birthday = $person->birthday ? strtoupper($person->birthday->format('j M Y')) : $person->birth_year;
-            $indi->setBirthday($birthday);
+            $birt = $person->birthday ? strtoupper($person->birthday->format('j M Y')) : $person->birth_year;
+            $indi->setBirt($birt);
         }
 
         if ($person->deathday || $person->death_year) {
-            $deathday = $person->deathday ? strtoupper($person->deathday->format('j M Y')) : $person->death_year;
-            $indi->setDeathday($deathday);
+            $deat = $person->deathday ? strtoupper($person->deathday->format('j M Y')) : $person->death_year;
+            $indi->setDeat($deat);
         }
 
         if ($person->burial_day || $person->burial_year) {
-            $burialday = $person->burial_day ? strtoupper(Carbon::parse($person->burial_day)->format('j M Y')) : $person->burial_year;
-            $indi->setBurialday($burialday);
+            $buri = $person->burial_day ? strtoupper(Carbon::parse($person->burial_day)->format('j M Y')) : $person->burial_year;
+            $indi->setBuri($buri);
         }
 
         if ($person->chan) {
@@ -509,9 +515,10 @@ class GedcomGenerator
             $fam->addNote($note);
         }
 
-        $_sour = [];
+        $_sour = Source::all();
         foreach ($_sour as $item) {
             $sour = new SourRef();
+            $sour->setSour($item->sour);
             $fam->addSour($sour);
         }
 
@@ -535,6 +542,13 @@ class GedcomGenerator
 
     protected function setSour()
     {
+        $sour = new \Gedcom\Record\Sour();
+        $_sour = Source::all();
+        foreach ($_sour as $item) {
+            $sour->setTitl($item->titl);
+        }
+        
+        $this->_gedcom->addSour($sour);
     }
 
     protected function setNote()
