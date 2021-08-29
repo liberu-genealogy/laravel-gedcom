@@ -4,6 +4,7 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
+use Illuminate\Support\Str;
 
 class ParentData
 {
@@ -60,7 +61,6 @@ class ParentData
                 $endl = $individual->getEndl();
                 $slgc = $individual->getSlgc();
                 $chan = $individual->getChan();
-//                $a = $chan->getDatetime() ? '' : '';
                 $g_id = $individual->getId();
 
                 if (!empty($names)) {
@@ -81,7 +81,7 @@ class ParentData
                 // added to database
                 // string value
                 $sex = preg_replace('/[^MF]/', '', $individual->getSex());
-                $uid = $individual->getUid();
+                $uid = $individual->getUid() ?? strtoupper(str_replace('-', '', Str::uuid()));
                 $resn = $individual->getResn();
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
@@ -157,17 +157,19 @@ class ParentData
                     'chr' => $chr
                 ];
 
-                $ParentData[] = $value;
+                $parentData[] = $value;
             }
 
-            $chunk = array_chunk($ParentData, 1000);
+            $chunk = array_chunk($parentData, 500);
 
-            foreach ($chunk as $ParentData) {
+            foreach ($chunk as $item) {
                 // it's take only 1 second for 3010 record
-                Person::on($conn)->upsert($ParentData, ['uid']);
+                $a = Person::on($conn)->upsert($item, ['uid']);
             }
 
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
+
+            return $parentData;
         } catch (\Exception $e) {
             $error = $e->getMessage();
 

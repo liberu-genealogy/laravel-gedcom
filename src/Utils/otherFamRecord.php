@@ -36,8 +36,8 @@ class otherFamRecord
             $g_id = $family->getId();
             $husb = $family->getHusb();
             $wife = $family->getWife();
-            $husband_id = (isset($persons_id[$husb])) ? $persons_id[$husb] : 0;
-            $wife_id = (isset($persons_id[$wife])) ? $persons_id[$wife] : 0;
+            $husband_id = $persons_id[$husb] ?? 0;
+            $wife_id = $persons_id[$wife] ?? 0;
             $children = $family->getChil();
             $events = $family->getAllEven();
             $subm = $family->getSubm();
