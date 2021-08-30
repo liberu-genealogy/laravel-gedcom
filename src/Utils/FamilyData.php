@@ -3,6 +3,7 @@
 namespace FamilyTree365\LaravelGedcom\Utils;
 
 use FamilyTree365\LaravelGedcom\Models\Family;
+use FamilyTree365\LaravelGedcom\Models\Person;
 
 class FamilyData
 {
@@ -21,9 +22,10 @@ class FamilyData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getFamily($conn, $families, $obje_ids = [], $sour_ids = [], $persons_id = [], $note_ids = [], $repo_ids = [])
+    public static function getFamily($conn, $families, $obje_ids = [], $sour_ids = [], $persons_id = [], $note_ids = [], $repo_ids = [], $parentData = [])
     {
         $familyData = [];
+        $persons_id = [];
 
         try {
             foreach ($families as $family) {
@@ -52,12 +54,16 @@ class FamilyData
 
                 $chan = $family->getChan();
 
-                $husband_id = (isset($husb) ? $husb : 0);
-                $wife_id = (isset($wife) ? $wife : 0);
+                $husband_key = array_search($husb, array_column($parentData, 'gid'));
+                $husband_uid = $parentData[$husband_key]['uid'] ?? null;
+                $husband_id = Person::where('uid', $husband_uid)->first()->id ?? null;
 
-//                $family = Family::on($conn)->updateOrCreate(
-//                    compact('husband_id', 'wife_id', 'description', 'type_id', 'nchi', 'rin')
-//                );
+                $wife_key = array_search($wife, array_column($parentData, 'gid'));
+                $wife_uid = $parentData[$wife_key]['uid'] ?? null;
+                $wife_id = Person::where('uid', $wife_uid)->first()->id ?? null;
+
+                $persons_id[$husb] = $husband_id;
+                $persons_id[$wife] = $wife_id;
 
                 $value = [
                     'husband_id'  => $husband_id,
@@ -68,40 +74,12 @@ class FamilyData
                     'rin'         => $rin,
                 ];
 
-                $familydata[] = $value;
+                Family::on($conn)->updateOrCreate($value, $value);
+
             }
-            // Family::insert($familyData);
 
-            $key = [
-                ['husband_id', $husband_id],
-                ['wife_id', $wife_id],
-                ['description', $description],
-                ['type_id', $type_id],
-                ['nchi', $nchi],
-                ['rin', $rin],
-            ];
-
-            $check = Family::on($conn)->where($key)->first();
-            if (empty($check)) {
-                $value = [
-                    ['husband_id', $husband_id],
-                    ['wife_id', $wife_id],
-                    ['description', $description],
-                    ['type_id', $type_id],
-                    ['nchi', $nchi],
-                    ['rin', $rin],
-                ];
-
-                $FamilyData[] = $value;
-
-                foreach (array_chunk($FamilyData, 200) as $chunk) {
-                    Family::on($conn)->insert($chunk);
-                }
-
-                otherFamRecord::insertFamilyData($conn, $families, $obje_ids, $sour_ids);
-            }
-            // $person = Person::on($conn)->updateOrCreate($key,$value);
-            // otherFields::insertOtherFields($conn,$individual,$obje_ids,$person);
+            otherFamRecord::insertFamilyData($conn, $persons_id, $families, $obje_ids, $sour_ids);
+            
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
