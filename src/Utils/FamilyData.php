@@ -75,11 +75,9 @@ class FamilyData
                 ];
 
                 Family::on($conn)->updateOrCreate($value, $value);
-
             }
 
             otherFamRecord::insertFamilyData($conn, $persons_id, $families, $obje_ids, $sour_ids);
-            
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
