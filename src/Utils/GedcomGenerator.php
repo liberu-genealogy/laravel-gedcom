@@ -314,7 +314,7 @@ class GedcomGenerator
 
         $gid = $person->gid;
         $indi->setGid($gid);
-        
+
         $uid = $person->uid;
         $indi->setUid($uid);
 
@@ -351,7 +351,7 @@ class GedcomGenerator
             $chan = Carbon::parse($person->chan);
             $chan = [
                 strtoupper($chan->format('j M Y')),
-                $chan->format('H:i:s.v')
+                $chan->format('H:i:s.v'),
             ];
             $indi->setChan($chan);
         }
@@ -547,7 +547,7 @@ class GedcomGenerator
         foreach ($_sour as $item) {
             $sour->setTitl($item->titl);
         }
-        
+
         $this->_gedcom->addSour($sour);
     }
 

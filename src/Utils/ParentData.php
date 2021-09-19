@@ -87,14 +87,14 @@ class ParentData
                 $rfn = $individual->getRfn();
                 $afn = $individual->getAfn();
                 $titl = $individual->getAttr();
-                
+
                 $birt = $individual->getBirt();
                 $birthday = $birt->dateFormatted ?? null;
                 $birth_month = $birt->month ?? null;
                 $birth_year = $birt->year ?? null;
                 $birthday_dati = $birt->dati ?? null;
                 $birthday_plac = $birt->plac ?? null;
-                
+
                 $deat = $individual->getDeat();
                 $deathday = $deat->dateFormatted ?? null;
                 $death_month = $deat->month ?? null;
@@ -119,42 +119,42 @@ class ParentData
 
                 $config = json_encode(config('database.connections.'.$conn));
                 $value = [
-                    'gid' => $g_id,
-                    'name' => $name,
-                    'givn' => $givn,
-                    'surn' => $surn,
-                    'sex' => $sex,
-                    'uid' => $uid,
-                    'rin' => $rin,
-                    'resn' => $resn,
-                    'rfn' => $rfn,
-                    'afn' => $afn,
-                    'nick' => $nick,
-                    'type' => $type,
-                    'chan' => $chan ? $chan->getDatetime() : null,
-                    'nsfx' => $nsfx,
-                    'npfx' => $npfx,
-                    'spfx' => $spfx,
-                    'birthday' => $birthday,
-                    'birth_month' => $birth_month,
-                    'birth_year' => $birth_year,
-                    'birthday_dati' => $birthday_dati,
-                    'birthday_plac' => $birthday_plac,
-                    'deathday' => $deathday,
-                    'death_month' => $death_month,
-                    'death_year' => $death_year,
-                    'deathday_dati' => $deathday_dati,
-                    'deathday_plac' => $deathday_plac,
-                    'deathday_caus' => $deathday_caus,
-                    'burial_day' => $burial_day,
-                    'burial_month' => $burial_month,
-                    'burial_year' => $burial_year,
+                    'gid'             => $g_id,
+                    'name'            => $name,
+                    'givn'            => $givn,
+                    'surn'            => $surn,
+                    'sex'             => $sex,
+                    'uid'             => $uid,
+                    'rin'             => $rin,
+                    'resn'            => $resn,
+                    'rfn'             => $rfn,
+                    'afn'             => $afn,
+                    'nick'            => $nick,
+                    'type'            => $type,
+                    'chan'            => $chan ? $chan->getDatetime() : null,
+                    'nsfx'            => $nsfx,
+                    'npfx'            => $npfx,
+                    'spfx'            => $spfx,
+                    'birthday'        => $birthday,
+                    'birth_month'     => $birth_month,
+                    'birth_year'      => $birth_year,
+                    'birthday_dati'   => $birthday_dati,
+                    'birthday_plac'   => $birthday_plac,
+                    'deathday'        => $deathday,
+                    'death_month'     => $death_month,
+                    'death_year'      => $death_year,
+                    'deathday_dati'   => $deathday_dati,
+                    'deathday_plac'   => $deathday_plac,
+                    'deathday_caus'   => $deathday_caus,
+                    'burial_day'      => $burial_day,
+                    'burial_month'    => $burial_month,
+                    'burial_year'     => $burial_year,
                     'burial_day_dati' => $burial_day_dati,
                     'burial_day_plac' => $burial_day_plac,
-                    'titl' => $attr ? $attr['TITL'][0]->getAttr('TITL') : null,
-                    'famc' => $famc ? $famc[0]->getFamc() : null,
-                    'fams' => $fams ? $fams[0]->getFams() : null,
-                    'chr' => $chr
+                    'titl'            => $attr ? $attr['TITL'][0]->getAttr('TITL') : null,
+                    'famc'            => $famc ? $famc[0]->getFamc() : null,
+                    'fams'            => $fams ? $fams[0]->getFams() : null,
+                    'chr'             => $chr,
                 ];
 
                 $parentData[] = $value;

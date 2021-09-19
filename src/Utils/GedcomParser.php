@@ -243,7 +243,6 @@ class GedcomParser
             FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids, $parentData);
 
             foreach ($families as $family) {
-
                 FamilyData::getFamily($this->conn, $family, $this->obje_ids);
                 if ($progressBar === true) {
                     $bar->advance();
