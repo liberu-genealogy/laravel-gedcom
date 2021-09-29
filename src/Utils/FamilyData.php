@@ -54,11 +54,12 @@ class FamilyData
 
                 $chan = $family->getChan();
 
+                $husband_key = $parentData? array_search($husb, array_column($parentData, 'gid')) : null;
                 $husband_key = array_search($husb, array_column($parentData, 'gid'));
                 $husband_uid = $parentData[$husband_key]['uid'] ?? null;
                 $husband_id = Person::where('uid', $husband_uid)->first()->id ?? null;
 
-                $wife_key = array_search($wife, array_column($parentData, 'gid'));
+                $wife_key = $parentData? array_search($wife, array_column($parentData, 'gid')): null;
                 $wife_uid = $parentData[$wife_key]['uid'] ?? null;
                 $wife_id = Person::where('uid', $wife_uid)->first()->id ?? null;
 
