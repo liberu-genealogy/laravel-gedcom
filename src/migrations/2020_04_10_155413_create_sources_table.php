@@ -17,7 +17,7 @@ class CreateSourcesTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->dateTime('date')->nullable();
+            $table->string('date')->nullable();
             $table->integer('is_active')->nullable();
             $table->integer('author_id')->nullable();
             $table->integer('repository_id')->references('id')->on('repositories')->nullable();

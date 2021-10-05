@@ -12,7 +12,8 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\Repo;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Sour;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Subm;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Subn;
-use PhpGedcom\Parser;
+//here instead of PHPGedcom
+use Gedcom\Parser;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Input\StringInput;
@@ -255,6 +256,7 @@ class GedcomParser
 
             return \Log::error($error);
         }
+        Log::info('HEELLO');
 
         if ($progressBar === true) {
             $time_end = microtime(true);
