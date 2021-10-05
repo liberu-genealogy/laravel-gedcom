@@ -16,7 +16,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "david-prelinger\\LaravelGedcom\\ServiceProvider"
+                "FamilyTree365\\LaravelGedcom\\ServiceProvider"
             ]
         }
     },
