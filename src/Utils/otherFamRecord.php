@@ -12,7 +12,6 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Refn;
 use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Subm;
-use function Webmozart\Assert\Tests\StaticAnalysis\null;
 
 class otherFamRecord
 {
