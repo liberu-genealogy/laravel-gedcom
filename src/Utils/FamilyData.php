@@ -89,7 +89,7 @@ class FamilyData
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
-            return \Log::error('hello: ' . $e->getFile() . $error);
+            return \Log::error($error);
         }
     }
 }

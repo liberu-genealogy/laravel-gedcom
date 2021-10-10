@@ -173,7 +173,7 @@ class ParentData
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
-            return \Log::error($error . $e->getLine());
+            return \Log::error($error);
         }
     }
 }
