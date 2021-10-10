@@ -255,7 +255,6 @@ class GedcomParser
 
             return \Log::error($error);
         }
-        Log::info('HEELLO');
 
         if ($progressBar === true) {
             $time_end = microtime(true);
