@@ -19,7 +19,7 @@ class CreateDefaultPeopleTable extends Migration
                 $table->string('uid')->nullable()->unique();
                 $table->string('email')->unique()->nullable();
                 $table->string('phone')->nullable();
-                $table->date('birthday')->nullable();
+                $table->string('birthday')->nullable();
 
                 $table->string('bank')->nullable();
                 $table->string('bank_account')->nullable();

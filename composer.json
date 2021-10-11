@@ -1,10 +1,10 @@
 {
-    "name": "familytree365/laravel-gedcom",
+    "name": "david-prelinger/laravel-gedcom",
     "description": "A package that converts gedcom files to Eloquent models",
     "type": "library",
     "require": {
         "php": ">=8.0",
-        "familytree365/php-gedcom": "^1.0",
+        "familytree365/php-gedcom": "^1.4",
         "doctrine/dbal": "^2.8|^3.0"
     },
     "license": "MIT",

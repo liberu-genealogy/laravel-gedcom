@@ -54,14 +54,21 @@ class FamilyData
 
                 $chan = $family->getChan();
 
-                $husband_key = $parentData? array_search($husb, array_column($parentData, 'gid')) : null;
-                $husband_key = array_search($husb, array_column($parentData, 'gid'));
+                $husband_key = $parentData ? array_search($husb, array_column($parentData, 'gid')) : null;
                 $husband_uid = $parentData[$husband_key]['uid'] ?? null;
-                $husband_id = Person::where('uid', $husband_uid)->first()->id ?? null;
+                if(Person::where('uid', $husband_uid)->first() !=  null) {
+                    $husband_id = Person::where('uid', $husband_uid)->first()->id;
+                } else {
+                    $husband_id = null;
+                }
 
-                $wife_key = $parentData? array_search($wife, array_column($parentData, 'gid')): null;
+                $wife_key = $parentData ? array_search($wife, array_column($parentData, 'gid')) : null;
                 $wife_uid = $parentData[$wife_key]['uid'] ?? null;
-                $wife_id = Person::where('uid', $wife_uid)->first()->id ?? null;
+                if(Person::where('uid', $wife_uid)->first() != null) {
+                    $wife_id = Person::where('uid', $wife_uid)->first()->id;
+                } else {
+                    $wife_id = null;
+                }
 
                 $persons_id[$husb] = $husband_id;
                 $persons_id[$wife] = $wife_id;
@@ -77,7 +84,6 @@ class FamilyData
 
                 Family::on($conn)->updateOrCreate($value, $value);
             }
-
             otherFamRecord::insertFamilyData($conn, $persons_id, $families, $obje_ids, $sour_ids);
         } catch (\Exception $e) {
             $error = $e->getMessage();

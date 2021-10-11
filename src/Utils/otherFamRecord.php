@@ -69,7 +69,11 @@ class otherFamRecord
                 }
             }
             $_group = 'fam';
-            $_gid = $familie->id;
+            if($familie == null) {
+                $_gid = 0;
+            } else {
+                $_gid = $familie->id;
+            }
             if ($_note != null && count($_note) > 0) {
                 foreach ($_note as $item) {
                     NoteRef::read($conn, $item, $_group, $_gid);

@@ -151,7 +151,7 @@ class ParentData
                     'burial_year'     => $burial_year,
                     'burial_day_dati' => $burial_day_dati,
                     'burial_day_plac' => $burial_day_plac,
-                    'titl'            => $attr ? $attr['TITL'][0]->getAttr('TITL') : null,
+                    'titl'            => array_key_exists('TITL', $attr) ? $attr['TITL'][0]->getAttr('TITL') : null,
                     'famc'            => $famc ? $famc[0]->getFamc() : null,
                     'fams'            => $fams ? $fams[0]->getFams() : null,
                     'chr'             => $chr,
