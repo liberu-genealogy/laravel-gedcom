@@ -11,7 +11,7 @@
 
 familytree365/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
 as Laravel models, inside your Laravel application. It is used by:
-(https://github.com/familytree365/backend)
+(https://github.com/familytree365/genealogy)
 
 ## Installation
 ```
