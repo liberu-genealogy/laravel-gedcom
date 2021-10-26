@@ -64,14 +64,14 @@ class ParentData
                 $g_id = $individual->getId();
 
                 if (!empty($names)) {
-                    $name = current($names)->getName();
-                    $npfx = current($names)->getNpfx();
-                    $givn = current($names)->getGivn();
-                    $nick = current($names)->getNick();
-                    $spfx = current($names)->getSpfx();
-                    $surn = current($names)->getSurn();
-                    $nsfx = current($names)->getNsfx();
-                    $type = current($names)->getType();
+                    $name = current($names)->getName() ?: '';
+                    $npfx = current($names)->getNpfx() ?: '';
+                    $givn = current($names)->getGivn() ?: '';
+                    $nick = current($names)->getNick() ?: '';
+                    $spfx = current($names)->getSpfx() ?: '';
+                    $surn = current($names)->getSurn() ?: '';
+                    $nsfx = current($names)->getNsfx() ?: '';
+                    $type = current($names)->getType() ?: '';
                 }
 
                 // array value
