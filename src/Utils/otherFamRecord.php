@@ -69,7 +69,7 @@ class otherFamRecord
                 }
             }
             $_group = 'fam';
-            if($familie == null) {
+            if ($familie == null) {
                 $_gid = 0;
             } else {
                 $_gid = $familie->id;
