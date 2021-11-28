@@ -122,7 +122,7 @@ class otherFields
             }
 
             $_group = 'indi';
-            $_gid = $person->id;
+            $_gid = $person->id ?? 0;
             if ($names != null && count($names) > 0) {
                 // Name::read($conn, $names, $_group, $_gid);
                 foreach ($names as $item) {
@@ -170,7 +170,7 @@ class otherFields
             }
 
             if ($subm && count($subm) > 0) {
-                Subm::read($conn, $subm, $_group, $_gid, $subm_ids);
+                Subm::read($conn, $subm, $_group, $_gid, $obje_ids);
                 // foreach ($subm as $item) {
                     //     if ($item) {
                     //         Subm::read($conn, $item, $_group, $_gid, $subm_ids);
@@ -179,7 +179,7 @@ class otherFields
             }
 
             if ($anci && count($anci) > 0) {
-                Anci::read($conn, $anci, $_group, $_gid, $subm_ids);
+                Anci::read($conn, $anci, $_group, $_gid, $obje_ids);
                 // foreach ($anci as $item) {
                     //     if ($item) {
                     //         Anci::read($conn, $item, $_group, $_gid, $subm_ids);
