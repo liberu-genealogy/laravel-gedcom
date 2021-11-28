@@ -304,12 +304,12 @@ class GedcomWriter
 
         if ($addr != null) {
             $arr_addr = [
-                'addr' => $_addr->getAddr() ?? 'Unknown',
-                'adr1' => $_addr->getAdr1() ?? 'Unknown',
-                'adr2' => $_addr->getAdr2() ?? 'Unknown',
-                'city' => $_addr->getCity() ?? 'Unknown',
-                'stae' => $_addr->getStae() ?? 'Unknown',
-                'ctry' => $_addr->getCtry() ?? 'Unknown',
+                'addr' => $addr->getAddr() ?? 'Unknown',
+                'adr1' => $addr->getAdr1() ?? 'Unknown',
+                'adr2' => $addr->getAdr2() ?? 'Unknown',
+                'city' => $addr->getCity() ?? 'Unknown',
+                'stae' => $addr->getStae() ?? 'Unknown',
+                'ctry' => $addr->getCtry() ?? 'Unknown',
             ];
         } else {
             $arr_addr = [

@@ -2,9 +2,11 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
+use Carbon\Carbon;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
 use Illuminate\Support\Str;
+use Throwable;
 
 class ParentData
 {
@@ -90,6 +92,7 @@ class ParentData
 
                 $birt = $individual->getBirt();
                 $birthday = $birt->dateFormatted ?? null;
+
                 $birth_month = $birt->month ?? null;
                 $birth_year = $birt->year ?? null;
                 $birthday_dati = $birt->dati ?? null;
@@ -120,9 +123,9 @@ class ParentData
                 $config = json_encode(config('database.connections.'.$conn));
                 $value = [
                     'gid'             => $g_id,
-                    'name'            => $name,
-                    'givn'            => $givn,
-                    'surn'            => $surn,
+                    'name'            => utf8_encode($name),
+                    'givn'            => utf8_encode($givn),
+                    'surn'            => utf8_encode($surn),
                     'sex'             => $sex,
                     'uid'             => $uid,
                     'rin'             => $rin,
@@ -135,16 +138,16 @@ class ParentData
                     'nsfx'            => $nsfx,
                     'npfx'            => $npfx,
                     'spfx'            => $spfx,
-                    'birthday'        => $birthday,
+                    'birthday'        => self::validateDate($birthday) ? $birthday : null,
                     'birth_month'     => $birth_month,
                     'birth_year'      => $birth_year,
-                    'birthday_dati'   => $birthday_dati,
-                    'birthday_plac'   => $birthday_plac,
+                    'birthday_dati'   => utf8_encode($birthday_dati),
+                    'birthday_plac'   => utf8_encode($birthday_plac),
                     'deathday'        => $deathday,
                     'death_month'     => $death_month,
                     'death_year'      => $death_year,
                     'deathday_dati'   => $deathday_dati,
-                    'deathday_plac'   => $deathday_plac,
+                    'deathday_plac'   => utf8_encode($deathday_plac),
                     'deathday_caus'   => $deathday_caus,
                     'burial_day'      => $burial_day,
                     'burial_month'    => $burial_month,
@@ -171,9 +174,14 @@ class ParentData
 
             return $parentData;
         } catch (\Exception $e) {
-            $error = $e->getMessage();
-
-            return \Log::error($error);
+            return \Log::error($e);
         }
+    }
+
+    private static function validateDate($date, $format = 'Y-m-d')
+    {
+        $d = \DateTime::createFromFormat($format, $date);
+        // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
+        return $d && $d->format($format) === $date;
     }
 }
