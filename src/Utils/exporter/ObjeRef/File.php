@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\ObjeRef;
 
 use FamilyTree365\LaravelGedcom\Models\MediaObjeectFile;
 

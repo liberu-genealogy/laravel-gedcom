@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\SourRef;
 
 use FamilyTree365\LaravelGedcom\Models\SourceRefEven;
 

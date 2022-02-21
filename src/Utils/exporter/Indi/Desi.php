@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Indi;
 
 use FamilyTree365\LaravelGedcom\Models\PersonDesi;
 

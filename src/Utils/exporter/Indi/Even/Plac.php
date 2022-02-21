@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi\Even;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Indi\Even;
 
 class Plac
 {

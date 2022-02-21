@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\Fam;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Fam;
 
 use FamilyTree365\LaravelGedcom\Models\FamilySlgs;
 use Throwable;

@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\Sour;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Sour;
 
 use FamilyTree365\LaravelGedcom\Models\SourceRepo;
 use FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef;

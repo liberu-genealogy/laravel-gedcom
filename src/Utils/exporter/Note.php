@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter;
 
 use FamilyTree365\LaravelGedcom\Models\Note as MNote;
 use Throwable;

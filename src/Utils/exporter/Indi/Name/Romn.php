@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\Indi\Name;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Indi\Name;
 
 use FamilyTree365\LaravelGedcom\Models\PersonNameRomn;
 

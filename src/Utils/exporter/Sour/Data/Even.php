@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Importer\Sour\Data;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Sour\Data;
 
 use FamilyTree365\LaravelGedcom\Models\SourceDataEven;
 
