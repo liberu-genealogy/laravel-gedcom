@@ -29,4 +29,4 @@ return new class extends Migration
             $table->string('chan')->nullable()->after('deleted_at');
         });
     }
-}
+};

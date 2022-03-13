@@ -29,4 +29,4 @@ return new class extends Migration
             $table->dropIndex(['id', 'person_id', 'addr_id']);
         });
     }
-}
+};

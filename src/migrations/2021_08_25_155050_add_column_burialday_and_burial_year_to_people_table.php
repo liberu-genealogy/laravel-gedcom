@@ -30,4 +30,4 @@ return new class extends Migration
             $table->dropColumn(['burial_day', 'burial_year']);
         });
     }
-}
+};

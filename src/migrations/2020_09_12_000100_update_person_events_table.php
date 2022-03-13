@@ -33,4 +33,4 @@ return new class extends Migration
             $table->text('attr')->nullable(false)->change();
         });
     }
-}
+};

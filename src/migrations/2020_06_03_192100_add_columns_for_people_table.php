@@ -45,4 +45,4 @@ return new class extends Migration
             $table->dropColumn('deleted_at');
         });
     }
-}
+};

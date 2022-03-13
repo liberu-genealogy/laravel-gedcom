@@ -31,4 +31,4 @@ return new class extends Migration
             $table->integer('wife_id')->nullable()->change();
         });
     }
-}
+};

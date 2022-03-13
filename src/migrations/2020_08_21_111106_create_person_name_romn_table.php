@@ -38,4 +38,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('person_name_romn');
     }
-}
+};

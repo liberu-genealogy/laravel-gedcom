@@ -30,4 +30,4 @@ return new class extends Migration
             $table->dropColumn(['birth_year', 'death_year']);
         });
     }
-}
+};

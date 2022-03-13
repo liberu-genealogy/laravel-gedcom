@@ -31,4 +31,4 @@ return new class extends Migration
             $table->dropColumn(['birth_month', 'death_month', 'burial_month']);
         });
     }
-}
+};
