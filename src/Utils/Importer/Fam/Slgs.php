@@ -16,8 +16,7 @@ class Slgs
      */
     public static function read($conn, $slgs, $fam)
     {
-        try
-        {
+        try {
             if ($slgs == null || $fam === null) {
                 return;
             }
@@ -63,9 +62,7 @@ class Slgs
                     \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
                 }
             }
-        }
-        catch(Throwable $e)
-        {
+        } catch (Throwable $e) {
             report($e);
         }
     }

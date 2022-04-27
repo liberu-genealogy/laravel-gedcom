@@ -2,11 +2,10 @@
 
 namespace FamilyTree365\LaravelGedcom\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use FamilyTree365\LaravelGedcom\Models\Person;
-use FamilyTree365\LaravelGedcom\Models\Subm;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 class GedcomExporter extends Command
@@ -42,12 +41,11 @@ class GedcomExporter extends Command
      */
     public function handle()
     {
+        $dir = 'public/gedcom/exported';
 
-         $dir = 'public/gedcom/exported';
+        $filename = $this->argument('filename').'.GED';
 
-        $filename = $this->argument('filename').".GED";
-
-        $file_path = $dir . '/' . $filename;
+        $file_path = $dir.'/'.$filename;
 
         if (!file_exists($dir)) {
             Storage::makeDirectory($dir);
@@ -69,10 +67,10 @@ class GedcomExporter extends Command
         $people = Person::all();
         $submissions = $query->get();
 
-        $data =array (
+        $data = [
             'submissions' => $submissions,
-            'people' => $people,
-        );
+            'people'      => $people,
+        ];
 
         $source = View::make('stubs.ged', $data)->render();
 
@@ -84,9 +82,8 @@ class GedcomExporter extends Command
 
         fclose($handle);
 
-        $headers = array(
+        $headers = [
             'Content-Type' => 'text/ged',
-        );
-
+        ];
     }
 }

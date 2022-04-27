@@ -16,9 +16,10 @@ class Even
      */
     public static function read($conn, $events, $person, $obje_ids = [])
     {
+        if (empty($person)) {
+            return;
+        }
 
-        if(empty($person)) return;
-        
         $eventData = [];
         foreach ($events as $event) {
             if ($event && count($event) > 0) {
@@ -185,10 +186,8 @@ class Even
 
     public static function otherField($conn, $events, $person)
     {
-        try
-        {
+        try {
             foreach ($events as $event) {
-                
                 if ($event && count($event) > 0) {
                     $even = $event[0];
                     $class_name = get_class($even);
@@ -367,9 +366,7 @@ class Even
                 // $person->addEvent($_type, $date, $plac);
                 }
             }
-        }
-        catch(Throwable $e)
-        {
+        } catch (Throwable $e) {
             report($e);
         }
     }

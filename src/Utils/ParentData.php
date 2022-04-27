@@ -2,11 +2,9 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
-use Carbon\Carbon;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
 use Illuminate\Support\Str;
-use Throwable;
 
 class ParentData
 {

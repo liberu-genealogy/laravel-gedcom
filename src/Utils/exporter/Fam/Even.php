@@ -16,8 +16,7 @@ class Even
      */
     public static function read($conn, $even, $fam, $obje_ids = [])
     {
-        try
-        {
+        try {
             if ($even == null || $fam === null) {
                 return;
             }
@@ -153,9 +152,7 @@ class Even
                     \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
                 }
             }
-        }
-        catch(Throwable $e)
-        {
+        } catch (Throwable $e) {
             report($e);
         }
     }
