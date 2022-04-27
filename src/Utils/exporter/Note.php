@@ -14,13 +14,12 @@ class Note
      */
     public static function read($conn, \Gedcom\Record\Note $note, $group = '', $group_id = 0)
     {
-       try
-       {
-             $_note = $note->getNote();
+        try {
+            $_note = $note->getNote();
             $rin = $note->getRin();
 
             // store note
-            $key = ['group'=>$group, 'gid'=>$group_id, 'note'=> utf8_encode($_note) ];
+            $key = ['group'=>$group, 'gid'=>$group_id, 'note'=> utf8_encode($_note)];
             $data = ['group'=>$group, 'gid'=>$group_id, 'note'=> utf8_encode($_note), 'rin'=>$rin];
             $record = MNote::on($conn)->updateOrCreate($key, $data);
 
@@ -49,11 +48,8 @@ class Note
             }
 
             return $_gid;
-       }
-       catch(Throwable $e)
-       {
-        report($e);
-       }
-
+        } catch (Throwable $e) {
+            report($e);
+        }
     }
 }
