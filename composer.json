@@ -1,5 +1,5 @@
 {
-    "name": "familytree365/laravel-gedcom",
+    "name": "cgdprojects/laravel-gedcom",
     "description": "A package that converts gedcom files to Eloquent models",
     "type": "library",
     "require": {
