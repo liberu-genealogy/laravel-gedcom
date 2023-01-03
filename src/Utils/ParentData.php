@@ -121,9 +121,9 @@ class ParentData
                 $config = json_encode(config('database.connections.'.$conn));
                 $value = [
                     'gid'             => $g_id,
-                    'name'            => utf8_encode($name),
-                    'givn'            => utf8_encode($givn),
-                    'surn'            => utf8_encode($surn),
+                    'name'            => $name,
+                    'givn'            => $givn,
+                    'surn'            => $surn,
                     'sex'             => $sex,
                     'uid'             => $uid,
                     'rin'             => $rin,
