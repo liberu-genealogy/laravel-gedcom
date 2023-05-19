@@ -1,5 +1,5 @@
 {
-    "name": "cgdprojects/laravel-gedcom",
+    "name": "laravel-liberu/laravel-gedcom",
     "description": "A package that converts gedcom files to Eloquent models",
     "type": "library",
     "require": {
