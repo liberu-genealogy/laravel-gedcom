@@ -54,6 +54,12 @@ class FamilyData
 
                 $chan = $family->getChan();
 
+                foreach ($children as $child) {
+                    if (!isset($persons_id[$child])) {
+                        $persons_id[$child] = Person::where('gid', $child)->first()->id;
+                    }
+                }
+
                 $husband_key = $parentData ? array_search($husb, array_column($parentData, 'gid')) : null;
                 $husband_uid = $parentData[$husband_key]['uid'] ?? null;
                 if (Person::where('uid', $husband_uid)->first() != null) {
