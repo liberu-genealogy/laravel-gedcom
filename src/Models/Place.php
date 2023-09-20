@@ -18,7 +18,7 @@ class Place extends Model
         if ($place !== null) {
             $id = $place->id;
         } else {
-            $place = self::query()->create(compact('title'));
+            $place = self::query()->create(['title' => $title]);
             $id = $place->id;
         }
 

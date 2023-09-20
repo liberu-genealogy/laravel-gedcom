@@ -58,20 +58,16 @@ class Repo
         $_gid = $record->id;
         // store Note
         $note = $repo->getNote(); // Record/NoteRef array
-        if ($note && count($note) > 0) {
-            foreach ($note as $item) {
-                NoteRef::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($note as $item) {
+            NoteRef::read($conn, $item, $_group, $_gid);
         }
         $refn = $repo->getRefn(); // Record/Refn array
-        if ($refn && count($refn) > 0) {
-            foreach ($refn as $item) {
-                Refn::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($refn as $item) {
+            Refn::read($conn, $item, $_group, $_gid);
         }
 
         $chan = $repo->getChan(); // Recore/Chan
-        if ($chan !== null) {
+        if ($chan instanceof \Gedcom\Record\Chan) {
             \FamilyTree365\LaravelGedcom\Utils\Importer\Chan::read($conn, $chan, $_group, $_gid);
         }
 

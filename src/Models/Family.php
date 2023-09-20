@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Family extends Model
 {
+    public $husband;
+    public $wife;
+    public $id;
     protected $fillable = ['description', 'is_active', 'type_id', 'husband_id', 'wife_id', 'chan', 'nchi', 'rin'];
 
     protected $attributes = ['is_active' => false];

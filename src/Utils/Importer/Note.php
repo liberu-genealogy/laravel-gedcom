@@ -19,8 +19,8 @@ class Note
             $rin = $note->getRin();
 
             // store note
-            $key = ['group'=>$group, 'gid'=>$group_id, 'note'=> utf8_encode($_note)];
-            $data = ['group'=>$group, 'gid'=>$group_id, 'note'=> utf8_encode($_note), 'rin'=>$rin];
+            $key = ['group'=>$group, 'gid'=>$group_id, 'note'=> mb_convert_encoding((string) $_note, 'UTF-8', 'ISO-8859-1')];
+            $data = ['group'=>$group, 'gid'=>$group_id, 'note'=> mb_convert_encoding((string) $_note, 'UTF-8', 'ISO-8859-1'), 'rin'=>$rin];
             $record = MNote::on($conn)->updateOrCreate($key, $data);
 
             // store Sources of Note
@@ -28,17 +28,13 @@ class Note
             $_gid = $record->id;
             // SourRef array
             $sour = $note->getSour();
-            if ($sour && count($sour) > 0) {
-                foreach ($sour as $item) {
-                    SourRef::read($conn, $item, $_group, $_gid);
-                }
+            foreach ($sour as $item) {
+                SourRef::read($conn, $item, $_group, $_gid);
             }
             // Refn array
             $refn = $note->getRefn();
-            if ($refn && count($refn) > 0) {
-                foreach ($refn as $item) {
-                    Refn::read($conn, $item, $_group, $_gid);
-                }
+            foreach ($refn as $item) {
+                Refn::read($conn, $item, $_group, $_gid);
             }
 
             // Chan

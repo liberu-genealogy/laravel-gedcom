@@ -29,7 +29,7 @@ class ParentData
         $a = [];
 
         try {
-            foreach ($individuals as $k => $individual) {
+            foreach ($individuals as $individual) {
                 $g_id = $individual->getId();
                 $name = '';
                 $givn = '';
@@ -80,8 +80,8 @@ class ParentData
 
                 // added to database
                 // string value
-                $sex = preg_replace('/[^MF]/', '', $individual->getSex());
-                $uid = $individual->getUid() ?? strtoupper(str_replace('-', '', Str::uuid()));
+                $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
+                $uid = $individual->getUid() ?? strtoupper(str_replace('-', '', (string) Str::uuid()));
                 $resn = $individual->getResn();
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
@@ -118,7 +118,7 @@ class ParentData
                     $givn = $name;
                 }
 
-                $config = json_encode(config('database.connections.'.$conn));
+                $config = json_encode(config('database.connections.'.$conn), JSON_THROW_ON_ERROR);
                 $value = [
                     'gid'             => $g_id,
                     'name'            => $name,
@@ -139,13 +139,13 @@ class ParentData
                     'birthday'        => self::validateDate($birthday) ? $birthday : null,
                     'birth_month'     => $birth_month,
                     'birth_year'      => $birth_year,
-                    'birthday_dati'   => utf8_encode($birthday_dati),
-                    'birthday_plac'   => utf8_encode($birthday_plac),
+                    'birthday_dati'   => mb_convert_encoding((string) $birthday_dati, 'UTF-8', 'ISO-8859-1'),
+                    'birthday_plac'   => mb_convert_encoding((string) $birthday_plac, 'UTF-8', 'ISO-8859-1'),
                     'deathday'        => $deathday,
                     'death_month'     => $death_month,
                     'death_year'      => $death_year,
                     'deathday_dati'   => $deathday_dati,
-                    'deathday_plac'   => utf8_encode($deathday_plac),
+                    'deathday_plac'   => mb_convert_encoding((string) $deathday_plac, 'UTF-8', 'ISO-8859-1'),
                     'deathday_caus'   => $deathday_caus,
                     'burial_day'      => $burial_day,
                     'burial_month'    => $burial_month,

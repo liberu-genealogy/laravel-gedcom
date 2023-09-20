@@ -17,12 +17,10 @@ class Phon
             if (method_exists($phon, 'getPhon')) {
                 return $phon->getPhon();
             }
+        } elseif (is_array($phon)) {
+            return json_encode($phon, JSON_THROW_ON_ERROR);
         } else {
-            if (is_array($phon)) {
-                return json_encode($phon);
-            } else {
-                return "$phon";
-            }
+            return "$phon";
         }
     }
 }

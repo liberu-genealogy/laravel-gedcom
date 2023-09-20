@@ -28,17 +28,13 @@ class Data
         $_gid = $record->id;
         // \Gedcom\Record\Sour\Data\Even array
         $even = $data->getEven();
-        if ($even && count($even) > 0) {
-            foreach ($even as $item) {
-                Even::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($even as $item) {
+            Even::read($conn, $item, $_group, $_gid);
         }
         // \Gedcom\Record\NoteRef array
         $note = $data->getNote();
-        if ($note && count($note) > 0) {
-            foreach ($note as $item) {
-                NoteRef::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($note as $item) {
+            NoteRef::read($conn, $item, $_group, $_gid);
         }
     }
 }

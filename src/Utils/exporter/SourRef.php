@@ -44,18 +44,14 @@ class SourRef
         $_gid = $record->id;
         // store MediaObje
         $objes = $sourref->getObje();
-        if ($objes && count($objes) > 0) {
-            foreach ($objes as $item) {
-                ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-            }
+        foreach ($objes as $item) {
+            ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
         }
 
         // store Note
         $notes = $sourref->getNote();
-        if ($notes && count($notes) > 0) {
-            foreach ($notes as $item) {
-                NoteRef::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($notes as $item) {
+            NoteRef::read($conn, $item, $_group, $_gid);
         }
 
         // store Data

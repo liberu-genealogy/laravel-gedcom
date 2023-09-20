@@ -45,8 +45,6 @@ class GedcomExporter extends Command
 
         $filename = $this->argument('filename').'.GED';
 
-        $file_path = $dir.'/'.$filename;
-
         if (!file_exists($dir)) {
             Storage::makeDirectory($dir);
         }
@@ -78,12 +76,8 @@ class GedcomExporter extends Command
 
         $handle = fopen($filename, 'w');
 
-        fputs($handle, $ged_doc.$source);
+        fwrite($handle, $ged_doc.$source);
 
         fclose($handle);
-
-        $headers = [
-            'Content-Type' => 'text/ged',
-        ];
     }
 }

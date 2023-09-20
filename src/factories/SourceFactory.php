@@ -1,4 +1,4 @@
-@<?php
+<?php
 
 namespace Database\Factories;
 
@@ -11,6 +11,7 @@ namespace Database\Factories;
 
     class SourceFactory extends Factory
     {
+        public $faker;
         /**
          * The name of the factory's corresponding model.
          *

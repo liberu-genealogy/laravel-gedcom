@@ -11,7 +11,7 @@ class Desi
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, string $desi, $group = '', $group_id = 0, $subm_ids)
+    public static function read($conn, string $desi, $subm_ids, $group = '', $group_id = 0)
     {
         // store alia
         if (isset($subm_ids[$desi])) {

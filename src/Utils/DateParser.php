@@ -4,25 +4,16 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 
 class DateParser
 {
-    private $year;
-    private $month;
-    private $day;
-    private $date_string;
-
-    public function __construct()
-    {
-        $date_string = '';
-    }
+    private int|float|null $year = null;
+    private ?int $month = null;
+    private int|float|null $day = null;
+    private string|array|null $date_string = null;
 
     public function parse_date()
     {
         $this->trim_datestring();
-        if (!$this->try_parse_full_date()) {
-            if (!$this->try_parse_M_Y_date()) {
-                if (!$this->try_parse_Y_date()) {
-                    $this->set_null_date();
-                }
-            }
+        if (!$this->try_parse_full_date() && !$this->try_parse_M_Y_date() && !$this->try_parse_Y_date()) {
+            $this->set_null_date();
         }
 
         return $this->export();
@@ -39,7 +30,7 @@ class DateParser
             'FROM', 'TO',
         ];
         foreach ($words_to_remove as $word) {
-            $this->date_string = str_replace($word, '', $this->date_string);
+            $this->date_string = str_replace($word, '', (string) $this->date_string);
         }
         $this->date_string = trim($this->date_string);
     }
@@ -47,47 +38,41 @@ class DateParser
     private function try_parse_full_date()
     {
         $this->set_null_date(); // Default
-        $date_parts = explode(' ', $this->date_string);
+        $date_parts = explode(' ', (string) $this->date_string);
         if (count($date_parts) > 3) {
             return false;
         }
 
         return $this->try_get_day(
             $date_parts[0] ?? false
-        )
-            and
-            $this->try_get_month(
-                $date_parts[1] ?? false
-            )
-            and
-            $this->try_get_year(
-                $date_parts[2] ?? false,
-                $date_parts[3] ?? false
-            );
+        ) && $this->try_get_month(
+            $date_parts[1] ?? false
+        ) && $this->try_get_year(
+            $date_parts[2] ?? false,
+            $date_parts[3] ?? false
+        );
     }
 
     private function try_parse_M_Y_date()
     {
         $this->set_null_date(); // Default
-        $date_parts = explode(' ', $this->date_string);
+        $date_parts = explode(' ', (string) $this->date_string);
         if (count($date_parts) > 3) {
             return false;
         }
 
         return $this->try_get_month(
             $date_parts[0] ?? false
-        )
-            and
-            $this->try_get_year(
-                $date_parts[1] ?? false,
-                $date_parts[2] ?? false
-            );
+        ) && $this->try_get_year(
+            $date_parts[1] ?? false,
+            $date_parts[2] ?? false
+        );
     }
 
     private function try_parse_Y_date()
     {
         $this->set_null_date(); // Default
-        $date_parts = explode(' ', $this->date_string);
+        $date_parts = explode(' ', (string) $this->date_string);
         if (count($date_parts) > 2) {
             return false;
         }

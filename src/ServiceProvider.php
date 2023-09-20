@@ -7,15 +7,14 @@ use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
+    public $app;
     public function register()
     {
         $this->commands([
             GedcomImporter::class,
         ]);
 
-        $this->app->bind('FamilyTree365/laravel-gedcom:parser', function () {
-            return new GedcomParser();
-        });
+        $this->app->bind('FamilyTree365/laravel-gedcom:parser', fn() => new GedcomParser());
     }
 
     public function boot()

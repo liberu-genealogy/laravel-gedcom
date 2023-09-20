@@ -25,10 +25,8 @@ class NoteRef
         $_gid = $record->id;
         // SourRef array
         $sour = $noteref->getSour();
-        if ($sour && count($sour) > 0) {
-            foreach ($sour as $item) {
-                SourRef::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($sour as $item) {
+            SourRef::read($conn, $item, $_group, $_gid);
         }
     }
 }

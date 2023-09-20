@@ -69,17 +69,15 @@ class Subm
 
         $note = $subm->getNote();  // array ---
 
-        if ($note != null && count($note) > 0) {
+        if ($note != null && (is_countable($note) ? count($note) : 0) > 0) {
             foreach ($note as $item) {
                 \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
         $obje = $subm->getObje() ?? null;  // array ---
-        if ($obje && count($obje) > 0) {
-            foreach ($obje as $item) {
-                if ($item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-                }
+        foreach ($obje as $item) {
+            if ($item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
             }
         }
         $chan = $subm->getChan() ?? null; // Record\Chan---

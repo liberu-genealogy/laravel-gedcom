@@ -25,13 +25,9 @@ use Gedcom\Writer;
 
 class GedcomGenerator
 {
-    protected $family_id;
-    protected $p_id;
-    protected $up_nest;
-    protected $down_nest;
     protected $arr_indi_id = [];
     protected $arr_fam_id = [];
-    protected $_gedcom = null;
+    protected $_gedcom;
     protected $log = "\n";
 
     /**
@@ -42,14 +38,8 @@ class GedcomGenerator
      * @param int $up_nest
      * @param int $down_nest
      */
-    public function __construct($p_id = 0, $family_id = 0, $up_nest = 0, $down_nest = 0)
+    public function __construct(protected $p_id = 0, protected $family_id = 0, protected $up_nest = 0, protected $down_nest = 0)
     {
-        $this->family_id = $family_id;
-        $this->p_id = $p_id;
-        $this->up_nest = $up_nest;
-        $this->down_nest = $down_nest;
-        $this->arr_indi_id = [];
-        $this->arr_fam_id = [];
         $this->_gedcom = new Gedcom();
     }
 
@@ -88,7 +78,7 @@ class GedcomGenerator
         if ($persons == null) {
             return;
         }
-        foreach ($persons as $key => $person) {
+        foreach ($persons as $person) {
             $this->setIndi($person->id);
         }
 
@@ -110,7 +100,7 @@ class GedcomGenerator
             // add family
             $f_id = $item->id;
             if (!in_array($f_id, $this->arr_fam_id)) {
-                array_push($this->arr_fam_id, $f_id);
+                $this->arr_fam_id[] = $f_id;
                 $this->setFam($f_id);
             }
 
@@ -128,7 +118,7 @@ class GedcomGenerator
             foreach ($children as $item2) {
                 $child_id = $item2->id;
                 if (!in_array($child_id, $this->arr_indi_id)) {
-                    array_push($this->arr_indi_id, $child_id);
+                    $this->arr_indi_id[] = $child_id;
                     $this->setIndi($child_id);
                 }
             }
@@ -179,7 +169,7 @@ class GedcomGenerator
         // process self
         if (!in_array($p_id, $this->arr_indi_id)) {
             // add to indi array
-            array_push($this->arr_indi_id, $p_id);
+            $this->arr_indi_id[] = $p_id;
             $this->setIndi($p_id);
         }
 
@@ -188,7 +178,7 @@ class GedcomGenerator
             // add family
             $f_id = $item->id;
             if (!in_array($f_id, $this->arr_fam_id)) {
-                array_push($this->arr_fam_id, $f_id);
+                $this->arr_fam_id[] = $f_id;
                 $this->setFam($f_id);
             }
             // process partner
@@ -213,11 +203,11 @@ class GedcomGenerator
             $father_id = $parent_family->husband_id;
             $mother_id = $parent_family->wife_id;
             if (!in_array($father_id, $this->arr_indi_id)) {
-                array_push($this->arr_indi_id, $father_id);
+                $this->arr_indi_id[] = $father_id;
                 $this->setIndi($father_id);
             }
             if (!in_array($mother_id, $this->arr_indi_id)) {
-                array_push($this->arr_indi_id, $mother_id);
+                $this->arr_indi_id[] = $mother_id;
                 $this->setIndi($mother_id);
             }
         }
@@ -234,66 +224,30 @@ class GedcomGenerator
     protected function setHead()
     {
         $head = new Head();
-        /**
-         * @var Sour
-         */
         $sour = new Sour();
         $sour->setSour(env('APP_NAME', ''));
         $sour->setVersion('1.0');
         $head->setSour($sour);
-        /**
-         * @var string
-         */
         $dest = null;
         $head->setDest($dest);
-        /**
-         * @var Head\Date
-         */
         $date = null;
         $head->setDate($date);
-        /**
-         * @var string
-         */
         $subm = null;
         $head->setSubm($subm);
-        /**
-         * @var string
-         */
         $subn = null;
         $head->setSubn($subn);
-        /**
-         * @var string
-         */
         $file = null;
         $head->setFile($file);
-        /**
-         * @var string
-         */
         $copr = null;
         $head->setCopr($copr);
-        /**
-         * @var Head\Gedc
-         */
         $gedc = null;
         $head->setGedc($gedc);
-        /**
-         * @var Head\Char
-         */
         $char = null;
         $head->setChar($char);
-        /**
-         * @var string
-         */
         $lang = null;
         $head->setLang($lang);
-        /**
-         * @var Head\Plac
-         */
         $plac = null;
         $head->setPlac($plac);
-        /**
-         * @var string
-         */
         $note = null;
         $head->setNote($note);
         $this->_gedcom->setHead($head);
@@ -306,9 +260,6 @@ class GedcomGenerator
         if ($person == null) {
             return;
         }
-        /**
-         * @var string
-         */
         $id = $person->id;
         $indi->setId($id);
 
@@ -326,31 +277,28 @@ class GedcomGenerator
         $_name->setNsfx($person->nsfx);
         $indi->addName($_name);
 
-        /**
-         * @var string
-         */
         $sex = $person->sex;
         $indi->setSex($sex);
 
         if ($person->birthday || $person->birth_year) {
-            $birt = $person->birthday ? strtoupper(Carbon::createFromFormat('Y-m-d', $person->birthday)->format('j M Y')) : $person->birth_year;
+            $birt = $person->birthday ? strtoupper((string) Carbon::createFromFormat('Y-m-d', $person->birthday)->format('j M Y')) : $person->birth_year;
             $indi->setBirt($birt);
         }
 
         if ($person->deathday || $person->death_year) {
-            $deat = $person->deathday ? strtoupper(Carbon::createFromFormat('Y-m-d', $person->deathday)->format('j M Y')) : $person->death_year;
+            $deat = $person->deathday ? strtoupper((string) Carbon::createFromFormat('Y-m-d', $person->deathday)->format('j M Y')) : $person->death_year;
             $indi->setDeat($deat);
         }
 
         if ($person->burial_day || $person->burial_year) {
-            $buri = $person->burial_day ? strtoupper(Carbon::parse($person->burial_day)->format('j M Y')) : $person->burial_year;
+            $buri = $person->burial_day ? strtoupper((string) Carbon::parse($person->burial_day)->format('j M Y')) : $person->burial_year;
             $indi->setBuri($buri);
         }
 
         if ($person->chan) {
             $chan = Carbon::parse($person->chan);
             $chan = [
-                strtoupper($chan->format('j M Y')),
+                strtoupper((string) $chan->format('j M Y')),
                 $chan->format('H:i:s.v'),
             ];
             $indi->setChan($chan);
@@ -366,7 +314,7 @@ class GedcomGenerator
             $_plac->setDate($date);
         }
         if (!empty($place->type) && !empty($place->date)) {
-            $indi->getAllEven($_plac);
+            $indi->getAllEven();
         }
 
         $this->_gedcom->addIndi($indi);

@@ -18,6 +18,6 @@ class Refn
         // store refn
         $key = ['group'=>$group, 'gid'=>$group_id, 'refn'=>$_refn, 'type'=>$type];
         $data = ['group'=>$group, 'gid'=>$group_id, 'refn'=>$_refn, 'type'=>$type];
-        $record = MRefn::on($conn)->updateOrCreate($key, $data);
+        MRefn::on($conn)->updateOrCreate($key, $data);
     }
 }

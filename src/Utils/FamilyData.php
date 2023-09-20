@@ -24,7 +24,6 @@ class FamilyData
 
     public static function getFamily($conn, $families, $obje_ids = [], $sour_ids = [], $persons_id = [], $note_ids = [], $repo_ids = [], $parentData = [])
     {
-        $familyData = [];
         $persons_id = [];
 
         try {

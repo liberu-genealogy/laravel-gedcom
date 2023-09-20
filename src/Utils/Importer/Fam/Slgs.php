@@ -48,19 +48,15 @@ class Slgs
 
             // array
             $sour = $slgs->getSour();
-            if ($sour && count($sour) > 0) {
-                foreach ($sour as $item) {
-                    if ($item) {
-                        \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
-                    }
+            foreach ($sour as $item) {
+                if ($item) {
+                    \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
 
             $note = $slgs->getNote();
-            if ($note && count($note) > 0) {
-                foreach ($note as $item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
-                }
+            foreach ($note as $item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         } catch (Throwable $e) {
             report($e);

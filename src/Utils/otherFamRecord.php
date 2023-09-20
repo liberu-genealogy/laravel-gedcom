@@ -58,7 +58,7 @@ class otherFamRecord
                 }
             }
 
-            if ($events !== null && count($events) > 0) {
+            if ($events !== null && (is_countable($events) ? count($events) : 0) > 0) {
                 foreach ($events as $item) {
                     if ($item) {
                         Even::read($conn, $item, $familie, $obje_ids);
@@ -69,49 +69,35 @@ class otherFamRecord
                 }
             }
             $_group = 'fam';
-            if ($familie == null) {
-                $_gid = 0;
-            } else {
-                $_gid = $familie->id;
-            }
-            if ($_note != null && count($_note) > 0) {
+            $_gid = $familie == null ? 0 : $familie->id;
+            if ($_note != null && (is_countable($_note) ? count($_note) : 0) > 0) {
                 foreach ($_note as $item) {
                     NoteRef::read($conn, $item, $_group, $_gid);
                 }
             }
-            if ($_obje && count($_obje) > 0) {
-                foreach ($_obje as $item) {
-                    if ($item) {
-                        ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-                    }
+            foreach ($_obje as $item) {
+                if ($item) {
+                    ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
-            if ($_refn && count($_refn) > 0) {
-                foreach ($_refn as $item) {
-                    if ($item) {
-                        Refn::read($conn, $item, $_group, $_gid);
-                    }
+            foreach ($_refn as $item) {
+                if ($item) {
+                    Refn::read($conn, $item, $_group, $_gid);
                 }
             }
-            if ($_sour && count($_sour) > 0) {
-                foreach ($_sour as $item) {
-                    if ($item) {
-                        SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
-                    }
+            foreach ($_sour as $item) {
+                if ($item) {
+                    SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
                 }
             }
-            if ($_slgs && count($_slgs) > 0) {
-                foreach ($_slgs as $item) {
-                    if ($item) {
-                        Slgs::read($conn, $item, $familie);
-                    }
+            foreach ($_slgs as $item) {
+                if ($item) {
+                    Slgs::read($conn, $item, $familie);
                 }
             }
-            if ($subm && count($subm) > 0) {
-                foreach ($subm as $item) {
-                    if ($item) {
-                        Subm::read($conn, $item, $_group, $_gid, $obje_ids);
-                    }
+            foreach ($subm as $item) {
+                if ($item) {
+                    Subm::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
             if ($chan) {

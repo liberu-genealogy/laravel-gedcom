@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RepositoryFactory extends Factory
 {
+    public $faker;
     /**
      * The name of the factory's corresponding model.
      *
@@ -25,7 +26,6 @@ class RepositoryFactory extends Factory
     {
         return [
             'repo'    => $this->faker->word(),
-            'name'    => $this->faker->word(),
             'addr_id' => Addr::factory(),
             'rin'     => $this->faker->word(),
             'phon'    => $this->faker->phoneNumber(),

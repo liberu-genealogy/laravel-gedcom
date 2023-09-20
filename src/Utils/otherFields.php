@@ -89,7 +89,7 @@ class otherFields
 
             // added to database
             // string value
-            $sex = preg_replace('/[^MF]/', '', $individual->getSex());
+            $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
             $uid = $individual->getUid();
             $resn = $individual->getResn();
             $rin = $individual->getRin();
@@ -123,7 +123,7 @@ class otherFields
 
             $_group = 'indi';
             $_gid = $person->id ?? 0;
-            if ($names != null && count($names) > 0) {
+            if ($names != null && (is_countable($names) ? count($names) : 0) > 0) {
                 // Name::read($conn, $names, $_group, $_gid);
                 foreach ($names as $item) {
                     if ($item) {
@@ -132,7 +132,7 @@ class otherFields
                 }
             }
 
-            if ($note != null && count($note) > 0) {
+            if ($note != null && (is_countable($note) ? count($note) : 0) > 0) {
                 // NoteRef::read($conn, $note, $_group, $_gid);
                 foreach ($note as $item) {
                     if ($item) {
@@ -141,7 +141,7 @@ class otherFields
                 }
             }
 
-            if ($indv_sour != null && count($indv_sour) > 0) {
+            if ($indv_sour != null && (is_countable($indv_sour) ? count($indv_sour) : 0) > 0) {
                 // SourRef::read($conn, $indv_sour, $_group, $_gid, $sour_ids, $obje_ids);
                 foreach ($indv_sour as $item) {
                     if ($item) {
@@ -151,7 +151,7 @@ class otherFields
             }
 
             // ??
-            if ($alia && count($alia) > 0) {
+            if ($alia && (is_countable($alia) ? count($alia) : 0) > 0) {
                 Alia::read($conn, $alia, $_group, $_gid);
                 // foreach ($alia as $item) {
                     //     if ($item) {
@@ -160,16 +160,14 @@ class otherFields
                     // }
             }
 
-            if ($asso && count($asso) > 0) {
-                // Asso::read($conn, $item, $_group, $_gid);
-                foreach ($asso as $item) {
-                    if ($item) {
-                        Asso::read($conn, $item, $_group, $_gid);
-                    }
+            // Asso::read($conn, $item, $_group, $_gid);
+            foreach ($asso as $item) {
+                if ($item) {
+                    Asso::read($conn, $item, $_group, $_gid);
                 }
             }
 
-            if ($subm && count($subm) > 0) {
+            if ($subm && (is_countable($subm) ? count($subm) : 0) > 0) {
                 Subm::read($conn, $subm, $_group, $_gid, $obje_ids);
                 // foreach ($subm as $item) {
                     //     if ($item) {
@@ -178,7 +176,7 @@ class otherFields
                     // }
             }
 
-            if ($anci && count($anci) > 0) {
+            if ($anci && (is_countable($anci) ? count($anci) : 0) > 0) {
                 Anci::read($conn, $anci, $_group, $_gid, $obje_ids);
                 // foreach ($anci as $item) {
                     //     if ($item) {
@@ -194,59 +192,45 @@ class otherFields
             //         }
             //     }
             // }
-
-            if ($refn && count($refn) > 0) {
-                // Refn::read($conn, $refn, $_group, $_gid);
-                foreach ($refn as $item) {
-                    if ($item) {
-                        Refn::read($conn, $item, $_group, $_gid);
-                    }
+            // Refn::read($conn, $refn, $_group, $_gid);
+            foreach ($refn as $item) {
+                if ($item) {
+                    Refn::read($conn, $item, $_group, $_gid);
                 }
             }
 
-            if ($obje && count($obje) > 0) {
-                // ObjeRef::read($conn, $obje, $_group, $_gid, $obje_ids);
-                foreach ($obje as $item) {
-                    if ($item) {
-                        ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-                    }
+            // ObjeRef::read($conn, $obje, $_group, $_gid, $obje_ids);
+            foreach ($obje as $item) {
+                if ($item) {
+                    ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
 
-            if ($bapl && count($bapl) > 0) {
-                // Lds::read($conn, $bapl, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
-                foreach ($bapl as $item) {
-                    if ($item) {
-                        Lds::read($conn, $item, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
-                    }
+            // Lds::read($conn, $bapl, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
+            foreach ($bapl as $item) {
+                if ($item) {
+                    Lds::read($conn, $item, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
                 }
             }
 
-            if ($conl && count($conl) > 0) {
-                // Lds::read($conn, $conl, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
-                foreach ($conl as $item) {
-                    if ($item) {
-                        Lds::read($conn, $item, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
-                    }
+            // Lds::read($conn, $conl, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
+            foreach ($conl as $item) {
+                if ($item) {
+                    Lds::read($conn, $item, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
                 }
             }
 
-            if ($endl && count($endl) > 0) {
-                // Lds::read($conn, $endl, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
-                foreach ($endl as $item) {
-                    if ($item) {
-                        Lds::read($conn, $item, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
-                    }
+            // Lds::read($conn, $endl, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
+            foreach ($endl as $item) {
+                if ($item) {
+                    Lds::read($conn, $item, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
                 }
             }
 
-            if ($slgc && count($slgc) > 0) {
-                // Lds::read($conn, $slgc, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
-
-                foreach ($slgc as $item) {
-                    if ($item) {
-                        Lds::read($conn, $item, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
-                    }
+            // Lds::read($conn, $slgc, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
+            foreach ($slgc as $item) {
+                if ($item) {
+                    Lds::read($conn, $item, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
                 }
             }
 

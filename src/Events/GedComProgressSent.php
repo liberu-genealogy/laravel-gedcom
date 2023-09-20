@@ -10,14 +10,13 @@ use Illuminate\Queue\SerializesModels;
 
 class GedComProgressSent implements ShouldBroadcast
 {
+    /**
+     * @var string
+     */
+    public $queue = 'low';
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
-
-    public $slug;
-    public $total;
-    public $complete;
-    public $channel;
 
     /**
      * Create a new event instance.
@@ -26,18 +25,8 @@ class GedComProgressSent implements ShouldBroadcast
      * @param $total
      * @param $complete
      */
-    public function __construct(
-        $slug,
-        $total,
-        $complete,
-        $channel = ['name' => 'gedcom-progress', 'eventName' => 'newMessage']
-    ) {
-        $this->slug = $slug;
-        $this->total = $total;
-        $this->complete = $complete;
-        $this->queue = 'low';
-
-        $this->channel = $channel;
+    public function __construct(public $slug, public $total, public $complete, public $channel = ['name' => 'gedcom-progress', 'eventName' => 'newMessage'])
+    {
     }
 
     /**

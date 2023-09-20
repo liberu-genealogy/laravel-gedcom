@@ -20,18 +20,18 @@ class Even
             if ($even == null || $fam === null) {
                 return;
             }
-            $class_name = get_class($even);
+            $class_name = $even::class;
             $type = $even->getType();
             $_date = $even->getDate();
             $date = \FamilyTree365\LaravelGedcom\Utils\Importer\Date::read($conn, $_date);
-            if (strpos($date, 'BEF') !== false) {
-                $newdate = trim(str_replace('BEF', '', $date));
+            if (str_contains((string) $date, 'BEF')) {
+                $newdate = trim(str_replace('BEF', '', (string) $date));
                 $date_cnvert = strtotime($newdate);
-            } elseif (strpos($date, 'AFT') !== false) {
-                $newdate = trim(str_replace('AFT', '', $date));
+            } elseif (str_contains((string) $date, 'AFT')) {
+                $newdate = trim(str_replace('AFT', '', (string) $date));
                 $date_cnvert = strtotime($newdate);
             } else {
-                $date_cnvert = strtotime($date);
+                $date_cnvert = strtotime((string) $date);
             }
             $_plac = $even->getPlac();
             $plac = \FamilyTree365\LaravelGedcom\Utils\Importer\Indi\Even\Plac::read($conn, $_plac);
@@ -67,25 +67,15 @@ class Even
 
             switch ($class_name) {
                 case 'Even':
-                break;
                 case 'Anul':
-                break;
                 case 'Cens':
-                break;
                 case 'Div':
-                break;
                 case 'Divf':
-                break;
                 case 'Enga':
-                break;
                 case 'Marr':
-                break;
                 case 'Marb':
-                break;
                 case 'Marc':
-                break;
                 case 'Marl':
-                break;
                 case 'Mars':
                 break;
                 default:
@@ -131,26 +121,20 @@ class Even
 
             // array
             $sour = $even->getSour();
-            if ($sour && count($sour) > 0) {
-                foreach ($sour as $item) {
-                    if ($item) {
-                        \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
-                    }
+            foreach ($sour as $item) {
+                if ($item) {
+                    \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $item, $_group, $_gid);
                 }
             }
             $obje = $even->getObje();
-            if ($obje && count($obje) > 0) {
-                foreach ($obje as $item) {
-                    if ($item) {
-                        \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-                    }
+            foreach ($obje as $item) {
+                if ($item) {
+                    \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
                 }
             }
             $notes = $even->getNote();
-            if ($notes && count($notes) > 0) {
-                foreach ($notes as $item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
-                }
+            foreach ($notes as $item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         } catch (Throwable $e) {
             report($e);

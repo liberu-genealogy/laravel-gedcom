@@ -54,21 +54,17 @@ class Name
         $_gid = $record->id;
         // store Note
         $note = $item->getNote();
-        if ($note && count($note) > 0) {
-            foreach ($note as $_item) {
-                if ($_item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $_item, $_group, $_gid);
-                }
+        foreach ($note as $_item) {
+            if ($_item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $_item, $_group, $_gid);
             }
         }
 
         // store sourref
         $sour = $item->getSour();
-        if ($sour && count($sour) > 0) {
-            foreach ($sour as $_item) {
-                if ($_item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $_item, $_group, $_gid);
-                }
+        foreach ($sour as $_item) {
+            if ($_item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\SourRef::read($conn, $_item, $_group, $_gid);
             }
         }
 

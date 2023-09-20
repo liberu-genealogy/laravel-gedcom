@@ -22,7 +22,7 @@ class ObjeRef
             $obje_id = $obje_ids[$obje_id];
         }
         $titl = $objeref->getTitl();
-        $file = $objeref->getFile();
+        $objeref->getFile();
 
         // store MediaObject
         $key = ['group'=>$group, 'gid'=>$group_id, 'titl'=>$titl];

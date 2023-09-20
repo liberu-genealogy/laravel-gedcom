@@ -24,8 +24,8 @@ class Sour
         $text = $sour->getText(); // string
 
         $record = Source::on($conn)->updateOrCreate(
-            compact('titl', 'rin', 'auth', 'text', 'publ', 'abbr'),
-            compact('titl', 'rin', 'auth', 'text', 'publ', 'abbr')
+            ['titl' => $titl, 'rin' => $rin, 'auth' => $auth, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr],
+            ['titl' => $titl, 'rin' => $rin, 'auth' => $auth, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr]
         );
 
         $_group = 'sour';
@@ -44,31 +44,27 @@ class Sour
             \FamilyTree365\LaravelGedcom\Utils\Importer\Sour\Data::read($conn, $data, $_group, $_gid = 0);
         }
         $refn = $sour->getRefn(); // array
-        if ($refn && count($refn) > 0) {
-            foreach ($refn as $item) {
-                if ($item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\Refn::read($conn, $item, $_group, $_gid = 0);
-                }
+        foreach ($refn as $item) {
+            if ($item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\Refn::read($conn, $item, $_group, $_gid = 0);
             }
         }
 
         $note = $sour->getNote(); // array
-        if ($note != null && count($note) > 0) {
+        if ($note != null && (is_countable($note) ? count($note) : 0) > 0) {
             foreach ($note as $item) {
                 \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
 
         $obje = $sour->getObje(); // array
-        if ($obje && count($obje) > 0) {
-            foreach ($obje as $item) {
-                if ($item) {
-                    \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
-                }
+        foreach ($obje as $item) {
+            if ($item) {
+                \FamilyTree365\LaravelGedcom\Utils\Importer\ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
             }
         }
 
-        $sour = $sour->getSour(); // string id
+        $sour->getSour(); // string id
 
         return $_gid;
     }

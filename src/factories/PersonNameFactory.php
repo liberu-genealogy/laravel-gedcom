@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PersonNameFactory extends Factory
 {
+    public $faker;
     /**
      * The name of the factory's corresponding model.
      *

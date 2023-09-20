@@ -16,11 +16,11 @@ class Repo
     {
         $repo_id = $data->getRepo();
         if (empty($repo_id)) {
-            $repo_id = rand(1, 10000);
+            $repo_id = random_int(1, 10000);
         }
         $_caln = $data->getCaln();
         $caln = '';
-        if ($_caln != null && count($_caln) > 0) {
+        if ($_caln != null && (is_countable($_caln) ? count($_caln) : 0) > 0) {
             $temp = [];
             foreach ($_caln as $item) {
                 $__caln = $item->getCaln();
@@ -43,10 +43,8 @@ class Repo
 
         // \Gedcom\Record\NoteRef array
         $note = $data->getNote();
-        if ($note && count($note) > 0) {
-            foreach ($note as $item) {
-                NoteRef::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($note as $item) {
+            NoteRef::read($conn, $item, $_group, $_gid);
         }
     }
 }

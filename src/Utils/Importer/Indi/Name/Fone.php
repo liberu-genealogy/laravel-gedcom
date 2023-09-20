@@ -48,6 +48,6 @@ class Fone
             'nsfx' => $nsfx,
         ];
 
-        $record = PersonNameFone::on($conn)->updateOrCreate($key, $data);
+        PersonNameFone::on($conn)->updateOrCreate($key, $data);
     }
 }

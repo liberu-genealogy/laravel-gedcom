@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\StreamOutput;
 
 class GedcomParser
 {
+    public $person_ids;
     /**
      * Array of persons ID
      * key - old GEDCOM ID
@@ -47,7 +48,7 @@ class GedcomParser
         $time_start = microtime(true);
         $this->conn = $conn;
         //start calculating the memory - https://www.php.net/manual/en/function.memory-get-usage.php
-        $startMemoryUse = round(memory_get_usage() / 1048576, 2);
+        $startMemoryUse = round(memory_get_usage() / 1_048_576, 2);
 
         error_log("\n Memory Usage: ".$startMemoryUse.' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
@@ -95,7 +96,7 @@ class GedcomParser
         if ($subn != null) {
             $c_subn = 1;
         }
-        $beforeInsert = round(memory_get_usage() / 1048576, 2);
+        $beforeInsert = round(memory_get_usage() / 1_048_576, 2);
 
         $individuals = $gedcom->getIndi();
         $families = $gedcom->getFam();
@@ -258,7 +259,7 @@ class GedcomParser
 
         if ($progressBar === true) {
             $time_end = microtime(true);
-            $endMemoryUse = round(memory_get_usage() / 1048576, 2);
+            $endMemoryUse = round(memory_get_usage() / 1_048_576, 2);
             $execution_time = ($time_end - $time_start);
             $beform_insert_memory = $beforeInsert - $startMemoryUse;
             $memory_usage = $endMemoryUse - $startMemoryUse;

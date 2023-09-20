@@ -11,18 +11,16 @@ class Subm
      * String $group
      * Integer $group_id.
      */
-    public static function read($conn, $item, $group = '', $group_id = 0, $subm_ids)
+    public static function read($conn, $item, $subm_ids, $group = '', $group_id = 0)
     {
         $record = [];
         foreach ($item as $subm) {
-            if ($subm) {
-                // store alia
-                if (isset($subm_ids[$subm])) {
-                    $subm_id = $subm_ids[$subm];
-                    $key = ['group'=>$group, 'gid'=>$group_id, 'subm'=>$subm_id];
-                    $data = ['group'=>$group, 'gid'=>$group_id, 'subm'=>$subm_id];
-                    $record[] = $data;
-                }
+            // store alia
+            if ($subm && isset($subm_ids[$subm])) {
+                $subm_id = $subm_ids[$subm];
+                $key = ['group'=>$group, 'gid'=>$group_id, 'subm'=>$subm_id];
+                $data = ['group'=>$group, 'gid'=>$group_id, 'subm'=>$subm_id];
+                $record[] = $data;
             }
         }
 

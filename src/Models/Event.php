@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    public $place;
+    public $title;
     protected $gedcom_event_names = [];
 
     public function place()

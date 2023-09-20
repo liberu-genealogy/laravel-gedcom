@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CitationFactory extends Factory
 {
+    public $faker;
     /**
      * The name of the factory's corresponding model.
      *

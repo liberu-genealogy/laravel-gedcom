@@ -26,11 +26,9 @@ class Chan
         $_gid = $record->id;
         // SourRef array
         $note = $chan->getNote();
-        if ($note && count($note) > 0) {
-            foreach ($note as $item) {
-                if ($item) {
-                    NoteRef::read($conn, $item, $_group, $_gid);
-                }
+        foreach ($note as $item) {
+            if ($item) {
+                NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
     }

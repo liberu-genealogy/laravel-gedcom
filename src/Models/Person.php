@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
+    public $givn;
+    public $surn;
+    public $sex;
+    public $id;
+    /**
+     * @var string
+     */
+    public $birthday;
+    /**
+     * @var string
+     */
+    public $deathday;
+    public $events;
     /**
      * The attributes that should be mutated to dates.
      *
@@ -99,11 +112,11 @@ class Person extends Model
 
         // add birthyear to person table ( for form builder )
         if ($title == 'BIRT' && !empty($date)) {
-            $this->birthday = date('Y-m-d', strtotime($date));
+            $this->birthday = date('Y-m-d', strtotime((string) $date));
         }
         // add deathyear to person table ( for form builder )
         if ($title == 'DEAT' && !empty($date)) {
-            $this->deathday = date('Y-m-d', strtotime($date));
+            $this->deathday = date('Y-m-d', strtotime((string) $date));
         }
         $this->save();
 

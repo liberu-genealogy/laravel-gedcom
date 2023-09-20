@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FamilyEventFactory extends Factory
 {
+    public $faker;
     /**
      * The name of the factory's corresponding model.
      *

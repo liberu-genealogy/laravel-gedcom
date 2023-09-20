@@ -23,6 +23,6 @@ class File
         // store File
         $key = ['group'=>$group, 'gid'=>$group_id, 'form'=>$form, 'medi'=>$medi, 'type'=> $type];
         $data = ['group'=>$group, 'gid'=>$group_id, 'form'=>$form, 'medi'=>$medi, 'type'=>$type];
-        $record = MediaObjeectFile::on($conn)->updateOrCreate($key, $data);
+        MediaObjeectFile::on($conn)->updateOrCreate($key, $data);
     }
 }

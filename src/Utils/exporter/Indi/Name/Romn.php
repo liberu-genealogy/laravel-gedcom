@@ -45,6 +45,6 @@ class Romn
             'nsfx' => $nsfx,
         ];
 
-        $record = PersonNameRomn::on($conn)->updateOrCreate($key, $data);
+        PersonNameRomn::on($conn)->updateOrCreate($key, $data);
     }
 }

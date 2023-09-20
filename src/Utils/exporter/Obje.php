@@ -40,18 +40,14 @@ class Obje
         $_gid = $record->id;
 
         $refn = $obje->getRefn(); // Record/Refn array
-        if ($refn && count($refn) > 0) {
-            foreach ($refn as $item) {
-                Refn::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($refn as $item) {
+            Refn::read($conn, $item, $_group, $_gid);
         }
 
         // store Note
         $note = $obje->getNote(); // Record/NoteRef array
-        if ($note && count($note) > 0) {
-            foreach ($note as $item) {
-                NoteRef::read($conn, $item, $_group, $_gid);
-            }
+        foreach ($note as $item) {
+            NoteRef::read($conn, $item, $_group, $_gid);
         }
 
         // store Note

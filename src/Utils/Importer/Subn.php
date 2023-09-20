@@ -27,14 +27,14 @@ class Subn
         $desc = $subn->getDesc();
         $ordi = $subn->getOrdi();
         $rin = $subn->getRin();
-        $record = MSubn::on($conn)->updateOrCreate(compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'), compact('subm', 'famf', 'temp', 'ance', 'desc', 'ordi', 'rin'));
+        $record = MSubn::on($conn)->updateOrCreate(['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin], ['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin]);
 
         $_group = 'subn';
         $_gid = $record->id;
 
         $note = $subn->getNote();  // array ---
 
-        if ($note != null && count($note) > 0) {
+        if ($note != null && (is_countable($note) ? count($note) : 0) > 0) {
             foreach ($note as $item) {
                 \FamilyTree365\LaravelGedcom\Utils\Importer\NoteRef::read($conn, $item, $_group, $_gid);
             }

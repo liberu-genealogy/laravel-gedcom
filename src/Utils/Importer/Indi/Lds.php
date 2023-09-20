@@ -51,21 +51,17 @@ class Lds
         $_gid = $record->id;
         // add sour
         $sour = $lds->getSour();
-        if ($sour && count($sour) > 0) {
-            foreach ($sour as $item) {
-                if ($item) {
-                    SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
-                }
+        foreach ($sour as $item) {
+            if ($item) {
+                SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
             }
         }
 
         // add note
         $note = $lds->getNote();
-        if ($note && count($note) > 0) {
-            foreach ($note as $item) {
-                if ($item) {
-                    NoteRef::read($conn, $item, $_group, $_gid);
-                }
+        foreach ($note as $item) {
+            if ($item) {
+                NoteRef::read($conn, $item, $_group, $_gid);
             }
         }
     }
