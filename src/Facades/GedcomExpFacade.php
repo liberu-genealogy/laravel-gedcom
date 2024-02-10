@@ -4,7 +4,7 @@ namespace FamilyTree365\LaravelGedcom\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class GedcomParserFacade extends Facade
+class GedcomExpFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
