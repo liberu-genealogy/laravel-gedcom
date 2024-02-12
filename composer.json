@@ -1,27 +1,27 @@
 {
-    "name": "laravel-liberu/laravel-gedcom",
-    "description": "A package that converts gedcom files to Eloquent models",
-    "type": "library",
-    "require": {
-        "php": ">=8.2",
-        "laravel-liberu/php-gedcom": "^1.4",
-        "doctrine/dbal": "^2.8|^3.0"
-    },
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "FamilyTree365\\LaravelGedcom\\": "src"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "FamilyTree365\\LaravelGedcom\\ServiceProvider"
-            ]
-        }
-    },
-    "require-dev": {
-        "rector/rector": "*",
-        "driftingly/rector-laravel": "^0.25.0"
+  "name": "laravel-liberu/laravel-gedcom",
+  "description": "A package that converts gedcom files to Eloquent models",
+  "type": "library",
+  "require": {
+    "php": ">=8.2",
+    "laravel-liberu/php-gedcom": "^1.4",
+    "doctrine/dbal": "^2.8|^3.0"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "FamilyTree365\\LaravelGedcom\\": "src/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "FamilyTree365\\LaravelGedcom\\ServiceProvider"
+      ]
+    }
+  },
+  "require-dev": {
+    "rector/rector": "*",
+    "driftingly/rector-laravel": "^0.25.0"
+  }
 }
