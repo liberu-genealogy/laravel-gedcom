@@ -1,6 +1,6 @@
 <?php
 
-namespace FamilyTree365\LaravelGedcom\Utils\Exporter\Fam;
+namespace FamilyTree365\LaravelGedcom\Utils\Exporter;
 
 class Caln
 {
