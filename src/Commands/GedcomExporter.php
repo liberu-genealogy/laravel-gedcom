@@ -39,7 +39,7 @@ class GedcomExporter extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $dir = 'public/gedcom/exported';
 
@@ -81,3 +81,4 @@ class GedcomExporter extends Command
         fclose($handle);
     }
 }
+        return 0;
