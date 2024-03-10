@@ -36,9 +36,10 @@ class GedcomImporter extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $filename = $this->argument('filename');
         GedcomParserFacade::parse('mysql', $filename, true, true);
     }
 }
+        return 0;
