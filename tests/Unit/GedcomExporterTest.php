@@ -58,3 +58,38 @@ class GedcomExporterTest extends TestCase
     }
 }
 ]]>
+    /**
+     * @dataProvider exportDataProvider
+     */
+    public function testExportingData($data, $expected)
+    {
+        DB::shouldReceive('table')->andReturnSelf();
+        View::shouldReceive('make')->andReturnSelf()->shouldReceive('render')->andReturn($expected);
+
+        $this->artisan('gedcom:export', ['filename' => 'exportTest'])->assertExitCode(0);
+
+        Storage::disk('local')->assertExists('public/gedcom/exported/exportTest.GED');
+        $this->assertStringContainsString($expected, Storage::disk('local')->get('public/gedcom/exported/exportTest.GED'));
+    }
+
+    public function exportDataProvider()
+    {
+        return [
+            'individuals' => [
+                ['type' => 'individuals', 'data' => ['name' => 'John Doe']],
+                "0 @I1@ INDI\n1 NAME John Doe\n"
+            ],
+            'families' => [
+                ['type' => 'families', 'data' => ['id' => 'F1']],
+                "0 @F1@ FAM\n"
+            ],
+            'notes' => [
+                ['type' => 'notes', 'data' => ['content' => 'Note for individual']],
+                "0 @N1@ NOTE Note for individual\n"
+            ],
+            'media' => [
+                ['type' => 'media_objects', 'data' => ['title' => 'Photo of John Doe']],
+                "0 @M1@ OBJE\n1 TITL Photo of John Doe\n"
+            ],
+        ];
+    }
