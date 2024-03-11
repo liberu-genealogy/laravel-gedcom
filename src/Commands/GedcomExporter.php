@@ -30,9 +30,7 @@ class GedcomExporter extends Command
     protected $description = 'Export database data into a GEDCOM file format';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * Create a new GedcomExporter command instance.
      */
     public function __construct()
     {
