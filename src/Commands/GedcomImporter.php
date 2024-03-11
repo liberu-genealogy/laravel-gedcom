@@ -37,9 +37,9 @@ class GedcomImporter extends Command
     }
 
     /**
-     * Execute the console command.
+     * Execute the console command to import data from a GEDCOM file.
      *
-     * @return mixed
+     * @return int Returns 0 on success, or an error code on failure.
      */
     public function handle(): int
     {
