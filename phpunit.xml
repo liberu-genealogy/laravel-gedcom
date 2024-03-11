@@ -1,0 +1,26 @@
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;phpunit bootstrap="vendor/autoload.php" backupGlobals="false" colors="true" @preserveGlobalState="disabled">
+    &lt;testsuites>
+        &lt;testsuite name="Application Test Suite">
+            &lt;directory suffix="Test.php">./tests&lt;/directory>
+        &lt;/testsuite>
+    &lt;/testsuites>
+    &lt;php>
+        &lt;env name="APP_ENV" value="testing"/>
+        &lt;env name="BCRYPT_ROUNDS" value="4"/>
+        &lt;env name="CACHE_DRIVER" value="array"/>
+        &lt;env name="MAIL_MAILER" value="array"/>
+        &lt;env name="QUEUE_CONNECTION" value="sync"/>
+        &lt;env name="SESSION_DRIVER" value="array"/>
+        &lt;env name="DB_CONNECTION" value="sqlite"/>
+        &lt;env name="DB_DATABASE" value=":memory:"/>
+    &lt;/php>
+    &lt;filter>
+        &lt;whitelist processUncoveredFilesFromWhitelist="true">
+            &lt;directory suffix=".php">app&lt;/directory>
+            &lt;exclude>
+                &lt;directory>vendor&lt;/directory>
+            &lt;/exclude>
+        &lt;/whitelist>
+    &lt;/filter>
+&lt;/phpunit>
