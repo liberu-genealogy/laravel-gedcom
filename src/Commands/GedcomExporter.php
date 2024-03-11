@@ -42,6 +42,11 @@ class GedcomExporter extends Command
      *
      * @return mixed
      */
+    /**
+     * Execute the console command to export data into a GEDCOM file.
+     *
+     * @return int Returns 0 on success, or an error code on failure.
+     */
     public function handle(): int
     {
         $dir = 'public/gedcom/exported';
