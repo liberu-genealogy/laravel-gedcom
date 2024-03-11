@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles the exportation of data from the database to a GEDCOM file format.
+ * This command allows users to specify a filename for the exported GEDCOM file.
+ */
+
 namespace FamilyTree365\LaravelGedcom\Commands;
 
 use FamilyTree365\LaravelGedcom\Models\Person;
