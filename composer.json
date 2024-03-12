@@ -22,6 +22,7 @@
   },
   "require-dev": {
     "rector/rector": "*",
-    "driftingly/rector-laravel": "^0.25.0"
+    "driftingly/rector-laravel": "^0.25.0",
+    "phpunit/phpunit": "^11.0"
   }
 }
