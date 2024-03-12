@@ -68,6 +68,12 @@ class GedcomExporterHelpers
         return $gedcomHeader . $source;
     }
 
+    /**
+     * Writes the provided content to a file.
+     *
+     * @param string $filename The name of the file to write to.
+     * @param string $content The content to write to the file.
+     */
     public static function writeToFile($filename, $content)
     {
         $handle = fopen($filename, 'w');
