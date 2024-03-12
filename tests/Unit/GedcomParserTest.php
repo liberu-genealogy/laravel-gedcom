@@ -15,6 +15,10 @@ class GedcomParserTest extends TestCase
         DB::shouldReceive('disableQueryLog')->andReturnTrue();
     }
 
+    /**
+     * Verifies that individual records are parsed correctly from a GEDCOM file.
+     * It uses a fixture file named 'individuals.ged' and checks the count and first individual's name in the database.
+     */
     public function testParseIndividualRecords()
     {
         $filename = __DIR__ . '/../Fixtures/individuals.ged';
@@ -55,6 +59,18 @@ class GedcomParserTest extends TestCase
         $parser->parse(DB::connection(), $filename, 'test-slug', false);
 
         $media = DB::table('media_objects')->get();
+        $this->assertCount(2, $media);
+        $this->assertEquals('Photo of John Doe', $media->first()->title);
+    }
+}
+        $this->assertCount(2, $media);
+        $this->assertEquals('Photo of John Doe', $media->first()->title);
+    }
+}
+        $this->assertCount(2, $media);
+        $this->assertEquals('Photo of John Doe', $media->first()->title);
+    }
+}
         $this->assertCount(2, $media);
         $this->assertEquals('Photo of John Doe', $media->first()->title);
     }
