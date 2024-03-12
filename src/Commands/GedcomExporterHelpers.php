@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\View;
 
 class GedcomExporterHelpers
 {
+    /**
+     * Creates a directory if it does not already exist.
+     *
+     * @param string $dir The directory path to create.
+     */
     public static function createDirectory($dir)
     {
         if (!Storage::exists($dir)) {
