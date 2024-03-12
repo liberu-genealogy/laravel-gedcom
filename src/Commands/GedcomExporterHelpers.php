@@ -48,12 +48,13 @@ class GedcomExporterHelpers
      * @param \Illuminate\Support\Collection $people Collection of people data.
      * @return array Array containing prepared data for view.
      */
-    public static function prepareDataForView($submissions, $people)
     /**
-     * Fetches data from the database by joining 'subms' and 'addrs' tables.
+     * Creates a GEDCOM document string with a header and the provided source content.
      *
-     * @return \Illuminate\Support\Collection The fetched data.
+     * @param string $source The GEDCOM content to be included after the header.
+     * @return string The complete GEDCOM document string.
      */
+    public static function createGedcomDocumentString($source)
     {
         return [
             'submissions' => $submissions,
