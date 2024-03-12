@@ -98,3 +98,9 @@ class ImporterTests extends TestCase
         $this->assertEquals($expectedResult['title'], $storedMedia->title);
     }
     }
+    /**
+     * Prepares mock data for testing the note import functionality.
+     * This includes setting up mock expectations for database interactions.
+     * 
+     * @return array An array containing the mock data and the expected result.
+     */
