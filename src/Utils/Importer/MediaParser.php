@@ -9,6 +9,9 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\Obje;
 use Illuminate\Support\Facades\DB;
 
 class MediaParser
+/**
+ * MediaParser class is responsible for parsing media object data from GEDCOM files.
+ */
 {
     protected $conn;
     protected $mediaIds = [];
@@ -31,6 +34,13 @@ class MediaParser
     }
 
     protected function parseAttributes($mediaObject)
+    /**
+     * Parses media objects from GEDCOM files and processes their data.
+     * 
+     * @param array $mediaObjects Array of media objects to be parsed.
+     * 
+     * This method does not return anything but processes media object data.
+     */
     {
         $media = new Media();
         $media->file = $mediaObject->getFile();
@@ -61,3 +71,25 @@ class MediaParser
         }
     }
 }
+    /**
+     * Parses attributes of a media object and saves them to the database.
+     * 
+     * @param object $mediaObject Media object to parse attributes for.
+     * @return int The ID of the saved media object.
+     */
+    /**
+     * Links a media object to individuals based on their IDs.
+     * 
+     * @param int $mediaId The ID of the media object.
+     * @param array $individualIds Array of individual IDs to link the media to.
+     * 
+     * This method does not return anything but links media to individuals.
+     */
+    /**
+     * Links a media object to families based on their IDs.
+     * 
+     * @param int $mediaId The ID of the media object.
+     * @param array $familyIds Array of family IDs to link the media to.
+     * 
+     * This method does not return anything but links media to families.
+     */
