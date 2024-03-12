@@ -41,6 +41,13 @@ class GedcomExporterHelpers
         return $query->get();
     }
 
+    /**
+     * Prepares submission and people data for view rendering.
+     *
+     * @param \Illuminate\Support\Collection $submissions Collection of submissions.
+     * @param \Illuminate\Support\Collection $people Collection of people data.
+     * @return array Array containing prepared data for view.
+     */
     public static function prepareDataForView($submissions, $people)
     /**
      * Fetches data from the database by joining 'subms' and 'addrs' tables.
