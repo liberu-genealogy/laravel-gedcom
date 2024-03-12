@@ -17,6 +17,10 @@ class ImporterTests extends TestCase
         DB::shouldReceive('disableQueryLog')->andReturnTrue();
     }
 
+    /**
+     * Verifies the import functionality for notes using mock note data.
+     * Checks if the note is correctly inserted into the database.
+     */
     public function testNoteImport()
     {
         $mockData = "0 @N1@ NOTE This is a test note";
@@ -73,6 +77,14 @@ class ImporterTests extends TestCase
         DB::shouldReceive('where')->with('id', 'R1')->andReturnSelf();
         DB::shouldReceive('first')->andReturn((object)$expectedResult);
 
+        $storedRepo = DB::table('repositories')->where('id', 'R1')->first();
+        $this->assertEquals($expectedResult['name'], $storedRepo->name);
+    }
+}
+        $storedRepo = DB::table('repositories')->where('id', 'R1')->first();
+        $this->assertEquals($expectedResult['name'], $storedRepo->name);
+    }
+}
         $storedRepo = DB::table('repositories')->where('id', 'R1')->first();
         $this->assertEquals($expectedResult['name'], $storedRepo->name);
     }
