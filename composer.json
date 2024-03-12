@@ -3,7 +3,7 @@
   "description": "A package that converts gedcom files to Eloquent models",
   "type": "library",
   "require": {
-    "php": ">=8.2",
+    "php": ">=8.3",
     "laravel-liberu/php-gedcom": "^1.4",
     "doctrine/dbal": "^3.0",
     "laravel/framework": "^11.0"
