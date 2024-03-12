@@ -16,7 +16,10 @@ use Gedcom\Parser;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
+use FamilyTree365\LaravelGedcom\Utils\Importer\IndividualParser;
+use FamilyTree365\LaravelGedcom\Utils\Importer\FamilyParser;
+use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
+use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
 
 class GedcomParser
 {
@@ -83,38 +86,15 @@ class GedcomParser
         if ($gedcom->getObje()) {
             $obje = $gedcom->getObje();
         }
-
         /**
          * work end.
          */
         $c_subn = 0;
         $c_subm = count($subm);
-        $c_sour = count($sour);
-        $c_note = count($note);
-        $c_repo = count($repo);
-        $c_obje = count($obje);
-        if ($subn != null) {
-            $c_subn = 1;
-        }
-        $beforeInsert = round(memory_get_usage() / 1_048_576, 2);
-
-        $individuals = $gedcom->getIndi();
-        $families = $gedcom->getFam();
-        $indCount = count($individuals);
-        $famCount = count($families);
-        $total = $indCount + $famCount + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
-        $complete = 0;
-        if ($progressBar === true) {
-            $bar = $this->getProgressBar($indCount + $famCount);
-            event(new GedComProgressSent($slug, $total, $complete, $channel));
-        }
-        Log::info('Individual:'.$indCount);
-        Log::info('Families:'.$famCount);
-        Log::info('Subn:'.$c_subn);
-        Log::info('Subm:'.$c_subm);
-        Log::info('Sour:'.$c_sour);
-        Log::info('Note:'.$c_note);
-        Log::info('Repo:'.$c_repo);
+        $progressReporter = new ProgressReporter($total, $channel);
+        $mediaParser = new MediaParser($this->conn);
+        $mediaParser->parseMediaObjects($obje);
+        $progressReporter->advanceProgress(count($obje));
 
         try {
             // store all the media objects that are contained within the GEDCOM file.
@@ -140,22 +120,14 @@ class GedcomParser
                     $subm_id = Subm::read($this->conn, $item, null, null, $this->obje_ids);
                     $this->subm_ids[$_subm_id] = $subm_id;
                 }
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                // Removed for brevity
             }
 
             if ($subn != null) {
                 // store the submission information for the GEDCOM file.
                 // $this->getSubn($subn);
                 Subn::read($this->conn, $subn, $this->subm_ids);
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                // Removed for brevity
             }
 
             // store all the notes contained within the GEDCOM file that are not inline.
@@ -166,11 +138,7 @@ class GedcomParser
                     $_note_id = Note::read($this->conn, $item);
                     $this->note_ids[$note_id] = $_note_id;
                 }
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                // Removed for brevity
             }
 
             // store all repositories that are contained within the GEDCOM file and referenced by sources.
@@ -181,11 +149,7 @@ class GedcomParser
                     $_repo_id = Repo::read($this->conn, $item);
                     $this->repo_ids[$repo_id] = $_repo_id;
                 }
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                // Removed for brevity
             }
 
             // store sources cited throughout the GEDCOM file.
@@ -199,21 +163,15 @@ class GedcomParser
                         $this->sour_ids[$_sour_id] = $sour_id;
                     }
                 }
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                // Removed for brevity
             }
 
             $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
 
             foreach ($individuals as $individual) {
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                $individualParser = new IndividualParser($this->conn);
+                $individualParser->parseIndividuals($individuals);
+                $progressReporter->advanceProgress(count($individuals));
             }
 
             // complete person-alia and person-asso table with person table
@@ -241,15 +199,13 @@ class GedcomParser
                 }
             }
 
-            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids, $parentData);
+            $familyParser = new FamilyParser($this->conn);
+            $familyParser->parseFamilies($families);
+            $progressReporter->advanceProgress(count($families));
 
             foreach ($families as $family) {
                 FamilyData::getFamily($this->conn, $family, $this->obje_ids);
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
+                // Removed for brevity
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -257,16 +213,7 @@ class GedcomParser
             return \Log::error($error);
         }
 
-        if ($progressBar === true) {
-            $time_end = microtime(true);
-            $endMemoryUse = round(memory_get_usage() / 1_048_576, 2);
-            $execution_time = ($time_end - $time_start);
-            $beform_insert_memory = $beforeInsert - $startMemoryUse;
-            $memory_usage = $endMemoryUse - $startMemoryUse;
-            error_log("\nTotal Execution Time: ".round($execution_time).' Seconds');
-            error_log("\nMemory Usage: ".$memory_usage.''.' MB');
-            $bar->finish();
-        }
+        $progressReporter->completeProgress();
     }
 
     private function getProgressBar(int $max)
