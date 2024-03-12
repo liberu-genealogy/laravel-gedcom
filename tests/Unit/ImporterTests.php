@@ -110,3 +110,9 @@ class ImporterTests extends TestCase
      * 
      * @param array $expectedResult The expected result of the note import operation.
      */
+    /**
+     * Verifies the result of the media object import operation against the expected result.
+     * This includes setting up mock expectations for database queries and asserting the equality of the stored media object details.
+     * 
+     * @param array $expectedResult The expected result of the media object import operation.
+     */
