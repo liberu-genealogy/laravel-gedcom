@@ -32,6 +32,7 @@ class GedcomExporter extends Command
     /**
      * Create a new GedcomExporter command instance.
      */
+use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
     public function __construct()
     {
         parent::__construct();
@@ -53,40 +54,15 @@ class GedcomExporter extends Command
 
         $filename = $this->argument('filename').'.GED';
 
-        if (!file_exists($dir)) {
-            Storage::makeDirectory($dir);
-        }
+        GedcomExporterHelpers::createDirectory($dir);
 
-        $query = DB::table('subms');
-        $query->join('addrs', 'addrs.id', '=', 'subms.addr_id');
-        $query->select([
-            'subms.name',
-            'addrs.adr1',
-            'addrs.adr2',
-            'addrs.city',
-            'addrs.stae',
-            'addrs.post',
-            'addrs.ctry',
-            'subms.phon',
-        ])->get();
-
+        $submissions = GedcomExporterHelpers::fetchDatabaseData();
         $people = Person::all();
-        $submissions = $query->get();
 
         $data = [
-            'submissions' => $submissions,
-            'people'      => $people,
-        ];
-
         $source = View::make('stubs.ged', $data)->render();
-
-        $ged_doc = "HEAD \nGEDC \nVERS 5.5.5 \nFORM LINEAGE-LINKED \nVERS 5.5.5 \nCHAR UTF-8 \nSOUR GS \nVERS 5.5.5 \nCORP gedcom.org\n";
-
-        $handle = fopen($filename, 'w');
-
-        fwrite($handle, $ged_doc.$source);
-
-        fclose($handle);
+        $gedcomDocument = GedcomExporterHelpers::createGedcomDocumentString($source);
+        GedcomExporterHelpers::writeToFile($filename, $gedcomDocument);
     }
 }
         return 0;
