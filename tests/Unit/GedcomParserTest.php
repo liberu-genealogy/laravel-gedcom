@@ -59,3 +59,25 @@ class GedcomParserTest extends TestCase
         $this->assertEquals('Photo of John Doe', $media->first()->title);
     }
 }
+    public function testParseWithProgressReporting()
+    {
+        $filename = __DIR__ . '/../Fixtures/complete.ged';
+        $channel = ['name' => 'test-channel', 'eventName' => 'testEvent'];
+        $parser = new GedcomParser();
+        $parser->parse(DB::connection(), $filename, 'test-slug', true, $channel);
+
+        // Assuming Event::fake() is called in setUp() for testing events
+        Event::assertDispatched(GedComProgressSent::class, function ($event) use ($channel) {
+            return $event->channel === $channel && $event->currentProgress === 10; // Assuming 10 steps in the progress
+        });
+    }
+
+    public function testParseWithExceptionHandling()
+    {
+        $filename = __DIR__ . '/../Fixtures/invalid.ged';
+        $parser = new GedcomParser();
+        Log::shouldReceive('error')->once(); // Mocking Log::error() to expect it to be called once
+
+        $this->expectException(\Exception::class);
+        $parser->parse(DB::connection(), $filename, 'test-slug', false);
+    }
