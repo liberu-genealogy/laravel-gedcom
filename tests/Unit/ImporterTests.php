@@ -19,22 +19,13 @@ class ImporterTests extends TestCase
 
     public function testNoteImport()
     {
-        $mockData = "0 @N1@ NOTE This is a test note";
-        $expectedResult = ['id' => 'N1', 'content' => 'This is a test note'];
-
-        DB::shouldReceive('table')->with('notes')->andReturnSelf();
-        DB::shouldReceive('insert')->with($expectedResult)->andReturnTrue();
+        list($mockData, $expectedResult) = $this->prepareMockDataForNoteImport();
 
         $noteImporter = new Note();
         $result = $noteImporter->import($mockData);
 
         $this->assertTrue($result);
-        DB::shouldReceive('table')->with('notes')->andReturnSelf();
-        DB::shouldReceive('where')->with('id', 'N1')->andReturnSelf();
-        DB::shouldReceive('first')->andReturn((object)$expectedResult);
-
-        $storedNote = DB::table('notes')->where('id', 'N1')->first();
-        $this->assertEquals($expectedResult['content'], $storedNote->content);
+        $this->verifyNoteImportResult($expectedResult);
     }
 
     public function testObjeImport()
@@ -77,3 +68,33 @@ class ImporterTests extends TestCase
         $this->assertEquals($expectedResult['name'], $storedRepo->name);
     }
 }
+    private function prepareMockDataForNoteImport()
+    {
+        $mockData = "0 @N1@ NOTE This is a test note";
+        $expectedResult = ['id' => 'N1', 'content' => 'This is a test note'];
+
+        DB::shouldReceive('table')->with('notes')->andReturnSelf();
+        DB::shouldReceive('insert')->with($expectedResult)->andReturnTrue();
+
+        return [$mockData, $expectedResult];
+    }
+    private function verifyNoteImportResult($expectedResult)
+    {
+        DB::shouldReceive('table')->with('notes')->andReturnSelf();
+        DB::shouldReceive('where')->with('id', $expectedResult['id'])->andReturnSelf();
+        DB::shouldReceive('first')->andReturn((object)$expectedResult);
+
+        $storedNote = DB::table('notes')->where('id', $expectedResult['id'])->first();
+        $this->assertEquals($expectedResult['content'], $storedNote->content);
+    }
+    }
+    private function verifyObjeImportResult($expectedResult)
+    {
+        DB::shouldReceive('table')->with('media_objects')->andReturnSelf();
+        DB::shouldReceive('where')->with('id', $expectedResult['id'])->andReturnSelf();
+        DB::shouldReceive('first')->andReturn((object)$expectedResult);
+
+        $storedMedia = DB::table('media_objects')->where('id', $expectedResult['id'])->first();
+        $this->assertEquals($expectedResult['title'], $storedMedia->title);
+    }
+    }
