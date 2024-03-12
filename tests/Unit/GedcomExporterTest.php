@@ -64,6 +64,11 @@ class GedcomExporterTest extends TestCase
         return [
             'individuals' => [
     /**
+     * Verifies that the exported GEDCOM file exists in the specified storage location.
+     * 
+     * @param string $filename The name of the exported file to verify.
+     */
+    /**
      * Sets up the environment for exporting a GEDCOM file.
      * This includes faking the local storage and asserting the exit code of the artisan command.
      * 
