@@ -20,6 +20,11 @@ class GedcomExporterHelpers
         }
     }
 
+    /**
+     * Fetches submission and address data from the database.
+     *
+     * @return \Illuminate\Support\Collection Collection of database records.
+     */
     public static function fetchDatabaseData()
     {
         $query = DB::table('subms')->join('addrs', 'addrs.id', '=', 'subms.addr_id')->select([
