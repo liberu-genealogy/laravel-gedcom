@@ -22,6 +22,13 @@ class ServiceProvider extends BaseServiceProvider
         $this->commands(GedcomImporter::class);
     }
 
+    /**
+     * Load migration files from a specified directory.
+     * 
+     * This method is called when the service provider is booted, ensuring that
+     * the migration files are loaded into the Laravel application. It does not
+     * accept any inputs and has no return value.
+     */
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/migrations/');
