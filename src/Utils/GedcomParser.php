@@ -37,6 +37,9 @@ class GedcomParser
     protected $obje_ids = [];
     protected $note_ids = [];
     protected $repo_ids = [];
+/**
+ * GedcomParser class is responsible for parsing GEDCOM files and importing the data into the database.
+ */
     protected $conn = '';
 
     public function parse(
@@ -87,6 +90,17 @@ class GedcomParser
             $obje = $gedcom->getObje();
         }
         /**
+    /**
+     * Parses a GEDCOM file and imports the data into the database.
+     * 
+     * @param mixed $conn Database connection.
+     * @param string $filename Path to the GEDCOM file.
+     * @param string $slug A unique identifier for the import process.
+     * @param bool|null $progressBar Whether to display a progress bar.
+     * @param array $channel Information about the progress reporting channel.
+     * 
+     * This method does not return anything but processes the GEDCOM file.
+     */
          * work end.
          */
         $c_subn = 0;
@@ -224,3 +238,9 @@ class GedcomParser
         ))->createProgressBar($max);
     }
 }
+    /**
+     * Creates and returns a progress bar instance.
+     * 
+     * @param int $max The maximum value of the progress bar.
+     * @return \Symfony\Component\Console\Helper\ProgressBar The progress bar instance.
+     */
