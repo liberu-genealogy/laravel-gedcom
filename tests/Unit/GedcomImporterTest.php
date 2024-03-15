@@ -29,7 +29,13 @@ class GedcomImporterTest extends TestCase
     {
         Storage::fake('local');
         Storage::disk('local')->put('malformed.ged', 'Malformed GEDCOM content');
-
+/**
+ * Test class for GedcomImporter.
+ * 
+ * This class is designed to test the functionality of the GedcomImporter command,
+ * ensuring that it correctly handles well-formed and malformed GEDCOM files,
+ * as well as various file structures.
+ */
         GedcomParserFacade::shouldReceive('parse')
             ->once()
             ->with('mysql', 'storage/app/malformed.ged', true, true)
