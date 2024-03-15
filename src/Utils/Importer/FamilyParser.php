@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FamilyParser
+/**
+ * FamilyParser class is responsible for parsing family data from GEDCOM files.
+ */
 {
     protected $conn;
     protected $familyIds = [];
@@ -33,6 +36,13 @@ class FamilyParser
     }
 
     protected function parseAttributes($family)
+    /**
+     * Parses families from GEDCOM files and processes their data.
+     * 
+     * @param array $families Array of families to be parsed.
+     * 
+     * This method does not return anything but processes family data.
+     */
     {
         $fam = new Family();
         $fam->marriage_date = $family->getMarr() ? $family->getMarr()->getDate() : null;
@@ -46,3 +56,18 @@ class FamilyParser
         FamilyData::linkSpousesAndChildren($conn, $family->getId(), $this->familyIds);
     }
 }
+    /**
+     * Parses and links relationships within a family.
+     * 
+     * @param mixed $conn Database connection.
+     * @param object $family Family object to process relationships for.
+     * 
+     * This method does not return anything but contributes to parsing family data.
+     */
+    /**
+     * Parses attributes of a family and saves them to the database.
+     * 
+     * @param object $family Family object to parse attributes for.
+     * 
+     * This method does not return anything but contributes to parsing family data.
+     */

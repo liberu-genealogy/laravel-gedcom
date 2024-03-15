@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class IndividualParser
+/**
+ * IndividualParser class is responsible for parsing individual data from GEDCOM files.
+ */
 {
     protected $conn;
     protected $individualIds = [];
@@ -33,6 +36,13 @@ class IndividualParser
     }
 
     protected function parseAttributes($individual)
+    /**
+     * Parses individuals from GEDCOM files and processes their data.
+     * 
+     * @param array $individuals Array of individuals to be parsed.
+     * 
+     * This method does not return anything but processes individual data.
+     */
     {
         $person = new Person();
         $person->name = $this->parseName($individual);
@@ -54,6 +64,25 @@ class IndividualParser
     }
 
     protected function parseDeath($individual)
+    /**
+     * Parses attributes of an individual and saves them to the database.
+     * 
+     * @param object $individual Individual object to parse attributes for.
+     * 
+     * This method does not return anything but contributes to parsing individual data.
+     */
+    /**
+     * Parses the name of an individual.
+     * 
+     * @param object $individual Individual object to parse the name for.
+     * @return string|null The full name of the individual or null if not available.
+     */
+    /**
+     * Parses the birth date of an individual.
+     * 
+     * @param object $individual Individual object to parse the birth date for.
+     * @return string|null The birth date of the individual or null if not available.
+     */
     {
         return $individual->getDeath() ? $individual->getDeath()->getDate() : null;
     }
@@ -67,3 +96,9 @@ class IndividualParser
         }
     }
 }
+    /**
+     * Parses the death date of an individual.
+     * 
+     * @param object $individual Individual object to parse the death date for.
+     * @return string|null The death date of the individual or null if not available.
+     */
