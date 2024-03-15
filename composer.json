@@ -1,12 +1,10 @@
 {
-  "name": "laravel-liberu/laravel-gedcom",
+  "name": "liberu-genealogy/laravel-gedcom",
   "description": "A package that converts gedcom files to Eloquent models",
   "type": "library",
   "require": {
     "php": ">=8.3",
-    "laravel-liberu/php-gedcom": "^1.4",
-    "doctrine/dbal": "^3.0",
-    "laravel/framework": "^11.0"
+    "liberu-genealogy/php-gedcom": "^2.0",
   },
   "license": "MIT",
   "autoload": {
