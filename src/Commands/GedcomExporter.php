@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles the exportation of data from the database to a GEDCOM file format.
+ * This command allows users to specify a filename for the exported GEDCOM file.
+ */
+
 namespace FamilyTree365\LaravelGedcom\Commands;
 
 use FamilyTree365\LaravelGedcom\Models\Person;
@@ -25,9 +30,7 @@ class GedcomExporter extends Command
     protected $description = 'Export database data into a GEDCOM file format';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * Create a new GedcomExporter command instance.
      */
 use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
     public function __construct()
@@ -39,6 +42,11 @@ use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
      * Execute the console command.
      *
      * @return mixed
+     */
+    /**
+     * Execute the console command to export data into a GEDCOM file.
+     *
+     * @return int Returns 0 on success, or an error code on failure.
      */
     public function handle(): int
     {

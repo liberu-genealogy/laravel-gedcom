@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles the importation of data from a GEDCOM file into the Laravel application.
+ * This command allows users to specify the filename of the GEDCOM file to be imported.
+ */
+
 namespace FamilyTree365\LaravelGedcom\Commands;
 
 use FamilyTree365\LaravelGedcom\Facades\GedcomParserFacade;
@@ -32,9 +37,9 @@ class GedcomImporter extends Command
     }
 
     /**
-     * Execute the console command.
+     * Execute the console command to import data from a GEDCOM file.
      *
-     * @return mixed
+     * @return int Returns 0 on success, or an error code on failure.
      */
     public function handle(): int
     {
