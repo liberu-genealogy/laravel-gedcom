@@ -1,5 +1,5 @@
 # GEDCOM to Laravel Model
- ![Latest Stable Version](https://img.shields.io/github/release/familytree365/laravel-gedcom.svg) 
+ ![Latest Stable Version](https://img.shields.io/github/release/liberu-genealogy/laravel-gedcom.svg) 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/badges/build.png?b=master)](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/build-status/master)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/laravel-liberu/laravel-gedcom/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
