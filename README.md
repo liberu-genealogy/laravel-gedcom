@@ -9,13 +9,13 @@
 [![Build Status](https://travis-ci.org/familytree365/laravel-gedcom.svg?branch=master)](https://travis-ci.org/familytree365/laravel-gedcom)
 
 
-laravel-liberu/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
+liberu-genealogy/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
 as Laravel models, inside your Laravel application. It is used by:
-(https://github.com/familytree365/genealogy)
+(https://github.com/liberu-genealogy/genealogy-laravel)
 
 ## Installation
 ```
-composer require laravel-liberu/laravel-gedcom
+composer require liberu-genealogy/laravel-gedcom
 ```
 
 ## Usage
