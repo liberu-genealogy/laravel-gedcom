@@ -34,9 +34,3 @@ class ServiceProvider extends BaseServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/migrations/');
     }
 }
-     */
-    public function boot()
-    {
-        $this->loadMigrationsFrom(__DIR__.'/migrations/');
-    }
-}
