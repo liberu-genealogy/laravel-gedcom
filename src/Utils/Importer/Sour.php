@@ -16,12 +16,12 @@ class Sour
         if ($sour == null || is_array($sour)) {
             return 0;
         }
-        $auth = $sour->getAuth(); // string
-        $titl = $sour->getTitl(); // string
-        $abbr = $sour->getAbbr(); // string
-        $publ = $sour->getPubl(); // string
-        $rin = $sour->getRin(); // string
-        $text = $sour->getText(); // string
+        $auth = mb_convert_encoding($sour->getAuth(), 'UTF-8'); // string
+        $titl = mb_convert_encoding($sour->getTitl(), 'UTF-8'); // string
+        $abbr = mb_convert_encoding($sour->getAbbr(), 'UTF-8'); // string
+        $publ = mb_convert_encoding($sour->getPubl(), 'UTF-8'); // string
+        $rin = mb_convert_encoding($sour->getRin(), 'UTF-8'); // string
+        $text = mb_convert_encoding($sour->getText(), 'UTF-8'); // string
 
         $record = Source::on($conn)->updateOrCreate(
             ['titl' => $titl, 'rin' => $rin, 'auth' => $auth, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr],
