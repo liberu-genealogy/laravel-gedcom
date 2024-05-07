@@ -4,7 +4,7 @@
   "type": "library",
   "require": {
     "php": ">=8.3",
-    "liberu-genealogy/php-gedcom": "^2.0",
+    "liberu-genealogy/php-gedcom": "^2.0"
   },
   "license": "MIT",
   "autoload": {
