@@ -1,10 +1,10 @@
-&lt;?php
+<?php
 
 namespace Tests\Unit;
 
 use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GedcomParserTest extends TestCase
 {
@@ -58,7 +58,7 @@ class GedcomParserTest extends TestCase
         $this->assertCount(2, $media);
         $this->assertEquals('Photo of John Doe', $media->first()->title);
     }
-}
+
     public function testParseWithProgressReporting()
     {
         $filename = __DIR__ . '/../Fixtures/complete.ged';
@@ -81,3 +81,4 @@ class GedcomParserTest extends TestCase
         $this->expectException(\Exception::class);
         $parser->parse(DB::connection(), $filename, 'test-slug', false);
     }
+}

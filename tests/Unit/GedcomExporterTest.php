@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -7,7 +6,7 @@ use FamilyTree365\LaravelGedcom\Commands\GedcomExporter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GedcomExporterTest extends TestCase
 {
@@ -31,6 +30,8 @@ class GedcomExporterTest extends TestCase
 
         $this->artisan('gedcom:export', ['filename' => 'errorCase'])
              ->assertExitCode(1);
+    }
+    
     private function setupExportTestEnvironment($filename)
     {
         Storage::fake('local');
@@ -42,9 +43,8 @@ class GedcomExporterTest extends TestCase
     {
         Storage::disk('local')->assertExists('public/gedcom/exported/' . $filename);
     }
-    }
-}
-]]>
+    
+
     /**
      * @dataProvider exportDataProvider
      */
@@ -95,4 +95,5 @@ class GedcomExporterTest extends TestCase
                 "0 @M1@ OBJE\n1 TITL Photo of John Doe\n"
             ],
         ];
+    }
     }

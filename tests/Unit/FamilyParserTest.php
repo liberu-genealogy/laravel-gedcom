@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -7,7 +6,7 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\FamilyParser;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FamilyParserTest extends TestCase
 {
@@ -53,4 +52,4 @@ class FamilyParserTest extends TestCase
         $this->familyParser->parseFamilies($families);
     }
 }
-]]>
+

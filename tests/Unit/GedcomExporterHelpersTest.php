@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -6,7 +5,7 @@ namespace Tests\Unit;
 use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GedcomExporterHelpersTest extends TestCase
 {
@@ -78,4 +77,4 @@ class GedcomExporterHelpersTest extends TestCase
         GedcomExporterHelpers::writeToFile(storage_path('app/public/errorFile.txt'), 'Error content');
     }
 }
-]]>
+
