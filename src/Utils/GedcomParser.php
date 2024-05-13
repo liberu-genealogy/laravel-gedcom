@@ -2,7 +2,6 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
-use DB;
 use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
 use FamilyTree365\LaravelGedcom\Models\PersonAlia;
 use FamilyTree365\LaravelGedcom\Models\PersonAsso;
@@ -20,6 +19,7 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\IndividualParser;
 use FamilyTree365\LaravelGedcom\Utils\Importer\FamilyParser;
 use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
 use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
+use Illuminate\Support\Facades\DB as DB;
 
 class GedcomParser
 {

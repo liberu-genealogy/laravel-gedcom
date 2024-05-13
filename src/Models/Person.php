@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
-    public $givn;
-    public $surn;
-    public $sex;
-    public $id;
     /**
      * @var string
      */
@@ -25,8 +21,6 @@ class Person extends Model
      * @var array
      */
     protected $dates = ['deleted_at', 'birthday', 'deathday'];
-
-    protected $guarded = ['id'];
 
     protected $fillable = [
         'gid',
