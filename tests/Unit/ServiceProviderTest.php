@@ -1,9 +1,8 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Support\Facades\App;
 use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 
@@ -22,4 +21,4 @@ class ServiceProviderTest extends TestCase
         $this->assertSame($parserInstanceOne, $parserInstanceTwo);
     }
 }
-]]>
+

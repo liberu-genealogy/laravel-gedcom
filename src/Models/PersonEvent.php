@@ -39,7 +39,8 @@ class PersonEvent extends Event
 
     public static function boot()
     {
-        self::observe(new EventActionsObserver());
+        parent::boot();
+        static::observe(new EventActionsObserver());
     }
 
     public function person()

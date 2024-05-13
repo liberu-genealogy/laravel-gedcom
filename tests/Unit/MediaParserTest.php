@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -9,7 +8,7 @@ use FamilyTree365\LaravelGedcom\Models\Person;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class MediaParserTest extends TestCase
 {
@@ -62,4 +61,3 @@ class MediaParserTest extends TestCase
         $this->mediaParser->parseMediaObjects($mediaObjects);
     }
 }
-]]>

@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -6,7 +5,7 @@ namespace Tests\Unit;
 use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
 use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
 use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ProgressReporterTest extends TestCase
 {
@@ -52,4 +51,3 @@ class ProgressReporterTest extends TestCase
         });
     }
 }
-]]>

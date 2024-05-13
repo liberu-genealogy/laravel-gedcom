@@ -1,8 +1,8 @@
-&lt;?php
+<?php
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Support\Facades\DB;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Note;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Obje;
@@ -67,7 +67,7 @@ class ImporterTests extends TestCase
         $storedRepo = DB::table('repositories')->where('id', 'R1')->first();
         $this->assertEquals($expectedResult['name'], $storedRepo->name);
     }
-}
+
     private function prepareMockDataForNoteImport()
     {
         $mockData = "0 @N1@ NOTE This is a test note";
@@ -87,7 +87,7 @@ class ImporterTests extends TestCase
         $storedNote = DB::table('notes')->where('id', $expectedResult['id'])->first();
         $this->assertEquals($expectedResult['content'], $storedNote->content);
     }
-    }
+    
     private function verifyObjeImportResult($expectedResult)
     {
         DB::shouldReceive('table')->with('media_objects')->andReturnSelf();
@@ -97,7 +97,7 @@ class ImporterTests extends TestCase
         $storedMedia = DB::table('media_objects')->where('id', $expectedResult['id'])->first();
         $this->assertEquals($expectedResult['title'], $storedMedia->title);
     }
-    }
+    
     /**
      * Prepares mock data for testing the note import functionality.
      * This includes setting up mock expectations for database interactions.
@@ -116,3 +116,4 @@ class ImporterTests extends TestCase
      * 
      * @param array $expectedResult The expected result of the media object import operation.
      */
+}

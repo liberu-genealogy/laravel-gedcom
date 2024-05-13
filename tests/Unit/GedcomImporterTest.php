@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -6,7 +5,7 @@ namespace Tests\Unit;
 use FamilyTree365\LaravelGedcom\Commands\GedcomImporter;
 use FamilyTree365\LaravelGedcom\Facades\GedcomParserFacade;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Mockery;
 
 class GedcomImporterTest extends TestCase
@@ -64,4 +63,3 @@ class GedcomImporterTest extends TestCase
         }
     }
 }
-]]>

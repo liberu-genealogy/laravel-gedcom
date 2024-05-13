@@ -2,7 +2,6 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
-use DB;
 use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
 use FamilyTree365\LaravelGedcom\Models\PersonAlia;
 use FamilyTree365\LaravelGedcom\Models\PersonAsso;
@@ -20,6 +19,7 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\IndividualParser;
 use FamilyTree365\LaravelGedcom\Utils\Importer\FamilyParser;
 use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
 use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
+use Illuminate\Support\Facades\DB as DB;
 
 class GedcomParser
 {
@@ -37,9 +37,9 @@ class GedcomParser
     protected $obje_ids = [];
     protected $note_ids = [];
     protected $repo_ids = [];
-/**
- * GedcomParser class is responsible for parsing GEDCOM files and importing the data into the database.
- */
+    /**
+     * GedcomParser class is responsible for parsing GEDCOM files and importing the data into the database.
+     */
     protected $conn = '';
 
     public function parse(
@@ -56,11 +56,13 @@ class GedcomParser
         //start calculating the memory - https://www.php.net/manual/en/function.memory-get-usage.php
         $startMemoryUse = round(memory_get_usage() / 1_048_576, 2);
 
-        error_log("\n Memory Usage: ".$startMemoryUse.' MB');
-        error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'.$conn);
+        error_log("\n Memory Usage: " . $startMemoryUse . ' MB');
+        error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++' . $conn);
         $parser = new Parser();
         $gedcom = @$parser->parse($filename);
 
+        error_log(json_encode($gedcom));
+        
         /**
          * work.
          */
@@ -89,26 +91,41 @@ class GedcomParser
         if ($gedcom->getObje()) {
             $obje = $gedcom->getObje();
         }
+
         /**
-    /**
-     * Parses a GEDCOM file and imports the data into the database.
-     * 
-     * @param mixed $conn Database connection.
-     * @param string $filename Path to the GEDCOM file.
-     * @param string $slug A unique identifier for the import process.
-     * @param bool|null $progressBar Whether to display a progress bar.
-     * @param array $channel Information about the progress reporting channel.
-     * 
-     * This method does not return anything but processes the GEDCOM file.
-     */
-         * work end.
+         * Parses a GEDCOM file and imports the data into the database.
+         * 
+         * @param mixed $conn Database connection.
+         * @param string $filename Path to the GEDCOM file.
+         * @param string $slug A unique identifier for the import process.
+         * @param bool|null $progressBar Whether to display a progress bar.
+         * @param array $channel Information about the progress reporting channel.
+         * 
+         * This method does not return anything but processes the GEDCOM file.
          */
+
         $c_subn = 0;
         $c_subm = count($subm);
+        $c_sour = count($sour);
+        $c_note = count($note);
+        $c_repo = count($repo);
+        $c_obje = count($obje);
+        if ($subn != null) {
+            $c_subn = 1;
+        }
+        $beforeInsert = round(memory_get_usage() / 1_048_576, 2);
+
+        $individuals = $gedcom->getIndi();
+        $families = $gedcom->getFam();
+        $indCount = count($individuals);
+        $famCount = count($families);
+        $total = $indCount + $famCount + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
+
+        
         $progressReporter = new ProgressReporter($total, $channel);
         $mediaParser = new MediaParser($this->conn);
         $mediaParser->parseMediaObjects($obje);
-        $progressReporter->advanceProgress(count($obje));
+        $progressReporter->advanceProgress($c_obje);
 
         try {
             // store all the media objects that are contained within the GEDCOM file.
@@ -121,12 +138,9 @@ class GedcomParser
                         $this->obje_ids[$_obje_id] = $obje_id;
                     }
                 }
-                if ($progressBar === true) {
-                    $bar->advance();
-                    $complete++;
-                    event(new GedComProgressSent($slug, $total, $complete, $channel));
-                }
             }
+            
+            
             // store information about all the submitters to the GEDCOM file.
             foreach ($subm as $item) {
                 if ($item) {
@@ -136,6 +150,7 @@ class GedcomParser
                 }
                 // Removed for brevity
             }
+            $progressReporter->advanceProgress($c_subm);
 
             if ($subn != null) {
                 // store the submission information for the GEDCOM file.
@@ -143,6 +158,7 @@ class GedcomParser
                 Subn::read($this->conn, $subn, $this->subm_ids);
                 // Removed for brevity
             }
+            $progressReporter->advanceProgress($c_subn);
 
             // store all the notes contained within the GEDCOM file that are not inline.
             foreach ($note as $item) {
@@ -154,6 +170,7 @@ class GedcomParser
                 }
                 // Removed for brevity
             }
+            $progressReporter->advanceProgress($c_note);
 
             // store all repositories that are contained within the GEDCOM file and referenced by sources.
             foreach ($repo as $item) {
@@ -165,6 +182,7 @@ class GedcomParser
                 }
                 // Removed for brevity
             }
+            $progressReporter->advanceProgress($c_repo);
 
             // store sources cited throughout the GEDCOM file.
             // obje import before sour import
@@ -179,14 +197,14 @@ class GedcomParser
                 }
                 // Removed for brevity
             }
+            $progressReporter->advanceProgress($c_sour);
 
             $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
-
-            foreach ($individuals as $individual) {
-                $individualParser = new IndividualParser($this->conn);
-                $individualParser->parseIndividuals($individuals);
-                $progressReporter->advanceProgress(count($individuals));
-            }
+           
+            $individualParser = new IndividualParser($this->conn);
+            $individualParser->parseIndividuals($individuals);
+            $progressReporter->advanceProgress(count($individuals));
+            
 
             // complete person-alia and person-asso table with person table
             $alia_list = PersonAlia::on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
@@ -213,34 +231,17 @@ class GedcomParser
                 }
             }
 
-            $familyParser = new FamilyParser($this->conn);
-            $familyParser->parseFamilies($families);
+            // $familyParser = new FamilyParser($this->conn);
+            // $familyParser->parseFamilies($families);     
+            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids, $parentData);
             $progressReporter->advanceProgress(count($families));
 
-            foreach ($families as $family) {
-                FamilyData::getFamily($this->conn, $family, $this->obje_ids);
-                // Removed for brevity
-            }
+            
         } catch (\Exception $e) {
             $error = $e->getMessage();
-
             return \Log::error($error);
         }
 
         $progressReporter->completeProgress();
     }
-
-    private function getProgressBar(int $max)
-    {
-        return (new OutputStyle(
-            new StringInput(''),
-            new StreamOutput(fopen('php://stdout', 'w'))
-        ))->createProgressBar($max);
-    }
 }
-    /**
-     * Creates and returns a progress bar instance.
-     * 
-     * @param int $max The maximum value of the progress bar.
-     * @return \Symfony\Component\Console\Helper\ProgressBar The progress bar instance.
-     */

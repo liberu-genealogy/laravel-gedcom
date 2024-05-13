@@ -1,4 +1,3 @@
-<![CDATA[
 <?php
 
 namespace Tests\Unit;
@@ -8,7 +7,7 @@ use FamilyTree365\LaravelGedcom\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class IndividualParserTest extends TestCase
 {
@@ -55,4 +54,4 @@ class IndividualParserTest extends TestCase
         $this->individualParser->parseIndividuals($individuals);
     }
 }
-]]>
+
