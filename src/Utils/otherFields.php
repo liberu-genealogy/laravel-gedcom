@@ -100,8 +100,8 @@ class otherFields
                 $givn = $name;
             }
 
-            //$person = Person::on($conn)->where('name', $name)->where('givn', $givn)->where('surn', $surn)->where('sex', $sex)->first();
-            $person = Person::on($conn)->where('name', $name)->first();
+            //$person = app(Person::class)->on($conn)->where('name', $name)->where('givn', $givn)->where('surn', $surn)->where('sex', $sex)->first();
+            $person = app(Person::class)->on($conn)->where('name', $name)->first();
 
             if ($events !== null) {
                 Even::read($conn, $events, $person, $obje_ids);

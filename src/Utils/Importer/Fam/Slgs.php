@@ -41,7 +41,7 @@ class Slgs
                 'temp'     => $temp,
             ];
 
-            $record = FamilySlgs::on($conn)->updateOrCreate($key, $data);
+            $record = app(FamilySlgs::class)->on($conn)->updateOrCreate($key, $data);
 
             $_group = 'fam_slgs';
             $_gid = $record->id;

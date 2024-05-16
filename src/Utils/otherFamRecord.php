@@ -47,11 +47,11 @@ class otherFamRecord
             $_sour = $family->getSour();
             $_refn = $family->getRefn();
             $chan = $family->getChan();
-            $familie = Family::on($conn)->where('husband_id', $husband_id)->where('wife_id', $wife_id)->first();
+            $familie = app(Family::class)->on($conn)->where('husband_id', $husband_id)->where('wife_id', $wife_id)->first();
             if ($children !== null) {
                 foreach ($children as $child) {
                     if (isset($persons_id[$child])) {
-                        $person = Person::on($conn)->find($persons_id[$child]);
+                        $person = app(Person::class)->on($conn)->find($persons_id[$child]);
                         $person->child_in_family_id = $familie->id;
                         $person->save();
                     }

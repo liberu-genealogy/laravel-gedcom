@@ -3,6 +3,7 @@
 namespace FamilyTree365\LaravelGedcom\Utils;
 
 use FamilyTree365\LaravelGedcom\Models\Person;
+use FamilyTree365\LaravelGedcom\Models\Subm;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
@@ -19,7 +20,7 @@ class GedcomExporter
             Storage::makeDirectory($dir);
         }
 
-        $query = DB::table('subms');
+        $query = app(Subm::class)->query();
         $query->join('addrs', 'addrs.id', '=', 'subms.addr_id');
         $query->select([
             'subms.name',
@@ -30,9 +31,9 @@ class GedcomExporter
             'addrs.post',
             'addrs.ctry',
             'subms.phon',
-        ])->get();
+        ]);
 
-        $people = Person::all();
+        $people = app(Person::class)->all();
         $submissions = $query->get();
 
         $data = [

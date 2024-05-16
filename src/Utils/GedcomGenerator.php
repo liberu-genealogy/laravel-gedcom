@@ -70,11 +70,11 @@ class GedcomGenerator
             return;
         }
 
-        /* $person = Person::query()->find($p_id);
+        /* $person = app(Person::class)->query()->find($p_id);
         if ($person == null) {
             return;
         } */
-        $persons = Person::query()->get();
+        $persons = app(Person::class)->query()->get();
         if ($persons == null) {
             return;
         }
@@ -93,8 +93,8 @@ class GedcomGenerator
 
         // process family ( partner, children )
         $_families = $p_id
-            ? Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get()
-            : Family::all();
+            ? app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get()
+            : app(Family::class)->all();
 
         foreach ($_families as $item) {
             // add family
@@ -114,7 +114,7 @@ class GedcomGenerator
 //            $this->addUpData($wife_id, $nest);
 
             // add chidrent to indi
-            $children = Person::query()->where('child_in_family_id', $f_id)->get();
+            $children = app(Person::class)->query()->where('child_in_family_id', $f_id)->get();
             foreach ($children as $item2) {
                 $child_id = $item2->id;
                 if (!in_array($child_id, $this->arr_indi_id)) {
@@ -127,7 +127,7 @@ class GedcomGenerator
         $this->setSour();
 
         /* $parent_family_id = $person->child_in_family_id;
-        $p_family = Family::query()->find($parent_family_id);
+        $p_family = app(Family::class)->query()->find($parent_family_id);
 
         // there is not parent data.
         if ($p_family === null) {
@@ -135,7 +135,7 @@ class GedcomGenerator
         }
 
         // process siblings
-        $siblings = Person::query()->where('child_in_family_id', $parent_family_id)->get();
+        $siblings = app(Person::class)->query()->where('child_in_family_id', $parent_family_id)->get();
         foreach ($siblings as $item3) {
             $sibling_id = $item3->id;
             if (!in_array($sibling_id, $this->arr_indi_id)) {
@@ -161,7 +161,7 @@ class GedcomGenerator
             return;
         }
 
-        $person = Person::query()->find($p_id);
+        $person = app(Person::class)->query()->find($p_id);
         if ($person == null) {
             return;
         }
@@ -173,7 +173,7 @@ class GedcomGenerator
             $this->setIndi($p_id);
         }
 
-        $_families = Family::query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
+        $_families = app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
         foreach ($_families as $item) {
             // add family
             $f_id = $item->id;
@@ -188,7 +188,7 @@ class GedcomGenerator
             $this->addDownData($wife_id, $nest);
 
             // process child
-            $children = Person::query()->where('child_in_family_id', $item->id);
+            $children = app(Person::class)->query()->where('child_in_family_id', $item->id);
             foreach ($children as $item2) {
                 $child_id = $item2->id;
                 $nest_next = $nest + 1;
@@ -198,7 +198,7 @@ class GedcomGenerator
 
         // process parent
         $parent_family_id = $person->child_in_family_id;
-        $parent_family = Family::query()->find($parent_family_id);
+        $parent_family = app(Family::class)->query()->find($parent_family_id);
         if ($parent_family != null) {
             $father_id = $parent_family->husband_id;
             $mother_id = $parent_family->wife_id;
@@ -212,7 +212,7 @@ class GedcomGenerator
             }
         }
         // process siblings
-        $siblings = Person::query()->where('child_in_family_id', $parent_family_id)->get();
+        $siblings = app(Person::class)->query()->where('child_in_family_id', $parent_family_id)->get();
         foreach ($siblings as $item3) {
             $sibling_id = $item3->id;
             if (!in_array($sibling_id, $this->arr_indi_id)) {
@@ -256,7 +256,7 @@ class GedcomGenerator
     protected function setIndi($p_id)
     {
         $indi = new Indi();
-        $person = Person::query()->find($p_id);
+        $person = app(Person::class)->query()->find($p_id);
         if ($person == null) {
             return;
         }
@@ -322,7 +322,7 @@ class GedcomGenerator
 
     protected function setFam($family_id)
     {
-        $famData = Family::query()->where('id', $family_id)->first();
+        $famData = app(Family::class)->query()->where('id', $family_id)->first();
         if ($famData == null) {
             return null;
         }
@@ -348,7 +348,7 @@ class GedcomGenerator
         $_nchi = null;
         $fam->setNchi($_nchi);
 
-        $_chil = Person::query()->where('child_in_family_id', $family_id)->get();
+        $_chil = app(Person::class)->query()->where('child_in_family_id', $family_id)->get();
         foreach ($_chil as $item) {
             $fam->addChil($item->id);
             // $this->setIndi($item->id);

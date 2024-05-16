@@ -36,7 +36,7 @@ class Repo
         // store Data of sources
         $key = ['group'=>$group, 'gid'=>$group_id, 'repo_id'=>$repo_id];
         $_data = ['group'=>$group, 'gid'=>$group_id, 'repo_id'=>$repo_id, 'caln'=>$caln];
-        $record = SourceRepo::on($conn)->updateOrCreate($key, $_data);
+        $record = app(SourceRepo::class)->on($conn)->updateOrCreate($key, $_data);
 
         $_group = 'sourcerepo';
         $_gid = $record->id;

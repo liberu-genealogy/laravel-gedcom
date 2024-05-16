@@ -24,7 +24,7 @@ class Addr
         $post = $addr->getPost();
         $ctry = $addr->getCtry();
 
-        $addr = MAddr::on($conn)->where([
+        $addr = app(MAddr::class)->on($conn)->where([
             ['adr1', '=', $adr1],
             ['adr2', '=', $adr2],
             ['city', '=', $city],
@@ -36,7 +36,7 @@ class Addr
         if ($addr !== null) {
             $id = $addr->id;
         } else {
-            $addr = MAddr::on($conn)->create(['adr1' => $adr1, 'adr2' => $adr2, 'city' => $city, 'stae' => $stae, 'post' => $post, 'ctry' => $ctry]);
+            $addr = app(MAddr::class)->on($conn)->create(['adr1' => $adr1, 'adr2' => $adr2, 'city' => $city, 'stae' => $stae, 'post' => $post, 'ctry' => $ctry]);
             $id = $addr->id;
         }
 

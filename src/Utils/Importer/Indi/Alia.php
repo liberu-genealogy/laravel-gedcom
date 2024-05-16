@@ -20,6 +20,6 @@ class Alia
                 $aliaData[] = $data;
             }
         }
-        PersonAlia::on($conn)->insert($aliaData);
+        app(PersonAlia::class)->on($conn)->insert($aliaData);
     }
 }

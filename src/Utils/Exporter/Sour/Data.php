@@ -22,7 +22,7 @@ class Data
         // store Data of sources
         $key = ['group'=>$group, 'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
         $_data = ['group'=>$group, 'gid'=>$group_id, 'date'=>$date, 'text'=>$text, 'agnc'=>$agnc];
-        $record = SourceData::on($conn)->updateOrCreate($key, $_data);
+        $record = app(SourceData::class)->on($conn)->updateOrCreate($key, $_data);
 
         $_group = 'sourcedata';
         $_gid = $record->id;

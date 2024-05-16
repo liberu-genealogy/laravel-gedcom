@@ -42,7 +42,7 @@ class MediaParser
      * This method does not return anything but processes media object data.
      */
     {
-        $media = new Media();
+        $media = app(Media::class);
         $media->file = $mediaObject->getFile();
         $media->title = $mediaObject->getTitle();
         $media->note = $mediaObject->getNote();
@@ -54,7 +54,7 @@ class MediaParser
     protected function linkToIndividuals($mediaId, $individualIds)
     {
         foreach ($individualIds as $indiId) {
-            $person = Person::where('gedcom_id', $indiId)->first();
+            $person = app(Person::class)->where('gedcom_id', $indiId)->first();
             if ($person) {
                 $person->media()->attach($mediaId);
             }
@@ -64,7 +64,7 @@ class MediaParser
     protected function linkToFamilies($mediaId, $familyIds)
     {
         foreach ($familyIds as $famId) {
-            $family = Family::where('gedcom_id', $famId)->first();
+            $family = app(Family::class)->where('gedcom_id', $famId)->first();
             if ($family) {
                 $family->media()->attach($mediaId);
             }

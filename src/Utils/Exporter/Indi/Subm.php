@@ -24,6 +24,6 @@ class Subm
             }
         }
 
-        PersonSubm::on($conn)->insert($record);
+        app(PersonSubm::class)->on($conn)->insert($record);
     }
 }

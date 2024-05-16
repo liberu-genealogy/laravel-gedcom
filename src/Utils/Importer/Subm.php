@@ -63,7 +63,7 @@ class Subm
             'rin'     => $rin,
             'rfn'     => $rfn,
         ];
-        $record = MSubm::on($conn)->updateOrCreate($key, $data);
+        $record = app(MSubm::class)->on($conn)->updateOrCreate($key, $data);
         $_group = 'subm';
         $_gid = $record->id;
 

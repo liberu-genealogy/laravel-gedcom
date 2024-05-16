@@ -19,7 +19,7 @@ class Chan
         // store chan
         $key = ['group'=>$group, 'gid'=>$group_id, 'date'=>$date, 'time'=>$time];
         $data = ['group'=>$group, 'gid'=>$group_id,  'date'=>$date, 'time'=>$time];
-        $record = MChan::on($conn)->updateOrCreate($key, $data);
+        $record = app(MChan::class)->on($conn)->updateOrCreate($key, $data);
 
         // store Sources of Note
         $_group = 'chan';

@@ -32,7 +32,7 @@ class ObjeRef
             'obje_id'=> $obje_id,
             'titl'   => $titl,
         ];
-        $record = MediaObject::on($conn)->updateOrCreate($key, $data);
+        $record = app(MediaObject::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'objeref';
         $_gid = $record->id;

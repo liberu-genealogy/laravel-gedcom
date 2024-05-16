@@ -38,7 +38,7 @@ class SourRef
             'quay'   => $quay,
             'page'   => $page,
         ];
-        $record = SourceRef::on($conn)->updateOrCreate($key, $data);
+        $record = app(SourceRef::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'sourref';
         $_gid = $record->id;

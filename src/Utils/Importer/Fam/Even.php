@@ -48,7 +48,7 @@ class Even
             // update husb age
             $_husb = $even->getHusb();
             if ($_husb) {
-                $husb = Person::on($conn)->find($husb_id);
+                $husb = app(Person::class)->on($conn)->find($husb_id);
                 if ($husb) {
                     $husb->age = $_husb->getAge();
                     $husb->save();
@@ -58,7 +58,7 @@ class Even
             // update wife age
             $_wife = $even->getWife();
             if ($_wife) {
-                $wife = Person::on($conn)->find($wife_id);
+                $wife = app(Person::class)->on($conn)->find($wife_id);
                 if ($wife) {
                     $wife->age = $_wife->getAge();
                     $wife->save();
@@ -114,7 +114,7 @@ class Even
                 'wife'           => $wife_id, //
             ];
 
-            $record = FamilyEvent::on($conn)->updateOrCreate($key, $data);
+            $record = app(FamilyEvent::class)->on($conn)->updateOrCreate($key, $data);
 
             $_group = 'fam_even';
             $_gid = $record->id;
