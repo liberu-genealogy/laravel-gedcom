@@ -201,8 +201,8 @@ class GedcomParser
 
             $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
            
-            $individualParser = new IndividualParser($this->conn);
-            $individualParser->parseIndividuals($individuals);
+            // $individualParser = new IndividualParser($this->conn);
+            // $individualParser->parseIndividuals($individuals);
             $progressReporter->advanceProgress(count($individuals));
             
 
