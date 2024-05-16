@@ -17,7 +17,7 @@ class Slgs
     public static function read($conn, $slgs, $fam)
     {
         try {
-            if ($slgs == null || $fam === null) {
+            if ($slgs == null || empty($fam)) {
                 return;
             }
 

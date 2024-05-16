@@ -44,7 +44,7 @@ class IndividualParser
      * This method does not return anything but processes individual data.
      */
     {
-        $person = new Person();
+        $person = app(Person::class);
         $person->name = $this->parseName($individual);
         $person->sex = $individual->getSex();
         $person->birth_date = $this->parseBirth($individual);
