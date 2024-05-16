@@ -3,6 +3,7 @@
 namespace FamilyTree365\LaravelGedcom\Utils\Importer\Fam;
 
 use FamilyTree365\LaravelGedcom\Models\FamilyEvent;
+use FamilyTree365\LaravelGedcom\Models\Person;
 use Throwable;
 
 class Even

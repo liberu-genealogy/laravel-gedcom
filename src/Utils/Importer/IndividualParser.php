@@ -55,7 +55,7 @@ class IndividualParser
 
     protected function parseName($individual)
     {
-        return $individual->getName() ? $individual->getName()->getFullName() : null;
+        return $individual->getName() ? $individual->getName()[0]->getFullName() : null;
     }
 
     protected function parseBirth($individual)

@@ -165,7 +165,7 @@ class ParentData
 
             foreach ($chunk as $item) {
                 // it's take only 1 second for 3010 record
-                $a = app(Person::class)->on($conn)->upsert($item, ['uid']);
+                $a = app(BatchData::class)->upsert(Person::class, $conn, $item, ['uid']);
             }
 
             otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
