@@ -52,7 +52,7 @@ class Repo
             'www'     => $www,
         ];
 
-        $record = Repository::on($conn)->updateOrCreate($key, $data);
+        $record = app(Repository::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'repo';
         $_gid = $record->id;

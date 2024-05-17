@@ -21,7 +21,7 @@ class Note
             // store note
             $key = ['group'=>$group, 'gid'=>$group_id, 'note'=> mb_convert_encoding((string) $_note, 'UTF-8', 'ISO-8859-1')];
             $data = ['group'=>$group, 'gid'=>$group_id, 'note'=> mb_convert_encoding((string) $_note, 'UTF-8', 'ISO-8859-1'), 'rin'=>$rin];
-            $record = MNote::on($conn)->updateOrCreate($key, $data);
+            $record = app(MNote::class)->on($conn)->updateOrCreate($key, $data);
 
             // store Sources of Note
             $_group = 'note';

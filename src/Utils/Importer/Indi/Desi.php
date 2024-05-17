@@ -18,7 +18,7 @@ class Desi
             $subm_id = $subm_ids[$desi];
             $key = ['group'=>$group, 'gid'=>$group_id, 'desi'=>$desi];
             $data = ['group'=>$group, 'gid'=>$group_id, 'desi'=>$desi];
-            $record = PersonDesi::on($conn)->updateOrCreate($key, $data);
+            $record = app(PersonDesi::class)->on($conn)->updateOrCreate($key, $data);
         }
     }
 }

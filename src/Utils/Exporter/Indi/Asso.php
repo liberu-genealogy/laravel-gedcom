@@ -19,7 +19,7 @@ class Asso
         // store asso
         $key = ['group'=>$group, 'gid'=>$group_id, 'rela'=>$rela, 'indi' => $_indi];
         $data = ['group'=>$group, 'gid'=>$group_id, 'rela'=>$rela, 'indi' => $_indi];
-        $record = PersonAsso::on($conn)->updateOrCreate($key, $data);
+        $record = app(PersonAsso::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'indi_asso';
         $_gid = $record->id;

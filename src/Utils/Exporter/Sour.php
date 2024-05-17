@@ -23,7 +23,7 @@ class Sour
         $rin = $sour->getRin(); // string
         $text = $sour->getText(); // string
 
-        $record = Source::on($conn)->updateOrCreate(
+        $record = app(Source::class)->on($conn)->updateOrCreate(
             ['titl' => $titl, 'rin' => $rin, 'auth' => $auth, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr],
             ['titl' => $titl, 'rin' => $rin, 'auth' => $auth, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr]
         );

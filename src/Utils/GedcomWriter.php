@@ -197,7 +197,7 @@ class GedcomWriter
         if ($givn == '') {
             $givn = $name;
         }
-        $person = Person::query()->updateOrCreate(['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex], ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'chan' => $chan, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn]);
+        $person = app(Person::class)->query()->updateOrCreate(['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex], ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'chan' => $chan, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn]);
         $this->persons_id[$g_id] = $person->id;
 
         if ($events !== null) {
@@ -235,12 +235,12 @@ class GedcomWriter
         $husband_id = $this->persons_id[$husb] ?? 0;
         $wife_id = $this->persons_id[$wife] ?? 0;
 
-        $family = Family::query()->updateOrCreate(['husband_id' => $husband_id, 'wife_id' => $wife_id], ['husband_id' => $husband_id, 'wife_id' => $wife_id, 'description' => $description, 'type_id' => $type_id, 'chan' => $chan, 'nchi' => $nchi]);
+        $family = app(Family::class)->query()->updateOrCreate(['husband_id' => $husband_id, 'wife_id' => $wife_id], ['husband_id' => $husband_id, 'wife_id' => $wife_id, 'description' => $description, 'type_id' => $type_id, 'chan' => $chan, 'nchi' => $nchi]);
 
         if ($children !== null) {
             foreach ($children as $child) {
                 if (isset($this->persons_id[$child])) {
-                    $person = Person::query()->find($this->persons_id[$child]);
+                    $person = app(Person::class)->query()->find($this->persons_id[$child]);
                     $person->child_in_family_id = $family->id;
                     $person->save();
                 }
@@ -265,7 +265,7 @@ class GedcomWriter
         $desc = $subn->getDesc();
         $ordi = $subn->getOrdi();
         $rin = $subn->getRin();
-        Subn::query()->updateOrCreate(['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin], ['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin]);
+        app(Subn::class)->query()->updateOrCreate(['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin], ['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin]);
     }
 
     // insert subm data to model
@@ -324,7 +324,7 @@ class GedcomWriter
             $arr_phon[] = $__phon;
         }
         $phon = json_encode($arr_phon, JSON_THROW_ON_ERROR);
-        Subm::query()->updateOrCreate(['subm' => $subm, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'rfn' => $rfn, 'lang' => $lang, 'phon' => $phon], ['subm' => $subm, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'rfn' => $rfn, 'lang' => $lang, 'phon' => $phon]);
+        app(Subm::class)->query()->updateOrCreate(['subm' => $subm, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'rfn' => $rfn, 'lang' => $lang, 'phon' => $phon], ['subm' => $subm, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'rfn' => $rfn, 'lang' => $lang, 'phon' => $phon]);
     }
 
     // insert sour data to database
@@ -337,7 +337,7 @@ class GedcomWriter
         $text = $_sour->getText(); // string
         $publ = $_sour->getPubl(); // string
         $abbr = $_sour->getAbbr(); // string
-        Source::query()->updateOrCreate(['sour' => $sour, 'titl' => $titl, 'auth' => $auth, 'data' => $data, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr], ['sour' => $sour, 'titl' => $titl, 'auth' => $auth, 'data' => $data, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr]);
+        app(Source::class)->query()->updateOrCreate(['sour' => $sour, 'titl' => $titl, 'auth' => $auth, 'data' => $data, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr], ['sour' => $sour, 'titl' => $titl, 'auth' => $auth, 'data' => $data, 'text' => $text, 'publ' => $publ, 'abbr' => $abbr]);
     }
 
     // insert note data to database
@@ -346,7 +346,7 @@ class GedcomWriter
         $gid = $_note->getId(); // string
         $note = $_note->getNote(); // string
         $rin = $_note->getRin(); // string
-        Note::query()->updateOrCreate(['gid' => $gid, 'note' => $note, 'rin' => $rin], ['gid' => $gid, 'note' => $note, 'rin' => $rin]);
+        app(Note::class)->query()->updateOrCreate(['gid' => $gid, 'note' => $note, 'rin' => $rin], ['gid' => $gid, 'note' => $note, 'rin' => $rin]);
     }
 
     // insert repo data to database
@@ -372,13 +372,13 @@ class GedcomWriter
             $arr_phon[] = $__phon;
         }
         $phon = json_encode($arr_phon, JSON_THROW_ON_ERROR);
-        Repository::query()->updateOrCreate(['repo' => $repo, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'phon' => $phon], ['repo' => $repo, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'phon' => $phon]);
+        app(Repository::class)->query()->updateOrCreate(['repo' => $repo, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'phon' => $phon], ['repo' => $repo, 'name' => $name, 'addr' => $addr, 'rin' => $rin, 'phon' => $phon]);
     }
 
     // insert obje data to database
     private function getObje($_obje)
     {
         $gid = $_obje->getId(); $_obje->getForm(); $_obje->getTitl(); $_obje->getBlob(); $_obje->getRin(); $_obje->getChan(); $_obje->getFile(); // string
-        MediaObject::updateOrCreate(['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file], ['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file]);
+        app(MediaObject::class)->updateOrCreate(['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file], ['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file]);
     }
 }

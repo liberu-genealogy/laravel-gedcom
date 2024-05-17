@@ -27,6 +27,6 @@ class Caln
             'gid'  => $gid,
             'medi' => $medi,
         ];
-        MCaln::on($conn)->updateOrCreate($key, $data);
+        app(MCaln::class)->on($conn)->updateOrCreate($key, $data);
     }
 }

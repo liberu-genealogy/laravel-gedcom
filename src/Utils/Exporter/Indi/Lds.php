@@ -45,7 +45,7 @@ class Lds
             'temp'      => $temp,
             'slgc_famc' => $slgc_famc,
         ];
-        $record = PersonLds::on($conn)->updateOrCreate($key, $data);
+        $record = app(PersonLds::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'indi_lds';
         $_gid = $record->id;

@@ -24,7 +24,7 @@ class RepoRef
             'gid'  => $group_id,
             'repo' => $repo,
         ];
-        $record = Repository::on($conn)->updateOrCreate($key, $data);
+        $record = app(Repository::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'reporef';
         $_gid = $record->id;

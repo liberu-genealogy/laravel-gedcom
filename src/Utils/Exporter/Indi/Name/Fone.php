@@ -48,6 +48,6 @@ class Fone
             'nsfx' => $nsfx,
         ];
 
-        PersonNameFone::on($conn)->updateOrCreate($key, $data);
+        app(PersonNameFone::class)->on($conn)->updateOrCreate($key, $data);
     }
 }

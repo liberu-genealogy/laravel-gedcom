@@ -48,7 +48,7 @@ class Name
             'nsfx' => $nsfx,
         ];
 
-        $record = PersonName::on($conn)->updateOrCreate($key, $data);
+        $record = app(PersonName::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'indi_name';
         $_gid = $record->id;

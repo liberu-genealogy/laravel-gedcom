@@ -19,6 +19,6 @@ class Even
         // store Even of source/data
         $key = ['group'=>$group, 'gid'=>$group_id, 'date'=>$date, 'plac'=>$plac];
         $data = ['group'=>$group, 'gid'=>$group_id, 'date'=>$date, 'plac'=>$plac];
-        SourceDataEven::on($conn)->updateOrCreate($key, $data);
+        app(SourceDataEven::class)->on($conn)->updateOrCreate($key, $data);
     }
 }

@@ -18,7 +18,7 @@ class NoteRef
         // store note
         $key = ['group'=>$group, 'gid'=>$group_id, 'note'=>$note];
         $data = ['group'=>$group, 'gid'=>$group_id, 'note'=>$note];
-        $record = Note::on($conn)->updateOrCreate($key, $data);
+        $record = app(Note::class)->on($conn)->updateOrCreate($key, $data);
 
         // store Sources of Note
         $_group = 'note';

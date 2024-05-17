@@ -34,7 +34,7 @@ class Obje
             'obje_id' => $id,
         ];
 
-        $record = MediaObject::on($conn)->updateOrCreate($key, $data);
+        $record = app(MediaObject::class)->on($conn)->updateOrCreate($key, $data);
 
         $_group = 'obje';
         $_gid = $record->id;

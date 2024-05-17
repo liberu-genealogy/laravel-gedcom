@@ -17,7 +17,7 @@ class Slgs
     public static function read($conn, $slgs, $fam)
     {
         try {
-            if ($slgs == null || $fam === null) {
+            if ($slgs == null || empty($fam)) {
                 return;
             }
 
@@ -41,7 +41,7 @@ class Slgs
                 'temp'     => $temp,
             ];
 
-            $record = FamilySlgs::on($conn)->updateOrCreate($key, $data);
+            $record = app(FamilySlgs::class)->on($conn)->updateOrCreate($key, $data);
 
             $_group = 'fam_slgs';
             $_gid = $record->id;

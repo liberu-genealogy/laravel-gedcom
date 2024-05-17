@@ -201,13 +201,13 @@ class GedcomParser
 
             $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
            
-            $individualParser = new IndividualParser($this->conn);
-            $individualParser->parseIndividuals($individuals);
+            // $individualParser = new IndividualParser($this->conn);
+            // $individualParser->parseIndividuals($individuals);
             $progressReporter->advanceProgress(count($individuals));
             
 
             // complete person-alia and person-asso table with person table
-            $alia_list = PersonAlia::on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
+            $alia_list = app(PersonAlia::class)->on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
             foreach ($alia_list as $item) {
                 $alia = $item->alia;
                 if (isset($this->person_ids[$alia])) {
@@ -219,7 +219,7 @@ class GedcomParser
                 }
             }
 
-            $asso_list = PersonAsso::on($conn)->select('indi')->where('group', 'indi')->where('import_confirm', 0)->get();
+            $asso_list = app(PersonAsso::class)->on($conn)->select('indi')->where('group', 'indi')->where('import_confirm', 0)->get();
             foreach ($asso_list as $item) {
                 $_indi = $item->indi;
                 if (isset($this->person_ids[$_indi])) {
