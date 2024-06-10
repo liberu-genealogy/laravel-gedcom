@@ -24,6 +24,9 @@ class Subm
         $addr = $subm->getAddr() ?? null;
         $addr_id = \FamilyTree365\LaravelGedcom\Utils\Importer\Addr::read($conn, $addr);
         $_phon = $subm->getPhon() ?? []; // array
+        $_phon = array_map(function($phonObj) {
+            return $phonObj->getPhon();
+        }, $_phon);
         $phon = implode(',', $_phon);
         $_email = $subm->getEmail() ?? [];
         $email = implode(',', $_email);
