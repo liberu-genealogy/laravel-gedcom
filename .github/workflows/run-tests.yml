@@ -13,12 +13,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: host/packages/liberu-genealogy/laravel-gedcom
-
-    - name: Add this package to composer.json repositories
-      uses: ajthinking/merge-json-files@v1.0.20
-      with:
-        repo_relative_path: 'host/packages/liberu-genealogy/laravel-gedcom'
-
+    
     - name: Require this package
       working-directory: ./host
       run: composer require liberu-genealogy/laravel-gedcom @dev
