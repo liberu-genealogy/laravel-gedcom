@@ -1,5 +1,6 @@
 # GEDCOM to Laravel Model
  ![Latest Stable Version](https://img.shields.io/github/release/liberu-genealogy/laravel-gedcom.svg) 
+[![Tests](https://github.com/liberu-genealogy/laravel-gedcom/actions/workflows/run-tests.yml/badge.svg)](https://github.com/liberu-genealogy/laravel-gedcom/actions/workflows/run-tests.yml)
 
 
 liberu-genealogy/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
