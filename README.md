@@ -1,12 +1,5 @@
 # GEDCOM to Laravel Model
  ![Latest Stable Version](https://img.shields.io/github/release/liberu-genealogy/laravel-gedcom.svg) 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/badges/build.png?b=master)](https://scrutinizer-ci.com/g/familytree365/laravel-gedcom/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/laravel-liberu/laravel-gedcom/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
-[![StyleCI](https://github.styleci.io/repos/268533904/shield?branch=master)](https://github.styleci.io/repos/268533904)
-[![CodeFactor](https://www.codefactor.io/repository/github/familytree365/laravel-gedcom/badge/master)](https://www.codefactor.io/repository/github/familytree365/laravel-gedcom/overview/master)
-[![codebeat badge](https://codebeat.co/badges/911f9e33-212a-4dfa-a860-751cdbbacff7)](https://codebeat.co/projects/github-com-modulargenealogy-gedcom-laravel-gedcom-master)
-[![Build Status](https://travis-ci.org/familytree365/laravel-gedcom.svg?branch=master)](https://travis-ci.org/familytree365/laravel-gedcom)
 
 
 liberu-genealogy/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files, and import them 
