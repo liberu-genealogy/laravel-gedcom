@@ -56,7 +56,9 @@ Pull requests are welcome, as are issues.
 
 ## Contributors
 
-
+<a href = "https://github.com/liberu-genealogy/laravel-gedcom/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=liberu-genealogy/laravel-gedcom"/>
+</a>
 
 ## License
 
