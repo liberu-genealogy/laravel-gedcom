@@ -6,7 +6,7 @@ use FamilyTree365\LaravelGedcom\Commands\GedcomExporter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class GedcomExporterTest extends TestCase
 {
