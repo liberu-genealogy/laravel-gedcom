@@ -1,3 +1,31 @@
+<?php
+
+namespace Tests\Unit;
+
+use FamilyTree365\LaravelGedcom\Commands\GedcomExporter;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
+use Mockery;
+
+class GedcomExporterTest extends TestCase
+{
+    public function setUp(): void
+    {
+        parent::setUp();
+        Storage::fake('local');
+    }
+
+    public function testHandlingOfFileWriteErrors()
+    {
+        Storage::shouldReceive('put')
+            ->once()
+            ->andThrow(new \Exception('Failed to write file'));
+
+        $this->artisan('gedcom:export', ['filename' => 'test_export'])
+            ->expectsOutput('An error occurred while exporting the GEDCOM file: Failed to write file')
+            ->assertExitCode(1);
+    }
+
     public static function exportDataProvider()
     {
         return [
@@ -19,3 +47,10 @@
             ],
         ];
     }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+}
