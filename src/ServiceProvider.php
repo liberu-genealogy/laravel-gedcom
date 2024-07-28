@@ -18,7 +18,9 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('FamilyTree365/laravel-gedcom:parser', fn() => new GedcomParser());
+        $this->app->singleton('FamilyTree365/laravel-gedcom:parser', function ($app) {
+            return new GedcomParser();
+        });
         $this->commands(GedcomImporter::class);
     }
 
