@@ -23,24 +23,24 @@ use Illuminate\Support\Facades\DB as DB;
 
 readonly class GedcomParser
 {
-    public array $person_ids = [];
-    /**
-     * Array of persons ID
-     * key - old GEDCOM ID
-     * value - new autoincrement ID.
-     *
-     * @var string
-     */
-    protected $persons_id = [];
-    protected $subm_ids = [];
-    protected $sour_ids = [];
-    protected $obje_ids = [];
-    protected $note_ids = [];
-    protected $repo_ids = [];
-    /**
-     * GedcomParser class is responsible for parsing GEDCOM files and importing the data into the database.
-     */
-    protected $conn = '';
+    public function __construct(
+        protected array $person_ids = [],
+        protected array $persons_id = [],
+        protected array $subm_ids = [],
+        protected array $sour_ids = [],
+        protected array $obje_ids = [],
+        protected array $note_ids = [],
+        protected array $repo_ids = [],
+        protected string $conn = ''
+    ) {}
+
+    public function parse(
+        string $conn,
+        string $filename,
+        string $slug,
+        ?bool $progressBar = null,
+        array $channel = ['name' => 'gedcom-progress1', 'eventName' => 'newMessage']
+    ): void {
 
     public function parse(
         $conn,

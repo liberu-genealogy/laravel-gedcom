@@ -4,10 +4,15 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 
 readonly class DateParser
 {
-    private int|float|null $year = null;
-    private ?int $month = null;
-    private int|float|null $day = null;
-    private string|array|null $date_string = null;
+    public function __construct(
+        private int|float|null $year = null,
+        private ?int $month = null,
+        private int|float|null $day = null,
+        private string|array|null $date_string = null
+    ) {}
+
+    public function parse_date(): array 
+    {
 
     public function parse_date(): array
     {
