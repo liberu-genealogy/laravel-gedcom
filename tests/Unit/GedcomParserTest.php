@@ -4,6 +4,39 @@ namespace Tests\Unit;
 
 use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 use Illuminate\Support\Facades\DB;
+use Orchestra\Testbench\TestCase;
+use Mockery;
+
+class GedcomParserTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        DB::shouldReceive('connection')->andReturnSelf();
+        DB::shouldReceive('disableQueryLog')->andReturnTrue();
+    }
+
+    public function testParseWithValidFile()
+    {
+        $parser = new GedcomParser();
+        $connection = DB::connection();
+        
+        DB::shouldReceive('table')->andReturnSelf();
+        DB::shouldReceive('insert')->andReturnTrue();
+        
+        $result = $parser->parse($connection, __DIR__ . '/../Fixtures/sample.ged', 'test-slug', false);
+        $this->assertTrue($result);
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+}mespace Tests\Unit;
+
+use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\TestCase;
 
 class GedcomParserTest extends TestCase
