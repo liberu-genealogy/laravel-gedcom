@@ -2,14 +2,14 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
-class DateParser
+readonly class DateParser
 {
     private int|float|null $year = null;
     private ?int $month = null;
     private int|float|null $day = null;
     private string|array|null $date_string = null;
 
-    public function parse_date()
+    public function parse_date(): array
     {
         $this->trim_datestring();
         if (!$this->try_parse_full_date() && !$this->try_parse_M_Y_date() && !$this->try_parse_Y_date()) {
@@ -151,7 +151,7 @@ class DateParser
         $this->day = null;
     }
 
-    public function export()
+    public function export(): array
     {
         return [
             'year'          => $this->year,
