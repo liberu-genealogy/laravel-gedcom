@@ -2,6 +2,47 @@
 
 namespace Tests\Unit;
 
+use Tests\TestCase;
+use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
+use FamilyTree365\LaravelGedcom\Models\Media;
+use Illuminate\Support\Facades\DB;
+use Mockery;
+
+class MediaParserTest extends TestCase
+{
+    protected $mediaParser;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->mockDatabase();
+        $this->mediaParser = new MediaParser(DB::connection());
+    }
+
+    private function mockDatabase()
+    {
+        DB::shouldReceive('beginTransaction')->andReturnSelf();
+        DB::shouldReceive('commit')->andReturnSelf();
+        DB::shouldReceive('rollBack')->andReturnSelf();
+    }
+
+    public function testParseMediaObjectsWithValidData()
+    {
+        $mediaObjects = [
+            (object)[
+                'getFile' => 'test.jpg',
+                'getTitle' => 'Test Image',
+                'getNote' => 'Test Note'
+            ]
+        ];
+
+        Media::shouldReceive('create')->once()->andReturn(new Media());
+        
+        $result = $this->mediaParser->parseMediaObjects($mediaObjects);
+        $this->assertTrue($result);
+    }
+}mespace Tests\Unit;
+
 use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
 use FamilyTree365\LaravelGedcom\Models\Media;
 use FamilyTree365\LaravelGedcom\Models\Person;
