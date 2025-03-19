@@ -6,7 +6,8 @@
     "php": ">=8.3",
     "liberu-genealogy/php-gedcom": "^2.2",
     "illuminate/support": "^11.0",
-    "illuminate/database": "^11.0"
+    "illuminate/database": "^11.0",
+    "orchestra/testbench": "^10.0"
   },
   "license": "MIT",
   "autoload": {
