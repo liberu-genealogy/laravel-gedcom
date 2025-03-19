@@ -7,7 +7,7 @@ use FamilyTree365\LaravelGedcom\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\TestCase;
 use Mockery;
 
 class IndividualParserTest extends TestCase
