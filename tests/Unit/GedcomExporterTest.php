@@ -2,14 +2,19 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use FamilyTree365\LaravelGedcom\Commands\GedcomExporter;
 use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
 use Mockery;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class GedcomExporterTest extends TestCase
 {
-    protected function setUp(): void
+    use WithoutMiddleware;
+
+    public function setUp(): void
     {
         parent::setUp();
         Storage::fake('local');
@@ -23,36 +28,6 @@ class GedcomExporterTest extends TestCase
         $exporter = new GedcomExporter();
         $result = $exporter->export($type, $data);
         $this->assertEquals($expected, $result);
-    }
-
-    public static function exportDataProvider()
-    {
-        return [
-            'individuals' => [
-                'individuals',
-                ['name' => 'John Doe'],
-                "0 @I1@ INDI\n1 NAME John Doe\n"
-            ],
-            'families' => [
-                'families',
-                ['id' => 'F1'],
-                "0 @F1@ FAM\n"
-            ]
-        ];
-    }
-}amespace Tests\Unit;
-
-use FamilyTree365\LaravelGedcom\Commands\GedcomExporter;
-use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
-use Mockery;
-
-class GedcomExporterTest extends TestCase
-{
-    public function setUp(): void
-    {
-        parent::setUp();
-        Storage::fake('local');
     }
 
     public function testHandlingOfFileWriteErrors()
