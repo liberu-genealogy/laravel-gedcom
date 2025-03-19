@@ -7,14 +7,12 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Mockery;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class GedcomExporterTest extends TestCase
 {
     use WithoutMiddleware;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         Storage::fake('local');
