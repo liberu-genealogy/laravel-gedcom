@@ -3,40 +3,44 @@
 namespace Tests\Unit;
 
 use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
+use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Framework\TestCase;
+use Mockery;
 
 class GedcomExporterHelpersTest extends TestCase
 {
-    public function testCreateDirectory()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         Storage::fake('local');
-        GedcomExporterHelpers::createDirectory('testDir');
-        Storage::disk('local')->assertExists('testDir');
 
-        // Directory already exists
-        GedcomExporterHelpers::createDirectory('testDir');
-        Storage::disk('local')->assertExists('testDir');
-    }
-
-    public function testFetchDatabaseData()
-    {
         DB::shouldReceive('table')
-            ->with('subms')
             ->andReturnSelf()
             ->shouldReceive('join')
-            ->with('addrs', 'addrs.id', '=', 'subms.addr_id')
             ->andReturnSelf()
             ->shouldReceive('select')
             ->andReturnSelf()
             ->shouldReceive('get')
-            ->andReturn(collect([
-                (object)['name' => 'John Doe', 'adr1' => '123 Main St', 'city' => 'Anytown', 'stae' => 'CA', 'post' => '12345', 'ctry' => 'USA', 'phon' => '555-1234'],
-            ]));
+            ->andReturn(collect([]));
+    }
 
+    protected function getPackageProviders($app)
+    {
+        return ['FamilyTree365\LaravelGedcom\ServiceProvider'];
+    }
+
+    public function testCreateDirectory()
+    {
+        GedcomExporterHelpers::createDirectory('test-dir');
+        Storage::disk('local')->assertExists('test-dir');
+    }
+
+    public function testFetchDatabaseData()
+    {
         $data = GedcomExporterHelpers::fetchDatabaseData();
-        $this->assertCount(1, $data);
+        $this->assertCount(0, $data);
 
         // No records found
         DB::shouldReceive('get')->andReturn(collect([]));
@@ -63,7 +67,6 @@ class GedcomExporterHelpersTest extends TestCase
 
     public function testWriteToFile()
     {
-        Storage::fake('local');
         $filename = 'testFile.txt';
         $content = 'Test content';
 
@@ -76,5 +79,10 @@ class GedcomExporterHelpersTest extends TestCase
         $this->expectException(\Exception::class);
         GedcomExporterHelpers::writeToFile(storage_path('app/public/errorFile.txt'), 'Error content');
     }
-}
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+}

@@ -4,29 +4,32 @@ namespace Tests\Unit;
 
 use FamilyTree365\LaravelGedcom\Utils\GedcomParser;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Framework\TestCase;
+use Orchestra\Testbench\TestCase;
 use Mockery;
-use Event;
-use Log;
 
 class GedcomParserTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        DB::shouldReceive('connection')->andReturnSelf();
-        DB::shouldReceive('disableQueryLog')->andReturnTrue();
+
+        // Mock DB facade
+        DB::shouldReceive('connection')
+            ->andReturn(Mockery::mock('Illuminate\Database\Connection'));
+
+        DB::shouldReceive('disableQueryLog')
+            ->andReturn(true);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return ['FamilyTree365\LaravelGedcom\ServiceProvider'];
     }
 
     public function testParseWithValidFile()
     {
         $parser = new GedcomParser();
-        $connection = DB::connection();
-        
-        DB::shouldReceive('table')->andReturnSelf();
-        DB::shouldReceive('insert')->andReturnTrue();
-        
-        $result = $parser->parse($connection, __DIR__ . '/../Fixtures/sample.ged', 'test-slug', false);
+        $result = $parser->parse('mysql', __DIR__ . '/../Fixtures/sample.ged', 'test-slug', false);
         $this->assertTrue($result);
     }
 
