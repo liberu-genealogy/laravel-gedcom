@@ -15,60 +15,27 @@ use Gedcom\Parser;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
-use Symfony\Component\Console\Helper\ProgressBar;
-
-class GedcomWriter
+use readonly class GedcomWriter
 {
-    /**
-     * Array of persons ID
-     * key - old GEDCOM ID
-     * value - new autoincrement ID.
-     *
-     * @var string
-     */
     private array $personsId = [];
+    private ProgressReporter $progressReporter;
 
     public function parse(string $filename, string $slug, bool $progressBar = false): void
     {
         $parser = new Parser();
         $gedcom = $parser->parse($filename);
 
-        $subn = $gedcom->getSubn();
-        $subm = $gedcom->getSubm();
-        $sour = $gedcom->getSour();
-        $note = $gedcom->getNote();
-        $repo = $gedcom->getRepo();
-        $obje = $gedcom->getObje();
-
-        $total = $this->calculateTotal($gedcom, $subn, $subm, $sour, $note, $repo, $obje);
-        $complete = 0;
+        $records = $this->getGedcomRecords($gedcom);
+        $total = $this->calculateTotal($records);
 
         if ($progressBar) {
-            $bar = $this->getProgressBar($total);
-            $this->emitProgress($slug, $total, $complete);
+            $this->progressReporter = new ProgressReporter($total, ['name' => $slug]);
         }
 
-        $this->processRecords($subn, $subm, $sour, $note, $repo, $obje, $gedcom, $progressBar, $bar, $slug);
+        $this->processRecords($records);
     }
 
-    private function calculateTotal($gedcom, $subn, $subm, $sour, $note, $repo, $obje): int
-    {
-        return count($gedcom->getIndi()) +
-               count($gedcom->getFam()) +
-               ($subn ? 1 : 0) +
-               count($subm) +
-               count($sour) +
-               count($note) +
-               count($repo) +
-               count($obje);
-    }
-
-    private function emitProgress(string $slug, int $total, int $complete): void
-    {
-        event(new GedComProgressSent($slug, $total, $complete));
-    }
-
-    private function getProgressBar(int $max): ProgressBar
+    private function getProgressBar(int $max): OutputStyle
     {
         return (new OutputStyle(
             new StringInput(''),
@@ -76,121 +43,160 @@ class GedcomWriter
         ))->createProgressBar($max);
     }
 
-    private function getDate($input_date)
+    private function getGedcomRecords(Gedcom $gedcom): array
     {
-        return "$input_date";
+        $subn = $gedcom->getSubn();
+        $subm = $gedcom->getSubm();
+        $sour = $gedcom->getSour();
+        $note = $gedcom->getNote();
+        $repo = $gedcom->getRepo();
+        $obje = $gedcom->getObje();
+        $individuals = $gedcom->getIndi();
+        $families = $gedcom->getFam();
+        return [
+            'subn' => $subn,
+            'subm' => $subm,
+            'sour' => $sour,
+            'note' => $note,
+            'repo' => $repo,
+            'obje' => $obje,
+            'individuals' => $individuals,
+            'families' => $families,
+        ];
     }
 
-    private function getPlace($place)
+    private function calculateTotal(array $records): int
     {
-        if (is_object($place)) {
-            $place = $place->getPlac();
-        }
-
-        return $place;
+        $c_subn = $records['subn'] != null ? 1 : 0;
+        $c_subm = count($records['subm']);
+        $c_sour = count($records['sour']);
+        $c_note = count($records['note']);
+        $c_repo = count($records['repo']);
+        $c_obje = count($records['obje']);
+        $c_individuals = count($records['individuals']);
+        $c_families = count($records['families']);
+        return $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje + $c_individuals + $c_families;
     }
 
-    private function getPerson($individual)
+    private function processRecords(array $records): void
     {
-        $g_id = $individual->getId();
-        $name = '';
-        $givn = '';
-        $surn = '';
-
-        if (!empty($individual->getName())) {
-            $surn = current($individual->getName())->getSurn();
-            $givn = current($individual->getName())->getGivn();
-            $name = current($individual->getName())->getName();
-        }
-
-        // string value
-        $uid = $individual->getUid();
-        $chan = $individual->getChan();
-        $rin = $individual->getRin();
-        $resn = $individual->getResn();
-        $rfn = $individual->getRfn();
-        $afn = $individual->getAfn();
-
-        $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
-        $attr = $individual->getAllAttr();
-        $events = $individual->getAllEven();
-
-        if ($givn == '') {
-            $givn = $name;
-        }
-        $person = app(Person::class)->query()->updateOrCreate(['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex], ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'chan' => $chan, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn]);
-        $this->personsId[$g_id] = $person->id;
-
-        if ($events !== null) {
-            foreach ($events as $event) {
-                $date = $this->getDate($event->getDate());
-                $place = $this->getPlace($event->getPlac());
-                $person->addEvent($event->getType(), $date, $place);
-            }
-        }
-
-        if ($attr !== null) {
-            foreach ($attr as $event) {
-                $date = $this->getDate($event->getDate());
-                $place = $this->getPlace($event->getPlac());
-                $note = (is_countable($event->getNote()) ? count($event->getNote()) : 0) > 0 ? current($event->getNote())->getNote() : '';
-                $person->addEvent($event->getType(), $date, $place, $event->getAttr().' '.$note);
-            }
-        }
+        DB::transaction(function () use ($records) {
+            $this->processSubmission($records['subn']);
+            $this->processSubmitters($records['subm']);
+            $this->processSources($records['sour']);
+            $this->processNotes($records['note']);
+            $this->processRepositories($records['repo']);
+            $this->processMediaObjects($records['obje']);
+            $this->processIndividuals($records['individuals']);
+            $this->processFamilies($records['families']);
+        });
     }
 
-    private function getFamily($family)
+    private function processSubmission(?Subn $subn): void
     {
-        $husb = $family->getHusb();
-        $wife = $family->getWife();
-
-        // string
-        $chan = $family->getChan();
-        $nchi = $family->getNchi();
-
-        $description = null;
-        $type_id = 0;
-        $children = $family->getChil();
-        $events = $family->getAllEven();
-
-        $husband_id = $this->personsId[$husb] ?? 0;
-        $wife_id = $this->personsId[$wife] ?? 0;
-
-        $family = app(Family::class)->query()->updateOrCreate(['husband_id' => $husband_id, 'wife_id' => $wife_id], ['husband_id' => $husband_id, 'wife_id' => $wife_id, 'description' => $description, 'type_id' => $type_id, 'chan' => $chan, 'nchi' => $nchi]);
-
-        if ($children !== null) {
-            foreach ($children as $child) {
-                if (isset($this->personsId[$child])) {
-                    $person = app(Person::class)->query()->find($this->personsId[$child]);
-                    $person->child_in_family_id = $family->id;
-                    $person->save();
-                }
-            }
-        }
-
-        if ($events !== null) {
-            foreach ($events as $event) {
-                $date = $this->getDate($event->getDate());
-                $place = $this->getPlace($event->getPlac());
-                $family->addEvent($event->getType(), $date, $place);
+        if ($subn != null) {
+            //
+            $this->getSubn($subn);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
             }
         }
     }
 
-    private function getSubn($subn)
+    private function processSubmitters(array $subm): void
     {
-        $subm = $subn->getSubm();
-        $famf = $subn->getFamf();
-        $temp = $subn->getTemp();
-        $ance = $subn->getAnce();
-        $desc = $subn->getDesc();
-        $ordi = $subn->getOrdi();
-        $rin = $subn->getRin();
-        app(Subn::class)->query()->updateOrCreate(['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin], ['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin]);
+        foreach ($subm as $item) {
+            $this->getSubm($item);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function processSources(array $sour): void
+    {
+        foreach ($sour as $item) {
+            $this->getSour($item);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function processNotes(array $note): void
+    {
+        foreach ($note as $item) {
+            $this->getNote($item);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function processRepositories(array $repo): void
+    {
+        foreach ($repo as $item) {
+            $this->getRepo($item);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function processMediaObjects(array $obje): void
+    {
+        foreach ($obje as $item) {
+            $this->getObje($item);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function processIndividuals(array $individuals): void
+    {
+        foreach ($individuals as $individual) {
+            $this->getPerson($individual);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function processFamilies(array $families): void
+    {
+        foreach ($families as $family) {
+            $this->getFamily($family);
+            if ($this->progressReporter) {
+                $this->progressReporter->advance();
+                event(new GedComProgressSent($this->progressReporter->getSlug(), $this->progressReporter->getTotal(), $this->progressReporter->getComplete()));
+            }
+        }
+    }
+
+    private function getSubn(?Subn $subn): void
+    {
+        if ($subn != null) {
+            $subm = $subn->getSubm();
+            $famf = $subn->getFamf();
+            $temp = $subn->getTemp();
+            $ance = $subn->getAnce();
+            $desc = $subn->getDesc();
+            $ordi = $subn->getOrdi();
+            $rin = $subn->getRin();
+            app(Subn::class)->query()->updateOrCreate(['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin], ['subm' => $subm, 'famf' => $famf, 'temp' => $temp, 'ance' => $ance, 'desc' => $desc, 'ordi' => $ordi, 'rin' => $rin]);
+        }
     }
 
     // insert subm data to model
-    private function getSubm($_subm)
+    private function getSubm($_subm): void
     {
         $subm = $_subm->getSubm() ?? 'Unknown'; $_subm->getChan() ?? ['Unknown']; // Record\Chan---
         $name = $_subm->getName() ?? 'Unknown'; // string
@@ -249,7 +255,7 @@ class GedcomWriter
     }
 
     // insert sour data to database
-    private function getSour($_sour)
+    private function getSour($_sour): void
     {
         $sour = $_sour->getSour(); // string
         $titl = $_sour->getTitl(); // string
@@ -262,7 +268,7 @@ class GedcomWriter
     }
 
     // insert note data to database
-    private function getNote($_note)
+    private function getNote($_note): void
     {
         $gid = $_note->getId(); // string
         $note = $_note->getNote(); // string
@@ -271,7 +277,7 @@ class GedcomWriter
     }
 
     // insert repo data to database
-    private function getRepo($_repo)
+    private function getRepo($_repo): void
     {
         $repo = $_repo->getRepo(); // string
         $name = $_repo->getName(); // string
@@ -297,9 +303,106 @@ class GedcomWriter
     }
 
     // insert obje data to database
-    private function getObje($_obje)
+    private function getObje($_obje): void
     {
         $gid = $_obje->getId(); $_obje->getForm(); $_obje->getTitl(); $_obje->getBlob(); $_obje->getRin(); $_obje->getChan(); $_obje->getFile(); // string
         app(MediaObject::class)->updateOrCreate(['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file], ['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file]);
+    }
+
+    private function getDate(?string $inputDate): ?string
+    {
+        return $inputDate ? (new DateParser($inputDate))->parse() : null;
+    }
+
+    private function getPlace(?object $place): ?string
+    {
+        return $place?->getPlac();
+    }
+
+    private function getPerson(Person $individual): void
+    {
+        $g_id = $individual->getId();
+        $name = '';
+        $givn = '';
+        $surn = '';
+
+        if (!empty($individual->getName())) {
+            $surn = current($individual->getName())->getSurn();
+            $givn = current($individual->getName())->getGivn();
+            $name = current($individual->getName())->getName();
+        }
+
+        // string value
+        $uid = $individual->getUid();
+        $chan = $individual->getChan();
+        $rin = $individual->getRin();
+        $resn = $individual->getResn();
+        $rfn = $individual->getRfn();
+        $afn = $individual->getAfn();
+
+        $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
+        $attr = $individual->getAllAttr();
+        $events = $individual->getAllEven();
+
+        if ($givn == '') {
+            $givn = $name;
+        }
+        $person = app(Person::class)->query()->updateOrCreate(['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex], ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'chan' => $chan, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn]);
+        $this->personsId[$g_id] = $person->id;
+
+        if ($events !== null) {
+            foreach ($events as $event) {
+                $date = $this->getDate($event->getDate());
+                $place = $this->getPlace($event->getPlac());
+                $person->addEvent($event->getType(), $date, $place);
+            }
+        }
+
+        if ($attr !== null) {
+            foreach ($attr as $event) {
+                $date = $this->getDate($event->getDate());
+                $place = $this->getPlace($event->getPlac());
+                $note = (is_countable($event->getNote()) ? count($event->getNote()) : 0) > 0 ? current($event->getNote())->getNote() : '';
+                $person->addEvent($event->getType(), $date, $place, $event->getAttr().' '.$note);
+            }
+        }
+    }
+
+    private function getFamily(Family $family): void
+    {
+        $husb = $family->getHusb();
+        $wife = $family->getWife();
+
+        // string
+        $chan = $family->getChan();
+        $nchi = $family->getNchi();
+
+        $description = null;
+        $type_id = 0;
+        $children = $family->getChil();
+        $events = $family->getAllEven();
+
+        $husband_id = $this->personsId[$husb] ?? 0;
+        $wife_id = $this->personsId[$wife] ?? 0;
+
+        $family = app(Family::class)->query()->updateOrCreate(['husband_id' => $husband_id, 'wife_id' => $wife_id], ['husband_id' => $husband_id, 'wife_id' => $wife_id, 'description' => $description, 'type_id' => $type_id, 'chan' => $chan, 'nchi' => $nchi]);
+
+        if ($children !== null) {
+            foreach ($children as $child) {
+                if (isset($this->personsId[$child])) {
+                    $person = app(Person::class)->query()->find($this->personsId[$child]);
+                    $person->child_in_family_id = $family->id;
+                    $person->save();
+                }
+            }
+        }
+
+        if ($events !== null) {
+            foreach ($events as $event) {
+                $date = $this->getDate($event->getDate());
+                $place = $this->getPlace($event->getPlac());
+                $family->addEvent($event->getType(), $date, $place);
+            }
+        }
     }
 }

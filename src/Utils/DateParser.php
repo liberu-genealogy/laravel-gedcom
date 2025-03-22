@@ -4,16 +4,6 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 
 readonly class DateParser
 {
-    private const MONTHS = [
-        'JAN' => 1, 'FEB' => 2, 'MAR' => 3, 'APR' => 4,
-        'MAY' => 5, 'JUN' => 6, 'JUL' => 7, 'AUG' => 8,
-        'SEP' => 9, 'OCT' => 10, 'NOV' => 11, 'DEC' => 12,
-    ];
-
-    private const DATE_QUALIFIERS = [
-        'AFT', 'BEF', 'BET', 'AND', 'ABT', 'CAL', 'EST', 'FROM', 'TO'
-    ];
-
     private int|float|null $year = null;
     private ?int $month = null;
     private int|float|null $day = null;
@@ -21,20 +11,28 @@ readonly class DateParser
 
     public function parse_date(): array
     {
-        $dateString = $this->cleanDateString();
+        $this->trim_datestring();
+        if (!$this->try_parse_full_date() && !$this->try_parse_M_Y_date() && !$this->try_parse_Y_date()) {
+            $this->set_null_date();
+        }
 
-        return match(true) {
-            $this->try_parse_full_date($dateString) => $this->exportDate(),
-            $this->try_parse_M_Y_date($dateString) => $this->exportDate(),
-            $this->try_parse_Y_date($dateString) => $this->exportDate(),
-            default => $this->getNullDate()
-        };
+        return $this->export();
     }
 
-    private function cleanDateString(): string
+    private function trim_datestring()
     {
-        $string = str_replace(self::DATE_QUALIFIERS, '', $this->date_string ?? '');
-        return trim($string);
+        $words_to_remove = [
+            // If an exact date is not known, a date range can be specified
+            'AFT', 'BEF', 'BET', 'AND',
+            //For approximate dates
+            'ABT', 'CAL', 'EST',
+            // Takes a property over a certain period of time ( e.g. exercise of a profession, living in a particular place )
+            'FROM', 'TO',
+        ];
+        foreach ($words_to_remove as $word) {
+            $this->date_string = str_replace($word, '', (string) $this->date_string);
+        }
+        $this->date_string = trim($this->date_string);
     }
 
     private function try_parse_full_date()
@@ -153,21 +151,12 @@ readonly class DateParser
         $this->day = null;
     }
 
-    private function exportDate(): array
+    public function export(): array
     {
         return [
             'year'          => $this->year,
             'month'         => $this->month,
             'day'           => $this->day,
-        ];
-    }
-
-    private function getNullDate(): array
-    {
-        return [
-            'year' => null,
-            'month' => null,
-            'day' => null
         ];
     }
 }
