@@ -7,6 +7,10 @@ liberu-genealogy/laravel-gedcom is a package to parse [GEDCOM](https://en.wikipe
 as Laravel models, inside your Laravel application. It is used by:
 (https://github.com/liberu-genealogy/genealogy-laravel)
 
+
+* laravel-gedcom 5.0+ requires PHP 8.3 (or later).
+* laravel-gedcom 6.0+ requires PHP 8.4 (or later).
+
 ## Installation
 ```
 composer require liberu-genealogy/laravel-gedcom
