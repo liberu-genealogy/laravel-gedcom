@@ -7,16 +7,16 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
 
-class ProgressReporter
+readonly class ProgressReporter
 /**
  * ProgressReporter class is responsible for reporting the progress of GEDCOM file processing.
  * It manages progress tracking and emits events to update on the current progress.
  */
 {
-    protected $progressBar;
-    protected $totalSteps;
-    protected $currentProgress = 0;
-    protected $channel;
+    private int $totalSteps;
+    private int $currentProgress = 0;
+    private array $channel;
+    private OutputStyle $progressBar;
 
     public function __construct(int $totalSteps, array $channel)
     {

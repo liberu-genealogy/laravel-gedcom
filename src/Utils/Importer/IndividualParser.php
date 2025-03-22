@@ -7,20 +7,20 @@ use FamilyTree365\LaravelGedcom\Utils\FamilyData;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class IndividualParser
+readonly class IndividualParser
 /**
  * IndividualParser class is responsible for parsing individual data from GEDCOM files.
  */
 {
-    protected $conn;
-    protected $individualIds = [];
+    private string $conn;
+    private array $individualIds = [];
 
-    public function __construct($conn)
+    public function __construct(string $conn)
     {
         $this->conn = $conn;
     }
 
-    public function parseIndividuals($individuals)
+    public function parseIndividuals(array $individuals): void
     {
         foreach ($individuals as $individual) {
             DB::beginTransaction();

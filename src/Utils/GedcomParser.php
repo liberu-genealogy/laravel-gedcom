@@ -23,7 +23,14 @@ use Illuminate\Support\Facades\DB as DB;
 
 readonly class GedcomParser
 {
-    public array $person_ids = [];
+    private string $conn;
+    private array $obje_ids = [];
+    private array $subm_ids = [];
+    private array $sour_ids = [];
+    private array $note_ids = [];
+    private array $repo_ids = [];
+    private array $persons_id = [];
+
     /**
      * Array of persons ID
      * key - old GEDCOM ID
@@ -43,12 +50,12 @@ readonly class GedcomParser
     protected $conn = '';
 
     public function parse(
-        $conn,
         string $filename,
+        string $conn,
         string $slug,
-        bool $progressBar = null,
-        $channel = ['name' => 'gedcom-progress1', 'eventName' => 'newMessage']
-    ) {
+        ?bool $progressBar = false,
+        array $channel = []
+    ): void {
         DB::disableQueryLog();
         //start calculating the time
         $time_start = microtime(true);
