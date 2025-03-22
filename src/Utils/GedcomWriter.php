@@ -15,6 +15,7 @@ use Gedcom\Parser;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class GedcomWriter
 {
@@ -25,16 +26,13 @@ class GedcomWriter
      *
      * @var string
      */
-    protected $persons_id = [];
+    private array $personsId = [];
 
-    public function parse(string $filename, string $slug, bool $progressBar = false)
+    public function parse(string $filename, string $slug, bool $progressBar = false): void
     {
         $parser = new Parser();
-        $gedcom = @$parser->parse($filename);
+        $gedcom = $parser->parse($filename);
 
-        /**
-         * work.
-         */
         $subn = $gedcom->getSubn();
         $subm = $gedcom->getSubm();
         $sour = $gedcom->getSour();
@@ -42,112 +40,35 @@ class GedcomWriter
         $repo = $gedcom->getRepo();
         $obje = $gedcom->getObje();
 
-        /**
-         * work end.
-         */
-        $c_subn = 0;
-        $c_subm = count($subm);
-        $c_sour = count($sour);
-        $c_note = count($note);
-        $c_repo = count($repo);
-        $c_obje = count($obje);
-        if ($subn != null) {
-            //
-            $c_subn = 1;
-        }
-
-        $individuals = $gedcom->getIndi();
-        $families = $gedcom->getFam();
-        $total = count($individuals) + count($families) + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
+        $total = $this->calculateTotal($gedcom, $subn, $subm, $sour, $note, $repo, $obje);
         $complete = 0;
-        if ($progressBar) {
-            $bar = $this->getProgressBar(count($individuals) + count($families));
-            event(new GedComProgressSent($slug, $total, $complete));
-        }
-
-        if ($subn != null) {
-            // store the submission information for the GEDCOM file.
-            $this->getSubn($subn);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-
-        // store information about all the submitters to the GEDCOM file.
-        foreach ($subm as $item) {
-            $this->getSubm($item);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-
-        // store sources cited throughout the GEDCOM file.
-        foreach ($sour as $item) {
-            $this->getSour($item);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-
-        // store all the notes contained within the GEDCOM file that are not inline.
-        foreach ($note as $item) {
-            $this->getNote($item);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-
-        // store all repositories that are contained within the GEDCOM file and referenced by sources.
-        foreach ($repo as $item) {
-            $this->getRepo($item);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-        // store all the media objects that are contained within the GEDCOM file.
-        foreach ($obje as $item) {
-            $this->getObje($item);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-
-        foreach ($individuals as $individual) {
-            $this->getPerson($individual);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
-
-        foreach ($families as $family) {
-            $this->getFamily($family);
-            if ($progressBar) {
-                $bar->advance();
-                $complete++;
-                event(new GedComProgressSent($slug, $total, $complete));
-            }
-        }
 
         if ($progressBar) {
-            $bar->finish();
+            $bar = $this->getProgressBar($total);
+            $this->emitProgress($slug, $total, $complete);
         }
+
+        $this->processRecords($subn, $subm, $sour, $note, $repo, $obje, $gedcom, $progressBar, $bar, $slug);
     }
 
-    private function getProgressBar(int $max)
+    private function calculateTotal($gedcom, $subn, $subm, $sour, $note, $repo, $obje): int
+    {
+        return count($gedcom->getIndi()) +
+               count($gedcom->getFam()) +
+               ($subn ? 1 : 0) +
+               count($subm) +
+               count($sour) +
+               count($note) +
+               count($repo) +
+               count($obje);
+    }
+
+    private function emitProgress(string $slug, int $total, int $complete): void
+    {
+        event(new GedComProgressSent($slug, $total, $complete));
+    }
+
+    private function getProgressBar(int $max): ProgressBar
     {
         return (new OutputStyle(
             new StringInput(''),
@@ -198,7 +119,7 @@ class GedcomWriter
             $givn = $name;
         }
         $person = app(Person::class)->query()->updateOrCreate(['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex], ['name' => $name, 'givn' => $givn, 'surn' => $surn, 'sex' => $sex, 'uid' => $uid, 'chan' => $chan, 'rin' => $rin, 'resn' => $resn, 'rfn' => $rfn, 'afn' => $afn]);
-        $this->persons_id[$g_id] = $person->id;
+        $this->personsId[$g_id] = $person->id;
 
         if ($events !== null) {
             foreach ($events as $event) {
@@ -232,15 +153,15 @@ class GedcomWriter
         $children = $family->getChil();
         $events = $family->getAllEven();
 
-        $husband_id = $this->persons_id[$husb] ?? 0;
-        $wife_id = $this->persons_id[$wife] ?? 0;
+        $husband_id = $this->personsId[$husb] ?? 0;
+        $wife_id = $this->personsId[$wife] ?? 0;
 
         $family = app(Family::class)->query()->updateOrCreate(['husband_id' => $husband_id, 'wife_id' => $wife_id], ['husband_id' => $husband_id, 'wife_id' => $wife_id, 'description' => $description, 'type_id' => $type_id, 'chan' => $chan, 'nchi' => $nchi]);
 
         if ($children !== null) {
             foreach ($children as $child) {
-                if (isset($this->persons_id[$child])) {
-                    $person = app(Person::class)->query()->find($this->persons_id[$child]);
+                if (isset($this->personsId[$child])) {
+                    $person = app(Person::class)->query()->find($this->personsId[$child]);
                     $person->child_in_family_id = $family->id;
                     $person->save();
                 }
