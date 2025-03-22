@@ -7,32 +7,37 @@ use FamilyTree365\LaravelGedcom\Utils\FamilyData;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class FamilyParser
+readonly class FamilyParser
 /**
  * FamilyParser class is responsible for parsing family data from GEDCOM files.
  */
 {
-    protected $conn;
-    protected $familyIds = [];
+    public function __construct(
+        private string $conn,
+        private array $personIds = []
+    ) {}
 
-    public function __construct($conn)
-    {
-        $this->conn = $conn;
-    }
-
-    public function parseFamilies($families)
+    public function parseFamilies(array $families): void
     {
         foreach ($families as $family) {
-            DB::beginTransaction();
-            try {
-                $this->parseAttributes($family);
-                $this->parseRelationships($this->conn, $family);
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::error('Failed to parse family: ' . $e->getMessage());
-            }
+            DB::transaction(function () use ($family) {
+                $this->parseFamily($family);
+            });
         }
+    }
+
+    private function parseFamily(object $family): void
+    {
+        $familyRecord = app(Family::class)->create([
+            'husband_id' => $this->personIds[$family->getHusb()] ?? null,
+            'wife_id' => $this->personIds[$family->getWife()] ?? null,
+            'type_id' => 0,
+            'chan' => $family->getChan()?->getDatetime(),
+            'nchi' => $family->getNchi(),
+        ]);
+
+        $this->linkChildren($familyRecord, $family->getChil());
+        $this->parseEvents($familyRecord, $family->getAllEven());
     }
 
     protected function parseAttributes($family)

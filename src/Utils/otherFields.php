@@ -18,224 +18,174 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\Refn;
 use FamilyTree365\LaravelGedcom\Utils\Importer\SourRef;
 use FamilyTree365\LaravelGedcom\Utils\Importer\Subm;
 
-class otherFields
+readonly class OtherFields
 {
-    /**
-     * Array of persons ID
-     * key - old GEDCOM ID
-     * value - new autoincrement ID.
-     *
-     * @var string
-     */
-    protected $persons_id = [];
-    protected $subm_ids = [];
-    protected $sour_ids = [];
-    protected $obje_ids = [];
-    protected $note_ids = [];
-    protected $repo_ids = [];
-    protected $conn = '';
-
-    public static function insertOtherFields($conn, $individuals, $obje_ids, $sour_ids)
-    {
+    public static function insertOtherFields(
+        string $conn,
+        array $individuals,
+        array $objeIds,
+        array $sourIds
+    ): void {
         foreach ($individuals as $individual) {
-            $g_id = $individual->getId();
-            $name = '';
-            $givn = '';
-            $surn = '';
-            $name = '';
-            $npfx = '';
-            $givn = '';
-            $nick = '';
-            $spfx = '';
-            $surn = '';
-            $nsfx = '';
-            $type = '';
-            $fone = null; // Gedcom/
-            $romn = null;
-            $names = $individual->getName();
-            $attr = $individual->getAllAttr();
-            $events = $individual->getAllEven();
-            $note = $individual->getNote();
-            $indv_sour = $individual->getSour();
-            $alia = $individual->getAlia(); // string array
-            $asso = $individual->getAsso();
-            $subm = $individual->getSubm();
-            $anci = $individual->getAnci();
-            // $desi = $individual->getDesi();
-            $refn = $individual->getRefn(); //
-            $obje = $individual->getObje();
-            // object
-            $bapl = $individual->getBapl();
-            $conl = $individual->getConl();
-            $endl = $individual->getEndl();
-            $slgc = $individual->getSlgc();
-            $chan = $individual->getChan();
-            $g_id = $individual->getId();
+            DB::transaction(function () use ($conn, $individual, $objeIds, $sourIds) {
+                $person = self::findOrCreatePerson($conn, $individual);
 
-            if (!empty($names)) {
-                $name = current($names)->getName();
-                $npfx = current($names)->getNpfx();
-                $givn = current($names)->getGivn();
-                $nick = current($names)->getNick();
-                $spfx = current($names)->getSpfx();
-                $surn = current($names)->getSurn();
-                $nsfx = current($names)->getNsfx();
-                $type = current($names)->getType();
-            }
+                self::processEvents($conn, $individual, $person, $objeIds);
+                self::processNotes($conn, $individual, $person);
+                self::processSources($conn, $individual, $person, $sourIds, $objeIds);
+                self::processMedia($conn, $individual, $person, $objeIds);
+            });
+        }
+    }
 
-            // array value
-            $fams = $individual->getFams();  // self family, leave it now, note would be included in family
-            $famc = $individual->getFamc();  // parent family , leave it now, note and pedi would be included in family
+    private static function findOrCreatePerson(string $conn, object $individual): Person
+    {
+        return app(Person::class)->on($conn)->firstOrCreate(
+            ['name' => $individual->getName()?->first()?->getName()],
+            self::extractPersonData($individual)
+        );
+    }
 
-            // added to database
-            // string value
-            $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
-            $uid = $individual->getUid();
-            $resn = $individual->getResn();
-            $rin = $individual->getRin();
-            $rfn = $individual->getRfn();
-            $afn = $individual->getAfn();
+    private static function extractPersonData(object $individual): array
+    {
+        $names = $individual->getName();
+        $name = current($names)->getName();
+        $npfx = current($names)->getNpfx();
+        $givn = current($names)->getGivn();
+        $nick = current($names)->getNick();
+        $spfx = current($names)->getSpfx();
+        $surn = current($names)->getSurn();
+        $nsfx = current($names)->getNsfx();
+        $type = current($names)->getType();
+        $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
+        $uid = $individual->getUid();
+        $resn = $individual->getResn();
+        $rin = $individual->getRin();
+        $rfn = $individual->getRfn();
+        $afn = $individual->getAfn();
+        return compact('name', 'npfx', 'givn', 'nick', 'spfx', 'surn', 'nsfx', 'type', 'sex', 'uid', 'resn', 'rin', 'rfn', 'afn');
+    }
 
-            if ($givn == '') {
-                $givn = $name;
-            }
+    private static function processEvents(string $conn, object $individual, Person $person, array $objeIds): void
+    {
+        $events = $individual->getAllEven();
+        if ($events !== null) {
+            Even::read($conn, $events, $person, $objeIds);
+        }
+    }
 
-            //$person = app(Person::class)->on($conn)->where('name', $name)->where('givn', $givn)->where('surn', $surn)->where('sex', $sex)->first();
-            $person = app(Person::class)->on($conn)->where('name', $name)->first();
-
-            if ($events !== null) {
-                Even::read($conn, $events, $person, $obje_ids);
-                // foreach ($events as $event) {
-                    //     if ($event && count($event) > 0) {
-                    //         $e_data = $event[0];
-                    //         Even::read($conn, $e_data, $person, $obje_ids);
-                    //     }
-                    // }
-            }
-
-            if ($attr !== null) {
-                Even::read($conn, $attr, $person);
-                // foreach ($attr as $event) {
-                    //     $e_data = $event[0];
-                    //     Even::read($conn, $e_data, $person);
-                    // }
-            }
-
-            $_group = 'indi';
-            $_gid = $person->id ?? 0;
-            if ($names != null && (is_countable($names) ? count($names) : 0) > 0) {
-                // Name::read($conn, $names, $_group, $_gid);
-                foreach ($names as $item) {
-                    if ($item) {
-                        Name::read($conn, $item, $_group, $_gid);
-                    }
-                }
-            }
-
-            if ($note != null && (is_countable($note) ? count($note) : 0) > 0) {
-                // NoteRef::read($conn, $note, $_group, $_gid);
-                foreach ($note as $item) {
-                    if ($item) {
-                        NoteRef::read($conn, $item, $_group, $_gid);
-                    }
-                }
-            }
-
-            if ($indv_sour != null && (is_countable($indv_sour) ? count($indv_sour) : 0) > 0) {
-                // SourRef::read($conn, $indv_sour, $_group, $_gid, $sour_ids, $obje_ids);
-                foreach ($indv_sour as $item) {
-                    if ($item) {
-                        SourRef::read($conn, $item, $_group, $_gid, $sour_ids, $obje_ids);
-                    }
-                }
-            }
-
-            // ??
-            if ($alia && (is_countable($alia) ? count($alia) : 0) > 0) {
-                Alia::read($conn, $alia, $_group, $_gid);
-                // foreach ($alia as $item) {
-                    //     if ($item) {
-                    //         Alia::read($conn, $item, $_group, $_gid);
-                    //     }
-                    // }
-            }
-
-            // Asso::read($conn, $item, $_group, $_gid);
-            foreach ($asso as $item) {
+    private static function processNotes(string $conn, object $individual, Person $person): void
+    {
+        $note = $individual->getNote();
+        if ($note != null && (is_countable($note) ? count($note) : 0) > 0) {
+            foreach ($note as $item) {
                 if ($item) {
-                    Asso::read($conn, $item, $_group, $_gid);
+                    NoteRef::read($conn, $item, 'indi', $person->id ?? 0);
                 }
             }
+        }
+    }
 
-            if ($subm && (is_countable($subm) ? count($subm) : 0) > 0) {
-                Subm::read($conn, $subm, $_group, $_gid, $obje_ids);
-                // foreach ($subm as $item) {
-                    //     if ($item) {
-                    //         Subm::read($conn, $item, $_group, $_gid, $subm_ids);
-                    //     }
-                    // }
-            }
-
-            if ($anci && (is_countable($anci) ? count($anci) : 0) > 0) {
-                Anci::read($conn, $anci, $_group, $_gid, $obje_ids);
-                // foreach ($anci as $item) {
-                    //     if ($item) {
-                    //         Anci::read($conn, $item, $_group, $_gid, $subm_ids);
-                    //     }
-                    // }
-            }
-
-            // if ($desi && count($desi) > 0) {
-            //     foreach ($desi as $item) {
-            //         if ($item) {
-            //             Desi::read($conn, $item, $_group, $_gid, $subm_ids);
-            //         }
-            //     }
-            // }
-            // Refn::read($conn, $refn, $_group, $_gid);
-            foreach ($refn as $item) {
+    private static function processSources(string $conn, object $individual, Person $person, array $sourIds, array $objeIds): void
+    {
+        $indv_sour = $individual->getSour();
+        if ($indv_sour != null && (is_countable($indv_sour) ? count($indv_sour) : 0) > 0) {
+            foreach ($indv_sour as $item) {
                 if ($item) {
-                    Refn::read($conn, $item, $_group, $_gid);
+                    SourRef::read($conn, $item, 'indi', $person->id ?? 0, $sourIds, $objeIds);
                 }
             }
+        }
+    }
 
-            // ObjeRef::read($conn, $obje, $_group, $_gid, $obje_ids);
+    private static function processMedia(string $conn, object $individual, Person $person, array $objeIds): void
+    {
+        $obje = $individual->getObje();
+        if ($obje != null) {
             foreach ($obje as $item) {
                 if ($item) {
-                    ObjeRef::read($conn, $item, $_group, $_gid, $obje_ids);
+                    ObjeRef::read($conn, $item, 'indi', $person->id ?? 0, $objeIds);
                 }
             }
-
-            // Lds::read($conn, $bapl, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
+        }
+        $bapl = $individual->getBapl();
+        if ($bapl != null) {
             foreach ($bapl as $item) {
                 if ($item) {
-                    Lds::read($conn, $item, $_group, $_gid, 'BAPL', $sour_ids, $obje_ids);
+                    Lds::read($conn, $item, 'indi', $person->id ?? 0, 'BAPL', $sourIds, $objeIds);
                 }
             }
-
-            // Lds::read($conn, $conl, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
+        }
+        $conl = $individual->getConl();
+        if ($conl != null) {
             foreach ($conl as $item) {
                 if ($item) {
-                    Lds::read($conn, $item, $_group, $_gid, 'CONL', $sour_ids, $obje_ids);
+                    Lds::read($conn, $item, 'indi', $person->id ?? 0, 'CONL', $sourIds, $objeIds);
                 }
             }
-
-            // Lds::read($conn, $endl, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
+        }
+        $endl = $individual->getEndl();
+        if ($endl != null) {
             foreach ($endl as $item) {
                 if ($item) {
-                    Lds::read($conn, $item, $_group, $_gid, 'ENDL', $sour_ids, $obje_ids);
+                    Lds::read($conn, $item, 'indi', $person->id ?? 0, 'ENDL', $sourIds, $objeIds);
                 }
             }
-
-            // Lds::read($conn, $slgc, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
+        }
+        $slgc = $individual->getSlgc();
+        if ($slgc != null) {
             foreach ($slgc as $item) {
                 if ($item) {
-                    Lds::read($conn, $item, $_group, $_gid, 'SLGC', $sour_ids, $obje_ids);
+                    Lds::read($conn, $item, 'indi', $person->id ?? 0, 'SLGC', $sourIds, $objeIds);
                 }
             }
+        }
+    }
 
-            if ($chan) {
-                Chan::read($conn, $chan, $_group, $_gid);
+    private static function processAssociations(string $conn, object $individual, Person $person, array $objeIds): void
+    {
+        $asso = $individual->getAsso();
+        if ($asso != null) {
+            foreach ($asso as $item) {
+                if ($item) {
+                    Asso::read($conn, $item, 'indi', $person->id ?? 0);
+                }
+            }
+        }
+    }
+
+    private static function processSubmissions(string $conn, object $individual, Person $person, array $objeIds): void
+    {
+        $subm = $individual->getSubm();
+        if ($subm != null && (is_countable($subm) ? count($subm) : 0) > 0) {
+            foreach ($subm as $item) {
+                if ($item) {
+                    Subm::read($conn, $item, 'indi', $person->id ?? 0, $objeIds);
+                }
+            }
+        }
+    }
+
+    private static function processAncestors(string $conn, object $individual, Person $person, array $objeIds): void
+    {
+        $anci = $individual->getAnci();
+        if ($anci != null && (is_countable($anci) ? count($anci) : 0) > 0) {
+            foreach ($anci as $item) {
+                if ($item) {
+                    Anci::read($conn, $item, 'indi', $person->id ?? 0, $objeIds);
+                }
+            }
+        }
+    }
+
+    private static function processReferences(string $conn, object $individual, Person $person, array $objeIds): void
+    {
+        $refn = $individual->getRefn();
+        if ($refn != null) {
+            foreach ($refn as $item) {
+                if ($item) {
+                    Refn::read($conn, $item, 'indi', $person->id ?? 0);
+                }
             }
         }
     }

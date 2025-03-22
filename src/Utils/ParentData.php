@@ -5,8 +5,9 @@ namespace FamilyTree365\LaravelGedcom\Utils;
 use FamilyTree365\LaravelGedcom\Models\Family;
 use FamilyTree365\LaravelGedcom\Models\Person;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
-class ParentData
+readonly class ParentData
 {
     /**
      * Array of persons ID
@@ -23,163 +24,96 @@ class ParentData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getPerson($conn, $individuals, $obje_ids = [], $sour_ids = [])
-    {
-        $ParentData = [];
-        $a = [];
+    public static function getPerson(
+        string $conn,
+        array $individuals,
+        array $objeIds,
+        array $sourIds
+    ): array {
+        return DB::transaction(function () use ($conn, $individuals, $objeIds, $sourIds) {
+            $parentData = [];
 
-        try {
             foreach ($individuals as $individual) {
-                $g_id = $individual->getId();
-                $name = '';
-                $givn = '';
-                $surn = '';
-                $name = '';
-                $npfx = '';
-                $givn = '';
-                $nick = '';
-                $spfx = '';
-                $surn = '';
-                $nsfx = '';
-                $type = '';
-                $fone = null; // Gedcom/
-                $romn = null;
-                $names = $individual->getName();
-                $attr = $individual->getAllAttr();
-                $events = $individual->getAllEven();
-                $note = $individual->getNote();
-                $indv_sour = $individual->getSour();
-                $alia = $individual->getAlia(); // string array
-                $asso = $individual->getAsso();
-                $subm = $individual->getSubm();
-                $anci = $individual->getAnci();
-                $refn = $individual->getRefn();
-                $obje = $individual->getObje();
-                // object
-                $bapl = $individual->getBapl();
-                $conl = $individual->getConl();
-                $endl = $individual->getEndl();
-                $slgc = $individual->getSlgc();
-                $chan = $individual->getChan();
-                $g_id = $individual->getId();
-
-                if (!empty($names)) {
-                    $name = current($names)->getName() ?: '';
-                    $npfx = current($names)->getNpfx() ?: '';
-                    $givn = current($names)->getGivn() ?: '';
-                    $nick = current($names)->getNick() ?: '';
-                    $spfx = current($names)->getSpfx() ?: '';
-                    $surn = current($names)->getSurn() ?: '';
-                    $nsfx = current($names)->getNsfx() ?: '';
-                    $type = current($names)->getType() ?: '';
-                }
-
-                // array value
-                $fams = $individual->getFams();  // self family, leave it now, note would be included in family
-                $famc = $individual->getFamc();  // parent family , leave it now, note and pedi would be included in family
-
-                // added to database
-                // string value
-                $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
-                $uid = $individual->getUid() ?? strtoupper(str_replace('-', '', (string) Str::uuid()));
-                $resn = $individual->getResn();
-                $rin = $individual->getRin();
-                $rfn = $individual->getRfn();
-                $afn = $individual->getAfn();
-                $titl = $individual->getAttr();
-
-                $birt = $individual->getBirt();
-                $birthday = $birt->dateFormatted ?? null;
-
-                $birth_month = $birt->month ?? null;
-                $birth_year = $birt->year ?? null;
-                $birthday_dati = $birt->dati ?? null;
-                $birthday_plac = $birt->plac ?? null;
-
-                $deat = $individual->getDeat();
-                $deathday = $deat->dateFormatted ?? null;
-                $death_month = $deat->month ?? null;
-                $death_year = $deat->year ?? null;
-                $deathday_dati = $deat->dati ?? null;
-                $deathday_plac = $deat->plac ?? null;
-                $deathday_caus = $deat->caus ?? null;
-
-                $buri = $individual->getBuri();
-                $burial_day = $buri->dateFormatted ?? null;
-                $burial_month = $buri->month ?? null;
-                $burial_year = $buri->year ?? null;
-                $burial_day_dati = $buri->dati ?? null;
-                $burial_day_plac = $buri->plac ?? null;
-
-                $chr = $individual->getChr();
-                $chr = $chr->dateFormatted ?? null;
-
-                if ($givn == '') {
-                    $givn = $name;
-                }
-
-                $config = json_encode(config('database.connections.'.$conn), JSON_THROW_ON_ERROR);
-                $value = [
-                    'gid'             => $g_id,
-                    'name'            => $name,
-                    'givn'            => $givn,
-                    'surn'            => $surn,
-                    'sex'             => $sex,
-                    'uid'             => $uid,
-                    'rin'             => $rin,
-                    'resn'            => $resn,
-                    'rfn'             => $rfn,
-                    'afn'             => $afn,
-                    'nick'            => $nick,
-                    'type'            => $type,
-                    'chan'            => $chan ? $chan->getDatetime() : null,
-                    'nsfx'            => $nsfx,
-                    'npfx'            => $npfx,
-                    'spfx'            => $spfx,
-                    'birthday'        => self::validateDate($birthday) ? $birthday : null,
-                    'birth_month'     => $birth_month,
-                    'birth_year'      => $birth_year,
-                    'birthday_dati'   => mb_convert_encoding((string) $birthday_dati, 'UTF-8', 'ISO-8859-1'),
-                    'birthday_plac'   => mb_convert_encoding((string) $birthday_plac, 'UTF-8', 'ISO-8859-1'),
-                    'deathday'        => $deathday,
-                    'death_month'     => $death_month,
-                    'death_year'      => $death_year,
-                    'deathday_dati'   => $deathday_dati,
-                    'deathday_plac'   => mb_convert_encoding((string) $deathday_plac, 'UTF-8', 'ISO-8859-1'),
-                    'deathday_caus'   => $deathday_caus,
-                    'burial_day'      => $burial_day,
-                    'burial_month'    => $burial_month,
-                    'burial_year'     => $burial_year,
-                    'burial_day_dati' => $burial_day_dati,
-                    'burial_day_plac' => $burial_day_plac,
-                    'titl'            => array_key_exists('TITL', $attr) ? $attr['TITL'][0]->getAttr('TITL') : null,
-                    'famc'            => $famc ? $famc[0]->getFamc() : null,
-                    'fams'            => $fams ? $fams[0]->getFams() : null,
-                    'chr'             => $chr,
-                ];
-
-                $parentData[] = $value;
+                $parentData[] = self::processIndividual($conn, $individual);
             }
 
-            $chunk = array_chunk($parentData, 500);
-
-            foreach ($chunk as $item) {
-                // it's take only 1 second for 3010 record
-                $a = app(BatchData::class)->upsert(Person::class, $conn, $item, ['uid']);
-            }
-
-            otherFields::insertOtherFields($conn, $individuals, $obje_ids, $sour_ids);
+            self::batchInsertData($conn, $parentData);
+            self::processOtherFields($conn, $individuals, $objeIds, $sourIds);
 
             return $parentData;
-        } catch (\Exception $e) {
-            return \Log::error($e);
+        });
+    }
+
+    private static function processIndividual(string $conn, object $individual): array
+    {
+        $names = $individual->getName();
+        $firstNameRecord = $names ? current($names) : null;
+
+        return [
+            'gid' => $individual->getId(),
+            'name' => $firstNameRecord?->getName() ?? '',
+            'givn' => $firstNameRecord?->getGivn() ?? '',
+            'surn' => $firstNameRecord?->getSurn() ?? '',
+            'sex' => self::sanitizeSex($individual->getSex()),
+            'uid' => $individual->getUid() ?? Str::uuid(),
+            'rin' => $individual->getRin() ?? '',
+            'resn' => $individual->getResn() ?? '',
+            'rfn' => $individual->getRfn() ?? '',
+            'afn' => $individual->getAfn() ?? '',
+            'nick' => $firstNameRecord?->getNick() ?? '',
+            'type' => $firstNameRecord?->getType() ?? '',
+            'chan' => $individual->getChan() ? $individual->getChan()->getDatetime() : null,
+            'nsfx' => $firstNameRecord?->getNsfx() ?? '',
+            'npfx' => $firstNameRecord?->getNpfx() ?? '',
+            'spfx' => $firstNameRecord?->getSpfx() ?? '',
+            'birthday' => self::validateDate($individual->getBirt()) ? $individual->getBirt()->dateFormatted : null,
+            'birth_month' => $individual->getBirt() ? $individual->getBirt()->month : null,
+            'birth_year' => $individual->getBirt() ? $individual->getBirt()->year : null,
+            'birthday_dati' => mb_convert_encoding((string) $individual->getBirt()->dati, 'UTF-8', 'ISO-8859-1'),
+            'birthday_plac' => mb_convert_encoding((string) $individual->getBirt()->plac, 'UTF-8', 'ISO-8859-1'),
+            'deathday' => self::validateDate($individual->getDeat()) ? $individual->getDeat()->dateFormatted : null,
+            'death_month' => $individual->getDeat() ? $individual->getDeat()->month : null,
+            'death_year' => $individual->getDeat() ? $individual->getDeat()->year : null,
+            'deathday_dati' => $individual->getDeat() ? $individual->getDeat()->dati : null,
+            'deathday_plac' => mb_convert_encoding((string) $individual->getDeat()->plac, 'UTF-8', 'ISO-8859-1'),
+            'deathday_caus' => $individual->getDeat() ? $individual->getDeat()->caus : null,
+            'burial_day' => self::validateDate($individual->getBuri()) ? $individual->getBuri()->dateFormatted : null,
+            'burial_month' => $individual->getBuri() ? $individual->getBuri()->month : null,
+            'burial_year' => $individual->getBuri() ? $individual->getBuri()->year : null,
+            'burial_day_dati' => $individual->getBuri() ? $individual->getBuri()->dati : null,
+            'burial_day_plac' => $individual->getBuri() ? $individual->getBuri()->plac : null,
+            'titl' => array_key_exists('TITL', $individual->getAllAttr()) ? $individual->getAllAttr()['TITL'][0]->getAttr('TITL') : null,
+            'famc' => $individual->getFamc() ? $individual->getFamc()[0]->getFamc() : null,
+            'fams' => $individual->getFams() ? $individual->getFams()[0]->getFams() : null,
+            'chr' => self::validateDate($individual->getChr()) ? $individual->getChr()->dateFormatted : null,
+        ];
+    }
+
+    private static function sanitizeSex(?string $sex): string
+    {
+        return preg_replace('/[^MF]/', '', (string) $sex) ?: '';
+    }
+
+    private static function batchInsertData(string $conn, array $data): void
+    {
+        $chunk = array_chunk($data, 500);
+
+        foreach ($chunk as $item) {
+            app(BatchData::class)->upsert(Person::class, $conn, $item, ['uid']);
         }
     }
 
-    private static function validateDate($date, $format = 'Y-m-d')
+    private static function processOtherFields(string $conn, array $individuals, array $objeIds, array $sourIds): void
     {
-        $d = \DateTime::createFromFormat($format, $date);
-        // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
-        return $d && $d->format($format) === $date;
+        otherFields::insertOtherFields($conn, $individuals, $objeIds, $sourIds);
+    }
+
+    private static function validateDate(?object $date, string $format = 'Y-m-d'): bool
+    {
+        if ($date === null) {
+            return false;
+        }
+        $d = \DateTime::createFromFormat($format, $date->dateFormatted);
+        return $d && $d->format($format) === $date->dateFormatted;
     }
 }

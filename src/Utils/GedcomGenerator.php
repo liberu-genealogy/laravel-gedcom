@@ -23,243 +23,64 @@ use Gedcom\Record\SourRef;
 use Gedcom\Record\Subm;
 use Gedcom\Writer;
 
-class GedcomGenerator
+readonly class GedcomGenerator
 {
-    protected $arr_indi_id = [];
-    protected $arr_fam_id = [];
-    protected $_gedcom;
-    protected $log = "\n";
+    public function __construct(
+        private string $filename,
+        private array $options = []
+    ) {}
 
-    /**
-     * Constructor with family_id.
-     *
-     * @param int $p_id the         primary key of table `people`
-     * @param int $family_id        Primary key of table `families`
-     * @param int $up_nest
-     * @param int $down_nest
-     */
-    public function __construct(protected $p_id = 0, protected $family_id = 0, protected $up_nest = 0, protected $down_nest = 0)
+    public function generate(): void
     {
-        $this->_gedcom = new Gedcom();
+        $gedcom = new Gedcom();
+
+        $this->addHeader($gedcom);
+        $this->addSubmitter($gedcom);
+        $this->addIndividuals($gedcom);
+        $this->addFamilies($gedcom);
+
+        $this->writeGedcom($gedcom);
     }
 
-    public function getGedcomFamily()
+    private function addHeader(Gedcom $gedcom): void
     {
-        $this->setHead();
-        $writer = new Writer();
-
-        return $writer->convert($this->_gedcom);
+        $header = new Head();
+        $sour = new Sour();
+        $sour->setSour(env('APP_NAME', ''));
+        $header->setSour($sour);
+        $header->setGedc(['VERS' => '5.5.5', 'FORM' => 'LINEAGE-LINKED']);
+        $header->setChar('UTF-8');
+        $gedcom->setHead($header);
     }
 
-    public function getGedcomPerson()
+    private function addSubmitter(Gedcom $gedcom): void
     {
-        $this->setHead();
-        $this->addUpData($this->p_id);
-        $writer = new Writer();
-
-        return $writer->convert($this->_gedcom);
+        $sour = new Sour();
+        $sour->setSour(env('APP_NAME', ''));
+        $sour->setVersion('1.0');
+        $subm = new Subm();
+        $subm->setSour($sour);
+        $gedcom->addSubm($subm);
     }
 
-    public function addUpData($p_id, $nest = 0)
+    private function addIndividuals(Gedcom $gedcom): void
     {
-//        if (empty($p_id) || $p_id < 1) {
-//            return;
-//        }
-
-        if ($this->up_nest < $nest) {
-            return;
-        }
-
-        /* $person = app(Person::class)->query()->find($p_id);
-        if ($person == null) {
-            return;
-        } */
         $persons = app(Person::class)->query()->get();
         if ($persons == null) {
             return;
         }
         foreach ($persons as $person) {
-            $this->setIndi($person->id);
+            $this->setIndi($gedcom, $person->id);
         }
-
-        // add self to indi
-        /* if (!in_array($p_id, $this->arr_indi_id)) {
-            array_push($this->arr_indi_id, $p_id);
-            $this->setIndi($p_id);
-        } else {
-            // already processed this person
-            return;
-        } */
-
-        // process family ( partner, children )
-        $_families = $p_id
-            ? app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get()
-            : app(Family::class)->all();
-
-        foreach ($_families as $item) {
-            // add family
-            $f_id = $item->id;
-            if (!in_array($f_id, $this->arr_fam_id)) {
-                $this->arr_fam_id[] = $f_id;
-                $this->setFam($f_id);
-            }
-
-            // add partner to indi
-            $husb_id = $item->husband_id;
-            $wife_id = $item->wife_id;
-            $this->log .= $nest.' f_id='.$f_id."\n";
-            $this->log .= $nest.' husb_id='.$husb_id."\n";
-            $this->log .= $nest.' wife_id='.$wife_id."\n";
-//            $this->addUpData($husb_id, $nest);
-//            $this->addUpData($wife_id, $nest);
-
-            // add chidrent to indi
-            $children = app(Person::class)->query()->where('child_in_family_id', $f_id)->get();
-            foreach ($children as $item2) {
-                $child_id = $item2->id;
-                if (!in_array($child_id, $this->arr_indi_id)) {
-                    $this->arr_indi_id[] = $child_id;
-                    $this->setIndi($child_id);
-                }
-            }
-        }
-
-        $this->setSour();
-
-        /* $parent_family_id = $person->child_in_family_id;
-        $p_family = app(Family::class)->query()->find($parent_family_id);
-
-        // there is not parent data.
-        if ($p_family === null) {
-            return;
-        }
-
-        // process siblings
-        $siblings = app(Person::class)->query()->where('child_in_family_id', $parent_family_id)->get();
-        foreach ($siblings as $item3) {
-            $sibling_id = $item3->id;
-            if (!in_array($sibling_id, $this->arr_indi_id)) {
-                array_push($this->arr_indi_id, $sibling_id);
-                $this->setIndi($sibling_id);
-            }
-        }
-
-        // process parent
-        $nest++;
-        $father_id = $p_family->husband_id;
-        $mother_id = $p_family->wife_id;
-        $this->addUpData($father_id, $nest);
-        $this->addUpData($mother_id, $nest); */
     }
 
-    public function addDownData($p_id, $nest = 0)
+    private function setIndi(Gedcom $gedcom, $p_id): void
     {
-        if (empty($p_id) || $p_id < 1) {
-            return;
-        }
-        if ($this->down_nest < $nest) {
-            return;
-        }
-
         $person = app(Person::class)->query()->find($p_id);
         if ($person == null) {
             return;
         }
-
-        // process self
-        if (!in_array($p_id, $this->arr_indi_id)) {
-            // add to indi array
-            $this->arr_indi_id[] = $p_id;
-            $this->setIndi($p_id);
-        }
-
-        $_families = app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get();
-        foreach ($_families as $item) {
-            // add family
-            $f_id = $item->id;
-            if (!in_array($f_id, $this->arr_fam_id)) {
-                $this->arr_fam_id[] = $f_id;
-                $this->setFam($f_id);
-            }
-            // process partner
-            $husband_id = $item->husband_id;
-            $wife_id = $item->wife_id;
-            $this->addDownData($husband_id, $nest);
-            $this->addDownData($wife_id, $nest);
-
-            // process child
-            $children = app(Person::class)->query()->where('child_in_family_id', $item->id);
-            foreach ($children as $item2) {
-                $child_id = $item2->id;
-                $nest_next = $nest + 1;
-                $this->addDownData($child_id, $nest_next);
-            }
-        }
-
-        // process parent
-        $parent_family_id = $person->child_in_family_id;
-        $parent_family = app(Family::class)->query()->find($parent_family_id);
-        if ($parent_family != null) {
-            $father_id = $parent_family->husband_id;
-            $mother_id = $parent_family->wife_id;
-            if (!in_array($father_id, $this->arr_indi_id)) {
-                $this->arr_indi_id[] = $father_id;
-                $this->setIndi($father_id);
-            }
-            if (!in_array($mother_id, $this->arr_indi_id)) {
-                $this->arr_indi_id[] = $mother_id;
-                $this->setIndi($mother_id);
-            }
-        }
-        // process siblings
-        $siblings = app(Person::class)->query()->where('child_in_family_id', $parent_family_id)->get();
-        foreach ($siblings as $item3) {
-            $sibling_id = $item3->id;
-            if (!in_array($sibling_id, $this->arr_indi_id)) {
-                $this->addDownData($sibling_id, $nest);
-            }
-        }
-    }
-
-    protected function setHead()
-    {
-        $head = new Head();
-        $sour = new Sour();
-        $sour->setSour(env('APP_NAME', ''));
-        $sour->setVersion('1.0');
-        $head->setSour($sour);
-        $dest = null;
-        $head->setDest($dest);
-        $date = null;
-        $head->setDate($date);
-        $subm = null;
-        $head->setSubm($subm);
-        $subn = null;
-        $head->setSubn($subn);
-        $file = null;
-        $head->setFile($file);
-        $copr = null;
-        $head->setCopr($copr);
-        $gedc = null;
-        $head->setGedc($gedc);
-        $char = null;
-        $head->setChar($char);
-        $lang = null;
-        $head->setLang($lang);
-        $plac = null;
-        $head->setPlac($plac);
-        $note = null;
-        $head->setNote($note);
-        $this->_gedcom->setHead($head);
-    }
-
-    protected function setIndi($p_id)
-    {
         $indi = new Indi();
-        $person = app(Person::class)->query()->find($p_id);
-        if ($person == null) {
-            return;
-        }
         $id = $person->id;
         $indi->setId($id);
 
@@ -317,10 +138,18 @@ class GedcomGenerator
             $indi->getAllEven();
         }
 
-        $this->_gedcom->addIndi($indi);
+        $gedcom->addIndi($indi);
     }
 
-    protected function setFam($family_id)
+    private function addFamilies(Gedcom $gedcom): void
+    {
+        $_families = app(Family::class)->all();
+        foreach ($_families as $item) {
+            $this->setFam($gedcom, $item->id);
+        }
+    }
+
+    private function setFam(Gedcom $gedcom, $family_id): void
     {
         $famData = app(Family::class)->query()->where('id', $family_id)->first();
         if ($famData == null) {
@@ -465,20 +294,20 @@ class GedcomGenerator
             $obje = new ObjeRef();
             $fam->addObje($obje);
         }
-        $this->_gedcom->addFam($fam);
+        $gedcom->addFam($fam);
 
         return $fam;
     }
 
-    protected function setSubn()
+    private function setSubn(): void
     {
     }
 
-    protected function setSubM()
+    private function setSubM(): void
     {
     }
 
-    protected function setSour()
+    private function setSour(): void
     {
         $sour = new \Gedcom\Record\Sour();
         $_sour = Source::all();
@@ -486,18 +315,24 @@ class GedcomGenerator
             $sour->setTitl($item->titl);
         }
 
-        $this->_gedcom->addSour($sour);
+        $gedcom->addSour($sour);
     }
 
-    protected function setNote()
+    private function setNote(): void
     {
     }
 
-    protected function setRepo()
+    private function setRepo(): void
     {
     }
 
-    protected function setObje()
+    private function setObje(): void
     {
+    }
+
+    private function writeGedcom(Gedcom $gedcom): void
+    {
+        $writer = new Writer();
+        $writer->write($gedcom, $this->filename);
     }
 }
