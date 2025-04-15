@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14a7e60109caae5cae3e269129bd9910",
+    "content-hash": "00092b5de54bee7cacc2139bf4919a35",
     "packages": [
         {
             "name": "brick/math",
@@ -1942,16 +1942,16 @@
         },
         {
             "name": "liberu-genealogy/php-gedcom",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberu-genealogy/php-gedcom.git",
-                "reference": "f84424cb037116c05069775451bbc0edc0e48d1b"
+                "reference": "b5bfdb16f77abef420279feff78070e8e9b72889"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberu-genealogy/php-gedcom/zipball/f84424cb037116c05069775451bbc0edc0e48d1b",
-                "reference": "f84424cb037116c05069775451bbc0edc0e48d1b",
+                "url": "https://api.github.com/repos/liberu-genealogy/php-gedcom/zipball/b5bfdb16f77abef420279feff78070e8e9b72889",
+                "reference": "b5bfdb16f77abef420279feff78070e8e9b72889",
                 "shasum": ""
             },
             "require": {
@@ -1984,7 +1984,7 @@
             ],
             "support": {
                 "issues": "https://github.com/liberu-genealogy/php-gedcom/issues",
-                "source": "https://github.com/liberu-genealogy/php-gedcom/tree/v3.0.0"
+                "source": "https://github.com/liberu-genealogy/php-gedcom/tree/v3.1.0"
             },
             "funding": [
                 {
@@ -1992,7 +1992,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-22T22:19:04+00:00"
+            "time": "2025-04-15T22:43:34+00:00"
         },
         {
             "name": "monolog/monolog",
