@@ -124,7 +124,7 @@ readonly class GedcomParser
         $total = $indCount + $famCount + $c_subn + $c_subm + $c_sour + $c_note + $c_repo + $c_obje;
 
         
-        $progressReporter = new ProgressReporter($total, $channel);
+        $progressReporter = new ProgressReporter($total, $channel ?? []);
         $mediaParser = new MediaParser($this->conn);
         $mediaParser->parseMediaObjects($obje);
         $progressReporter->advanceProgress($c_obje);

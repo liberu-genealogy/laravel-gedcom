@@ -7,10 +7,10 @@ use FamilyTree365\LaravelGedcom\Utils\FamilyData;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class IndividualParser
 /**
  * IndividualParser class is responsible for parsing individual data from GEDCOM files.
  */
+class IndividualParser
 {
     protected $conn;
     protected $individualIds = [];
@@ -20,6 +20,13 @@ class IndividualParser
         $this->conn = $conn;
     }
 
+    /**
+     * Parses individuals from GEDCOM files and processes their data.
+     * 
+     * @param array $individuals Array of individuals to be parsed.
+     * 
+     * This method does not return anything but processes individual data.
+     */
     public function parseIndividuals($individuals)
     {
         foreach ($individuals as $individual) {
@@ -33,16 +40,18 @@ class IndividualParser
                 Log::error('Failed to parse individual: ' . $e->getMessage());
             }
         }
+        
+        return true;
     }
 
-    protected function parseAttributes($individual)
     /**
-     * Parses individuals from GEDCOM files and processes their data.
+     * Parses attributes of an individual and saves them to the database.
      * 
-     * @param array $individuals Array of individuals to be parsed.
+     * @param object $individual Individual object to parse attributes for.
      * 
-     * This method does not return anything but processes individual data.
+     * This method does not return anything but contributes to parsing individual data.
      */
+    protected function parseAttributes($individual)
     {
         $person = app(Person::class);
         $person->name = $this->parseName($individual);
@@ -53,36 +62,35 @@ class IndividualParser
         $this->individualIds[$individual->getId()] = $person->id;
     }
 
-    protected function parseName($individual)
-    {
-        return $individual->getName() ? $individual->getName()[0]->getFullName() : null;
-    }
-
-    protected function parseBirth($individual)
-    {
-        return $individual->getBirth() ? $individual->getBirth()->getDate() : null;
-    }
-
-    protected function parseDeath($individual)
-    /**
-     * Parses attributes of an individual and saves them to the database.
-     * 
-     * @param object $individual Individual object to parse attributes for.
-     * 
-     * This method does not return anything but contributes to parsing individual data.
-     */
     /**
      * Parses the name of an individual.
      * 
      * @param object $individual Individual object to parse the name for.
      * @return string|null The full name of the individual or null if not available.
      */
+    protected function parseName($individual)
+    {
+        return $individual->getName() ? $individual->getName()[0]->getFullName() : null;
+    }
+
     /**
      * Parses the birth date of an individual.
      * 
      * @param object $individual Individual object to parse the birth date for.
      * @return string|null The birth date of the individual or null if not available.
      */
+    protected function parseBirth($individual)
+    {
+        return $individual->getBirth() ? $individual->getBirth()->getDate() : null;
+    }
+
+    /**
+     * Parses the death date of an individual.
+     * 
+     * @param object $individual Individual object to parse the death date for.
+     * @return string|null The death date of the individual or null if not available.
+     */
+    protected function parseDeath($individual)
     {
         return $individual->getDeath() ? $individual->getDeath()->getDate() : null;
     }
