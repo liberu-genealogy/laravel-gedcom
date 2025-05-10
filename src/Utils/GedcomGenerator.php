@@ -60,11 +60,13 @@ class GedcomGenerator
         return $writer->convert($this->_gedcom);
     }
 
-    public function addUpData($p_id, $nest = 0)
+    public function addUpData($p_id, $nest = 0, $processed_ids = [])
     {
-//        if (empty($p_id) || $p_id < 1) {
-//            return;
-//        }
+        // Prevent infinite recursion by tracking processed IDs
+        if (in_array($p_id, $processed_ids)) {
+            return;
+        }
+        $processed_ids[] = $p_id;
 
         if ($this->up_nest < $nest) {
             return;
@@ -74,13 +76,13 @@ class GedcomGenerator
         if ($person == null) {
             return;
         } */
-        $persons = app(Person::class)->query()->get();
-        if ($persons == null) {
-            return;
-        }
-        foreach ($persons as $person) {
-            $this->setIndi($person->id);
-        }
+
+        // Process in batches to reduce memory usage
+        $persons = app(Person::class)->query()->chunk(100, function($persons) {
+            foreach ($persons as $person) {
+                $this->setIndi($person->id);
+            }
+        });
 
         // add self to indi
         /* if (!in_array($p_id, $this->arr_indi_id)) {
@@ -93,10 +95,22 @@ class GedcomGenerator
 
         // process family ( partner, children )
         $_families = $p_id
-            ? app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->get()
-            : app(Family::class)->all();
+            ? app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->chunk(50, function($families) use ($nest, $processed_ids) {
+                $this->processFamilies($families, $nest, $processed_ids);
+              })
+            : app(Family::class)->chunk(50, function($families) use ($nest, $processed_ids) {
+                $this->processFamilies($families, $nest, $processed_ids);
+              });
 
-        foreach ($_families as $item) {
+        $this->setSour();
+    }
+
+    /**
+     * Process families in batches to reduce memory usage
+     */
+    private function processFamilies($families, $nest, $processed_ids)
+    {
+        foreach ($families as $item) {
             // add family
             $f_id = $item->id;
             if (!in_array($f_id, $this->arr_fam_id)) {
@@ -110,46 +124,23 @@ class GedcomGenerator
             $this->log .= $nest.' f_id='.$f_id."\n";
             $this->log .= $nest.' husb_id='.$husb_id."\n";
             $this->log .= $nest.' wife_id='.$wife_id."\n";
-//            $this->addUpData($husb_id, $nest);
-//            $this->addUpData($wife_id, $nest);
 
-            // add chidrent to indi
-            $children = app(Person::class)->query()->where('child_in_family_id', $f_id)->get();
-            foreach ($children as $item2) {
-                $child_id = $item2->id;
-                if (!in_array($child_id, $this->arr_indi_id)) {
-                    $this->arr_indi_id[] = $child_id;
-                    $this->setIndi($child_id);
-                }
-            }
+            // Prevent infinite recursion by checking processed IDs
+            // $this->addUpData($husb_id, $nest, $processed_ids);
+            // $this->addUpData($wife_id, $nest, $processed_ids);
+
+            // add children to indi in batches
+            app(Person::class)->query()->where('child_in_family_id', $f_id)
+                ->chunk(50, function($children) {
+                    foreach ($children as $item2) {
+                        $child_id = $item2->id;
+                        if (!in_array($child_id, $this->arr_indi_id)) {
+                            $this->arr_indi_id[] = $child_id;
+                            $this->setIndi($child_id);
+                        }
+                    }
+                });
         }
-
-        $this->setSour();
-
-        /* $parent_family_id = $person->child_in_family_id;
-        $p_family = app(Family::class)->query()->find($parent_family_id);
-
-        // there is not parent data.
-        if ($p_family === null) {
-            return;
-        }
-
-        // process siblings
-        $siblings = app(Person::class)->query()->where('child_in_family_id', $parent_family_id)->get();
-        foreach ($siblings as $item3) {
-            $sibling_id = $item3->id;
-            if (!in_array($sibling_id, $this->arr_indi_id)) {
-                array_push($this->arr_indi_id, $sibling_id);
-                $this->setIndi($sibling_id);
-            }
-        }
-
-        // process parent
-        $nest++;
-        $father_id = $p_family->husband_id;
-        $mother_id = $p_family->wife_id;
-        $this->addUpData($father_id, $nest);
-        $this->addUpData($mother_id, $nest); */
     }
 
     public function addDownData($p_id, $nest = 0)

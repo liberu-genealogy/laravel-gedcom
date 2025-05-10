@@ -32,6 +32,9 @@ class otherFamRecord
 
     public static function insertFamilyData($conn, $persons_id, $families, $obje_ids, $sour_ids, $note_ids = [], $repo_ids = [])
     {
+        $batchSize = 50;
+        $counter = 0;
+
         foreach ($families as $family) {
             $g_id = $family->getId();
             $husb = $family->getHusb();
@@ -102,6 +105,12 @@ class otherFamRecord
             }
             if ($chan) {
                 Chan::read($conn, $chan, 'family', $familie->id);
+            }
+
+            // Process in batches and free memory periodically
+            $counter++;
+            if ($counter % $batchSize === 0) {
+                gc_collect_cycles();
             }
         }
     }

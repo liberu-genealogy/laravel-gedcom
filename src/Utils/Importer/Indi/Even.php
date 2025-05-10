@@ -21,6 +21,9 @@ class Even
         }
 
         $eventData = [];
+        $batchSize = 100; // Process events in batches
+        $currentBatch = 0;
+
         foreach ($events as $event) {
             if ($event && (is_countable($event) ? count($event) : 0) > 0) {
                 $even = $event[0];
@@ -142,9 +145,24 @@ class Even
 
                     $eventData[] = $data;
                 }
+
+                // When batch size is reached, insert and reset
+                if (count($eventData) >= $batchSize) {
+                    if (!empty($eventData)) {
+                        app(PersonEvent::class)->on($conn)->insert($eventData);
+                    }
+                    $eventData = [];
+                    // Free up memory
+                    gc_collect_cycles();
+                }
             }
         }
-        app(PersonEvent::class)->on($conn)->insert($eventData);
+
+        // Insert any remaining events
+        if (!empty($eventData)) {
+            app(PersonEvent::class)->on($conn)->insert($eventData);
+        }
+
         $new = new Even();
         $new->otherField($conn, $events, $person);
     }
