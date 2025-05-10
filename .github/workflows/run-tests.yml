@@ -16,7 +16,7 @@ jobs:
     
     - name: Require this package
       working-directory: ./host
-      run: composer require liberu-genealogy/laravel-gedcom @dev
+      run: composer require liberu-genealogy/laravel-gedcom
 
     - name: Run tests
       working-directory: ./host      
