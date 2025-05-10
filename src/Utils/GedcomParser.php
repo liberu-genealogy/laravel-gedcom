@@ -61,7 +61,9 @@ readonly class GedcomParser
         $parser = new Parser();
         $gedcom = @$parser->parse($filename);
 
-        error_log(json_encode($gedcom));
+        // Free up memory by not logging the entire gedcom structure
+        error_log("GEDCOM file parsed successfully");
+
         
         /**
          * work.
