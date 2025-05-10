@@ -56,7 +56,7 @@ the parser from Artisan commands.
 
 ## Contributing 
 
-Pull requests are welcome, as are issues.
+Pull requests are welcome, as are issues. Feel free to submit any feedback too.
 
 ## Contributors
 
