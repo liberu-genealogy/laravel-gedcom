@@ -8,10 +8,17 @@
 namespace FamilyTree365\LaravelGedcom\Commands;
 
 use FamilyTree365\LaravelGedcom\Models\Person;
+use FamilyTree365\LaravelGedcom\Models\Family;
+use FamilyTree365\LaravelGedcom\Models\Subm;
+use FamilyTree365\LaravelGedcom\Models\Note;
+use FamilyTree365\LaravelGedcom\Models\MediaObject;
+use FamilyTree365\LaravelGedcom\Models\Source;
+use FamilyTree365\LaravelGedcom\Models\Repository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use Carbon\Carbon;
 
 class GedcomExporter extends Command
 {
@@ -32,17 +39,12 @@ class GedcomExporter extends Command
     /**
      * Create a new GedcomExporter command instance.
      */
-use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
+    use GedcomExporterHelpers;
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     /**
      * Execute the console command to export data into a GEDCOM file.
      *
@@ -50,19 +52,48 @@ use FamilyTree365\LaravelGedcom\Commands\GedcomExporterHelpers;
      */
     public function handle(): int
     {
-        $dir = 'public/gedcom/exported';
+        try {
+            $dir = 'public/gedcom/exported';
+            $filename = $this->argument('filename').'.GED';
+            $fullPath = storage_path('app/'.$dir.'/'.$filename);
 
-        $filename = $this->argument('filename').'.GED';
+            $this->info('Starting GEDCOM export to: ' . $filename);
 
-        GedcomExporterHelpers::createDirectory($dir);
+            GedcomExporterHelpers::createDirectory($dir);
 
-        $submissions = GedcomExporterHelpers::fetchDatabaseData();
-        $people = Person::all();
+            // Fetch all required data from database
+            $submissions = GedcomExporterHelpers::fetchDatabaseData();
+            $people = Person::with(['events', 'names', 'notes', 'sources', 'media'])->get();
+            $families = Family::with(['husband', 'wife', 'children', 'notes', 'sources', 'media'])->get();
+            $notes = Note::all();
+            $sources = Source::with(['repositories', 'notes'])->get();
+            $repositories = Repository::all();
+            $mediaObjects = MediaObject::all();
 
-        $data = [
-        $source = View::make('stubs.ged', $data)->render();
-        $gedcomDocument = GedcomExporterHelpers::createGedcomDocumentString($source);
-        GedcomExporterHelpers::writeToFile($filename, $gedcomDocument);
+            $data = [
+                'submissions' => $submissions,
+                'people' => $people,
+                'families' => $families,
+                'notes' => $notes,
+                'sources' => $sources,
+                'repositories' => $repositories,
+                'mediaObjects' => $mediaObjects,
+                'exportDate' => Carbon::now()->format('d M Y'),
+                'exportTime' => Carbon::now()->format('H:i:s'),
+            ];
+
+            $this->info('Generating GEDCOM content...');
+            $source = View::make('stubs.ged', $data)->render();
+            $gedcomDocument = GedcomExporterHelpers::createGedcomDocumentString($source);
+
+            $this->info('Writing GEDCOM file...');
+            GedcomExporterHelpers::writeToFile($fullPath, $gedcomDocument);
+
+            $this->info('GEDCOM export completed successfully: ' . $fullPath);
+            return 0;
+        } catch (\Exception $e) {
+            $this->error('An error occurred while exporting the GEDCOM file: ' . $e->getMessage());
+            return 1;
+        }
     }
 }
-        return 0;
