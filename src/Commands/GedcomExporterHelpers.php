@@ -5,6 +5,7 @@ namespace FamilyTree365\LaravelGedcom\Commands;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use Carbon\Carbon;
 
 class GedcomExporterHelpers
 {
@@ -27,16 +28,22 @@ class GedcomExporterHelpers
      */
     public static function fetchDatabaseData()
     {
-        $query = DB::table('subms')->join('addrs', 'addrs.id', '=', 'subms.addr_id')->select([
-            'subms.name',
-            'addrs.adr1',
-            'addrs.adr2',
-            'addrs.city',
-            'addrs.stae',
-            'addrs.post',
-            'addrs.ctry',
-            'subms.phon',
-        ]);
+        $query = DB::table('subms')
+            ->leftJoin('addrs', 'addrs.id', '=', 'subms.addr_id')
+            ->select([
+                'subms.id',
+                'subms.name',
+                'subms.gid',
+                'subms.email',
+                'subms.phon',
+                'subms.www',
+                'addrs.adr1',
+                'addrs.adr2',
+                'addrs.city',
+                'addrs.stae',
+                'addrs.post',
+                'addrs.ctry',
+            ]);
 
         return $query->get();
     }
@@ -48,23 +55,40 @@ class GedcomExporterHelpers
      * @param \Illuminate\Support\Collection $people Collection of people data.
      * @return array Array containing prepared data for view.
      */
+    public static function prepareDataForView($submissions, $people)
+    {
+        return [
+            'submissions' => $submissions,
+            'people'      => $people,
+        ];
+    }
+
     /**
      * Creates a GEDCOM document string with a header and the provided source content.
      *
      * @param string $source The GEDCOM content to be included after the header.
      * @return string The complete GEDCOM document string.
      */
-    // public static function createGedcomDocumentArray($source)
-    // {
-    //     return [
-    //         'submissions' => $submissions,
-    //         'people'      => $people,
-    //     ];
-    // }
-
     public static function createGedcomDocumentString($source)
     {
-        $gedcomHeader = "HEAD \nGEDC \nVERS 5.5.5 \nFORM LINEAGE-LINKED \nVERS 5.5.5 \nCHAR UTF-8 \nSOUR GS \nVERS 5.5.5 \nCORP gedcom.org\n";
+        $now = Carbon::now();
+        $date = strtoupper($now->format('d M Y'));
+        $time = $now->format('H:i:s');
+
+        $gedcomHeader = "0 HEAD\n" .
+            "1 GEDC\n" .
+            "2 VERS 5.5.1\n" .
+            "2 FORM LINEAGE-LINKED\n" .
+            "1 CHAR UTF-8\n" .
+            "1 SOUR GS\n" .
+            "2 NAME " . env('APP_NAME', 'Family Tree 365') . "\n" .
+            "2 VERS 1.0\n" .
+            "2 CORP gedcom.org\n" .
+            "1 DATE $date\n" .
+            "2 TIME $time\n" .
+            "1 FILE " . basename($source) . "\n" .
+            "1 LANG English\n";
+
         return $gedcomHeader . $source;
     }
 
@@ -73,11 +97,25 @@ class GedcomExporterHelpers
      *
      * @param string $filename The name of the file to write to.
      * @param string $content The content to write to the file.
+     * @throws \Exception If file writing fails.
      */
     public static function writeToFile($filename, $content)
     {
+        $directory = dirname($filename);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
         $handle = fopen($filename, 'w');
-        fwrite($handle, $content);
+        if (!$handle) {
+            throw new \Exception("Could not open file for writing: $filename");
+        }
+
+        if (fwrite($handle, $content) === false) {
+            fclose($handle);
+            throw new \Exception("Failed to write to file: $filename");
+        }
+
         fclose($handle);
     }
 }
