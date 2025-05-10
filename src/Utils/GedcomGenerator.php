@@ -72,35 +72,26 @@ class GedcomGenerator
             return;
         }
 
-        /* $person = app(Person::class)->query()->find($p_id);
-        if ($person == null) {
-            return;
-        } */
-
         // Process in batches to reduce memory usage
-        $persons = app(Person::class)->query()->chunk(100, function($persons) {
+        app(Person::class)->query()->where('id', $p_id)->chunk(100, function($persons) {
             foreach ($persons as $person) {
-                $this->setIndi($person->id);
+                if (!in_array($person->id, $this->arr_indi_id)) {
+                    $this->arr_indi_id[] = $person->id;
+                    $this->setIndi($person->id);
+                }
             }
         });
 
-        // add self to indi
-        /* if (!in_array($p_id, $this->arr_indi_id)) {
-            array_push($this->arr_indi_id, $p_id);
-            $this->setIndi($p_id);
-        } else {
-            // already processed this person
-            return;
-        } */
-
         // process family ( partner, children )
-        $_families = $p_id
-            ? app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->chunk(50, function($families) use ($nest, $processed_ids) {
+        if ($p_id) {
+            app(Family::class)->query()->where('husband_id', $p_id)->orwhere('wife_id', $p_id)->chunk(50, function($families) use ($nest, $processed_ids) {
                 $this->processFamilies($families, $nest, $processed_ids);
-              })
-            : app(Family::class)->chunk(50, function($families) use ($nest, $processed_ids) {
+            });
+        } else {
+            app(Family::class)->query()->chunk(50, function($families) use ($nest, $processed_ids) {
                 $this->processFamilies($families, $nest, $processed_ids);
-              });
+            });
+        }
 
         $this->setSour();
     }

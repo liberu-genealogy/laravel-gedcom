@@ -378,7 +378,12 @@ class GedcomWriter
     // insert obje data to database
     private function getObje($_obje)
     {
-        $gid = $_obje->getId(); $_obje->getForm(); $_obje->getTitl(); $_obje->getBlob(); $_obje->getRin(); $_obje->getChan(); $_obje->getFile(); // string
+        $gid = $_obje->getId(); 
+        $form = $_obje->getForm(); 
+        $titl = $_obje->getTitl(); 
+        $blob = $_obje->getBlob(); 
+        $rin = $_obje->getRin(); 
+        $file = $_obje->getFile(); // string
         app(MediaObject::class)->updateOrCreate(['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file], ['gid' => $gid, 'form' => $form, 'titl' => $titl, 'blob' => $blob, 'rin' => $rin, 'file' => $file]);
     }
 }
