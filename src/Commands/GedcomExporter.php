@@ -59,10 +59,10 @@ class GedcomExporter extends Command
 
             $this->info('Starting GEDCOM export to: ' . $filename);
 
-            GedcomExporterHelpers::createDirectory($dir);
+            self::createDirectory($dir);
 
             // Fetch all required data from database
-            $submissions = GedcomExporterHelpers::fetchDatabaseData();
+            $submissions = self::fetchDatabaseData();
             $people = Person::with(['events', 'names', 'notes', 'sources', 'media'])->get();
             $families = Family::with(['husband', 'wife', 'children', 'notes', 'sources', 'media'])->get();
             $notes = Note::all();
@@ -84,10 +84,10 @@ class GedcomExporter extends Command
 
             $this->info('Generating GEDCOM content...');
             $source = View::make('stubs.ged', $data)->render();
-            $gedcomDocument = GedcomExporterHelpers::createGedcomDocumentString($source);
+            $gedcomDocument = self::createGedcomDocumentString($source);
 
             $this->info('Writing GEDCOM file...');
-            GedcomExporterHelpers::writeToFile($fullPath, $gedcomDocument);
+            self::writeToFile($fullPath, $gedcomDocument);
 
             $this->info('GEDCOM export completed successfully: ' . $fullPath);
             return 0;
