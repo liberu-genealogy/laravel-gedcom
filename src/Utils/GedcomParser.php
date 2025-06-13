@@ -21,7 +21,7 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
 use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
 use Illuminate\Support\Facades\DB as DB;
 
-readonly class GedcomParser
+class GedcomParser
 {
     public array $person_ids = [];
     /**
