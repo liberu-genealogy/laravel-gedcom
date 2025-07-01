@@ -22,7 +22,7 @@ class FamilyData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getFamily($conn, $families, $obje_ids = [], $sour_ids = [], $persons_id = [], $note_ids = [], $repo_ids = [], $parentData = [])
+    public static function getFamily($conn, $families, $obje_ids = [], $sour_ids = [], $persons_id = [], $note_ids = [], $repo_ids = [], $parentData = [], $tenant = null)
     {
         $persons_id = [];
 
@@ -85,6 +85,7 @@ class FamilyData
                     'type_id'     => $type_id,
                     'nchi'        => $nchi,
                     'rin'         => $rin,
+                    'team_id'     => $tenant,
                 ];
 
                 app(Family::class)->on($conn)->updateOrCreate($value, $value);

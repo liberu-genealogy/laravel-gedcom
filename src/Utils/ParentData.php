@@ -23,7 +23,7 @@ class ParentData
     protected $repo_ids = [];
     protected $conn = '';
 
-    public static function getPerson($conn, $individuals, $obje_ids = [], $sour_ids = [])
+    public static function getPerson($conn, $individuals, $obje_ids = [], $sour_ids = [], $tenant = null)
     {
         $ParentData = [];
         $a = [];
@@ -156,6 +156,7 @@ class ParentData
                     'famc'            => $famc ? $famc[0]->getFamc() : null,
                     'fams'            => $fams ? $fams[0]->getFams() : null,
                     'chr'             => $chr,
+                    'team_id'         => $tenant,
                 ];
 
                 $parentData[] = $value;

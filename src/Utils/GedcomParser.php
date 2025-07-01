@@ -47,6 +47,7 @@ class GedcomParser
         string $filename,
         string $slug,
         bool $progressBar = null,
+        $tenant = null,
         $channel = ['name' => 'gedcom-progress1', 'eventName' => 'newMessage']
     ) {
         DB::disableQueryLog();
@@ -201,7 +202,7 @@ class GedcomParser
             }
             $progressReporter->advanceProgress($c_sour);
 
-            $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids);
+            $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids, $tenant);
            
             // $individualParser = new IndividualParser($this->conn);
             // $individualParser->parseIndividuals($individuals);
@@ -235,7 +236,7 @@ class GedcomParser
 
             // $familyParser = new FamilyParser($this->conn);
             // $familyParser->parseFamilies($families);     
-            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids, $parentData);
+            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids, $parentData, $tenant);
             $progressReporter->advanceProgress(count($families));
 
             
