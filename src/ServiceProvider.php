@@ -21,6 +21,8 @@ class ServiceProvider extends BaseServiceProvider
                 \FamilyTree365\LaravelGedcom\Commands\GedcomExporter::class,
             ]);
         }
+
+        $this->loadMigrationsFrom(__DIR__.'/migrations');
     }
 
     /**
