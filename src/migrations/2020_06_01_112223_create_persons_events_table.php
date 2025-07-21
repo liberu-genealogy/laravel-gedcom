@@ -19,7 +19,7 @@ return new class() extends Migration {
             $table->string('title')->nullable();
             $table->string('date')->nullable();
             $table->string('description')->nullable();
-            $table->unsignedBigInteger('places_id')->nullable()->after('description');
+            $table->unsignedBigInteger('places_id')->nullable();
             $table->integer('year')->nullable();
             $table->integer('month')->nullable();
             $table->integer('day')->nullable();
