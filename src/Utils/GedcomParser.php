@@ -20,6 +20,7 @@ use FamilyTree365\LaravelGedcom\Utils\Importer\FamilyParser;
 use FamilyTree365\LaravelGedcom\Utils\Importer\MediaParser;
 use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
 use Illuminate\Support\Facades\DB as DB;
+use FamilyTree365\LaravelGedcom\Models\Person;
 
 class GedcomParser
 {
@@ -60,7 +61,7 @@ class GedcomParser
         error_log("\n Memory Usage: " . $startMemoryUse . ' MB');
         error_log('PARSE LOG : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++' . $conn);
         $parser = new Parser();
-        $gedcom = @$parser->parse($filename);
+        $gedcom = @ $parser->parse($filename);
 
         // Free up memory by not logging the entire gedcom structure
         error_log("GEDCOM file parsed successfully");
@@ -208,6 +209,23 @@ class GedcomParser
             // $individualParser->parseIndividuals($individuals);
             $progressReporter->advanceProgress(count($individuals));
             
+            // Build mapping of GEDCOM gid => new Person id so other imports (alia/asso/family) can reference them.
+            // ParentData upserted persons by 'gid' field, so fetch their assigned IDs.
+            if (is_array($parentData) && count($parentData) > 0) {
+                foreach ($parentData as $p) {
+                    if (isset($p['gid']) && $p['gid'] !== '') {
+                        try {
+                            $dbId = Person::on($this->conn)->where('gid', $p['gid'])->value('id');
+                            if ($dbId) {
+                                $this->person_ids[$p['gid']] = $dbId;
+                            }
+                        } catch (\Exception $e) {
+                            // ignore individual mapping errors but log for debugging
+                            Log::warning('Failed to map person gid to id: ' . $p['gid'] . ' - ' . $e->getMessage());
+                        }
+                    }
+                }
+            }
 
             // complete person-alia and person-asso table with person table
             $alia_list = app(PersonAlia::class)->on($conn)->select('alia')->where('group', 'indi')->where('import_confirm', 0)->get();
@@ -236,7 +254,8 @@ class GedcomParser
 
             // $familyParser = new FamilyParser($this->conn);
             // $familyParser->parseFamilies($families);     
-            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->persons_id, $this->note_ids, $this->repo_ids, $parentData, $tenant);
+            // Pass the populated person ID mapping to FamilyData so families can be linked to persons.
+            FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->person_ids, $this->note_ids, $this->repo_ids, $parentData, $tenant);
             $progressReporter->advanceProgress(count($families));
 
             
