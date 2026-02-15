@@ -9,8 +9,6 @@ as Laravel models, inside your Laravel application. It is used by:
 
 
 * laravel-gedcom 5.0+ requires PHP 8.3 (or later).
-* laravel-gedcom 6.0+ requires PHP 8.4 (or later).
-* laravel-gedcom 7.0+ requires PHP 8.4 (or later). Includes GEDCOM X
 
 ## Installation
 ```
