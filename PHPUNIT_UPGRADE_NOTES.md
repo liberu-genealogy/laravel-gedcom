@@ -25,17 +25,21 @@ PHPUnit has been successfully upgraded from version 10.x/11.x to **12.3.15** (la
 
 ## PHP 8.4 Requirement
 
-**Important**: This project now requires PHP 8.4 or higher due to the `liberu-genealogy/php-gedcom` dependency (v4.2.0) which uses PHP 8.4 features (property hooks).
+**Important**: This project now requires PHP 8.4 or higher.
 
 ### Why PHP 8.4?
-The `php-gedcom` library uses PHP 8.4 property hooks syntax:
+The `liberu-genealogy/php-gedcom` dependency (v4.2.0) contains code that uses PHP 8.4 features (property hooks), even though its composer.json declares PHP >=8.3 support. This is a bug in the php-gedcom package.
+
+The php-gedcom library contains PHP 8.4 property hooks syntax in `src/Parser.php`:
 ```php
 private \SplFileObject $fileHandle {
     get => $this->fileHandle ??= new \SplFileObject($this->fileName, 'r');
 }
 ```
 
-This syntax is not supported in PHP 8.3, causing parse errors when running tests.
+This syntax is not supported in PHP 8.3 and causes parse errors when the Parser class is loaded during test execution.
+
+**Note**: While php-gedcom's composer.json claims >=8.3 compatibility, the actual code requires PHP 8.4. This should be reported as a bug to the php-gedcom maintainers.
 
 ## Test Status
 
