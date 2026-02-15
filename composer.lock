@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7c33b613cef9a2e3159fed46d899277",
+    "content-hash": "8629990109c77e76bcc8ec27c43b44ea",
     "packages": [
         {
             "name": "brick/math",
@@ -1946,22 +1946,21 @@
         },
         {
             "name": "liberu-genealogy/php-gedcom",
-            "version": "v4.1.0",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liberu-genealogy/php-gedcom.git",
-                "reference": "98eaf2bd56a206be19d2c52c1fa45454c84c4ff2"
+                "reference": "2e70d1ae7c32c452cc53ebbf34b3801688c7e125"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liberu-genealogy/php-gedcom/zipball/98eaf2bd56a206be19d2c52c1fa45454c84c4ff2",
-                "reference": "98eaf2bd56a206be19d2c52c1fa45454c84c4ff2",
+                "url": "https://api.github.com/repos/liberu-genealogy/php-gedcom/zipball/2e70d1ae7c32c452cc53ebbf34b3801688c7e125",
+                "reference": "2e70d1ae7c32c452cc53ebbf34b3801688c7e125",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=8.4",
-                "raza9798/siteconfig": "^3.2"
+                "php": ">=8.3"
             },
             "require-dev": {
                 "driftingly/rector-laravel": "^1.0",
@@ -1989,7 +1988,7 @@
             ],
             "support": {
                 "issues": "https://github.com/liberu-genealogy/php-gedcom/issues",
-                "source": "https://github.com/liberu-genealogy/php-gedcom/tree/v4.1.0"
+                "source": "https://github.com/liberu-genealogy/php-gedcom/tree/v4.2.0"
             },
             "funding": [
                 {
@@ -1997,7 +1996,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-21T14:27:27+00:00"
+            "time": "2026-02-15T06:55:14+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3200,68 +3199,6 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.1"
             },
             "time": "2025-09-04T20:59:21+00:00"
-        },
-        {
-            "name": "raza9798/siteconfig",
-            "version": "3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Raza9798/siteconfig.git",
-                "reference": "a8d2777f709589d278417e5e1ad820ad5eae6179"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Raza9798/siteconfig/zipball/a8d2777f709589d278417e5e1ad820ad5eae6179",
-                "reference": "a8d2777f709589d278417e5e1ad820ad5eae6179",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Core\\Siteconfig\\SiteconfigServiceProvider"
-                    ]
-                },
-                "scripts": {
-                    "post-autoload-dump": [
-                        "@php artisan siteconfig:env-sync"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Core\\Siteconfig\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "raza9798",
-                    "email": "m.raza9798@gmail.com"
-                }
-            ],
-            "description": "A Laravel package for managing site configurations.",
-            "keywords": [
-                "Settings",
-                "application",
-                "configuration",
-                "environment",
-                "laravel",
-                "package",
-                "php",
-                "siteconfig"
-            ],
-            "support": {
-                "issues": "https://github.com/Raza9798/siteconfig/issues",
-                "source": "https://github.com/Raza9798/siteconfig/tree/3.2"
-            },
-            "time": "2025-05-19T11:04:06+00:00"
         },
         {
             "name": "symfony/clock",

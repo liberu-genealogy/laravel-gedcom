@@ -3,8 +3,8 @@
   "description": "A package that converts gedcom files to Eloquent models",
   "type": "library",
   "require": {
-    "php": ">=8.3",
-    "liberu-genealogy/php-gedcom": "^4.1.0",
+    "php": ">=8.4",
+    "liberu-genealogy/php-gedcom": "^4.0.0",
     "illuminate/support": "^11.0||^12.0",
     "illuminate/database": "^11.0||^12.0"
   },
