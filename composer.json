@@ -3,7 +3,7 @@
   "description": "A package that converts gedcom files to Eloquent models",
   "type": "library",
   "require": {
-    "php": ">=8.4",
+    "php": ">=8.3",
     "liberu-genealogy/php-gedcom": "^4.1.0",
     "illuminate/support": "^11.0||^12.0",
     "illuminate/database": "^11.0||^12.0"
@@ -12,6 +12,11 @@
   "autoload": {
     "psr-4": {
       "FamilyTree365\\LaravelGedcom\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
     }
   },
   "extra": {
@@ -24,7 +29,9 @@
   "require-dev": {
     "rector/rector": "^1.0.0",
     "driftingly/rector-laravel": "^1.2.0",
-    "phpunit/phpunit": "^10.0||^11.0||^12.0",
+    "phpunit/phpunit": "^11.0||^12.0",
+    "orchestra/testbench": "^9.0||^10.0",
+    "mockery/mockery": "^1.6",
     "laravel/framework": "^10.0||^11.0||^12.0"
   }
 }
