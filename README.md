@@ -116,6 +116,9 @@ $parser->parse('mysql', $filename, 'import-slug', true);
 
 ## Documentation
 
+### GEDCOM Data Import
+See [GEDCOM_DATA_IMPORT.md](GEDCOM_DATA_IMPORT.md) for a comprehensive reference of all GEDCOM tags and data elements imported by this package.
+
 ### Database
 This package will create the database tables, which map to models.
 
