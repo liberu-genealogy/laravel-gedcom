@@ -202,6 +202,9 @@ class GedcomParser
                 // Removed for brevity
             }
             $progressReporter->advanceProgress($c_sour);
+            
+            // Free up memory after processing sources
+            gc_collect_cycles();
 
             $parentData = ParentData::getPerson($this->conn, $individuals, $this->obje_ids, $this->sour_ids, $tenant);
            
@@ -255,8 +258,15 @@ class GedcomParser
             // $familyParser = new FamilyParser($this->conn);
             // $familyParser->parseFamilies($families);     
             // Pass the populated person ID mapping to FamilyData so families can be linked to persons.
+            
+            // Free up memory before processing families
+            gc_collect_cycles();
+            
             FamilyData::getFamily($this->conn, $families, $this->obje_ids, $this->sour_ids, $this->person_ids, $this->note_ids, $this->repo_ids, $parentData, $tenant);
             $progressReporter->advanceProgress(count($families));
+
+            // Free up memory after processing families
+            gc_collect_cycles();
 
             
         } catch (\Exception $e) {

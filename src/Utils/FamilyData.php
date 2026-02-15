@@ -61,19 +61,13 @@ class FamilyData
 
                 $husband_key = $parentData ? array_search($husb, array_column($parentData, 'gid')) : null;
                 $husband_uid = $parentData[$husband_key]['uid'] ?? null;
-                if (app(Person::class)->where('uid', $husband_uid)->first() != null) {
-                    $husband_id = app(Person::class)->where('uid', $husband_uid)->first()->id;
-                } else {
-                    $husband_id = null;
-                }
+                $husband = $husband_uid ? app(Person::class)->where('uid', $husband_uid)->first() : null;
+                $husband_id = $husband?->id;
 
                 $wife_key = $parentData ? array_search($wife, array_column($parentData, 'gid')) : null;
                 $wife_uid = $parentData[$wife_key]['uid'] ?? null;
-                if (app(Person::class)->where('uid', $wife_uid)->first() != null) {
-                    $wife_id = app(Person::class)->where('uid', $wife_uid)->first()->id;
-                } else {
-                    $wife_id = null;
-                }
+                $wife = $wife_uid ? app(Person::class)->where('uid', $wife_uid)->first() : null;
+                $wife_id = $wife?->id;
 
                 $persons_id[$husb] = $husband_id;
                 $persons_id[$wife] = $wife_id;

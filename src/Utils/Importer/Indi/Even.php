@@ -14,6 +14,40 @@ class Even
      *
      * @var string
      */
+    
+    /**
+     * Extract event-specific data like family context based on event type.
+     * 
+     * @param object $even The event object
+     * @param string $class_name The event class name
+     * @return array Array with keys: adop, adop_famc, birt_famc, chr_famc
+     */
+    private static function extractEventSpecificData($even, $class_name): array
+    {
+        $data = [
+            'adop' => '',
+            'adop_famc' => '',
+            'birt_famc' => '',
+            'chr_famc' => '',
+        ];
+        
+        // Extract family context based on event type
+        switch ($class_name) {
+            case 'Gedcom\Record\Indi\Adop':
+                $data['adop'] = $even->getAdop() ?? '';
+                $data['adop_famc'] = $even->getFamc() ?? '';
+                break;
+            case 'Gedcom\Record\Indi\Birt':
+                $data['birt_famc'] = $even->getFamc() ?? '';
+                break;
+            case 'Gedcom\Record\Indi\Chr':
+                $data['chr_famc'] = $even->getFamc() ?? '';
+                break;
+        }
+        
+        return $data;
+    }
+    
     public static function read($conn, $events, $person, $obje_ids = [])
     {
         if (empty($person)) {
@@ -53,60 +87,14 @@ class Even
                 $caus = $even->getCaus();
                 $age = $even->getAge();
                 $agnc = $even->getAgnc();
-                $adop = '';
-                $adop_famc = '';
-                $birt_famc = '';
-                switch ($class_name) {
-                case 'Adop':
-                    $adop = $even->getAdop();
-                    $adop_famc = $even->getFamc();
-                break;
-                case 'Birt':
-                    $birt_famc = $even->getFamc();
-                break;
-                case 'Bapm':
-                case 'Barm':
-                case 'Basm':
-                case 'Bles':
-                case 'Buri':
-                case 'Cast':
-                case 'Cens':
-                break;
-                case 'Chr':
-                    $chr_famc = $even->getFamc();
-                break;
-                case 'Chra':
-                case 'Conf':
-                case 'Crem':
-                case 'Dscr':
-                case 'Deat':
-                case 'Educ':
-                case 'Emig':
-                case 'Fcom':
-                case 'Grad':
-                case 'Idno':
-                case 'Immi':
-                case 'Nati':
-                case 'Nchi':
-                case 'Natu':
-                case 'Nmr':
-                case 'Occu':
-                case 'Ordn':
-                case 'Reti':
-                case 'Prob':
-                case 'Prop':
-                case 'Reli':
-                case 'Resi':
-                case 'Ssn':
-                case 'Titl':
-                case 'Will':
-                case 'Even':
-                break;
-                default:
-            }
-                $adop = '';
-                $adop_famc = '';
-                $birt_famc = '';
+                
+                // Extract event-specific family context data
+                $eventData = self::extractEventSpecificData($even, $class_name);
+                $adop = $eventData['adop'];
+                $adop_famc = $eventData['adop_famc'];
+                $birt_famc = $eventData['birt_famc'];
+                $chr_famc = $eventData['chr_famc'];
+                
                 // store Even
                 $key = [
                     ['person_id', $person_id],
@@ -122,25 +110,27 @@ class Even
                     ['adop', $adop],
                     ['adop_famc', $adop_famc],
                     ['birt_famc', $birt_famc],
+                    ['chr_famc', $chr_famc],
                 ];
                 $check = app(PersonEvent::class)->on($conn)->where($key)->first();
                 if (empty($check)) {
                     $data = [
                         'person_id'      => $person_id,
                         'title'          => $class_name,
-                        'type'           => $type, //
-                        'attr'           => $attr, //
+                        'type'           => $type,
+                        'attr'           => $attr,
                         'date'           => $date,
                         'converted_date' => $date_cnvert,
-                        'plac'           => $plac, //
-                        'addr_id'        => $addr_id, //
-                        'phon'           => $phon, //
-                        'caus'           => $caus, //
-                        'age'            => $age, //
-                        'agnc'           => $agnc, //
-                        'adop'           => $adop, //
-                        'adop_famc'      => $adop_famc,  //
-                        'birt_famc'      => $birt_famc,  //
+                        'plac'           => $plac,
+                        'addr_id'        => $addr_id,
+                        'phon'           => $phon,
+                        'caus'           => $caus,
+                        'age'            => $age,
+                        'agnc'           => $agnc,
+                        'adop'           => $adop,
+                        'adop_famc'      => $adop_famc,
+                        'birt_famc'      => $birt_famc,
+                        'chr_famc'       => $chr_famc,
                     ];
 
                     $eventData[] = $data;
@@ -190,60 +180,14 @@ class Even
                     $caus = $even->getCaus();
                     $age = $even->getAge();
                     $agnc = $even->getAgnc();
-                    $adop = '';
-                    $adop_famc = '';
-                    $birt_famc = '';
-                    switch ($class_name) {
-                    case 'Adop':
-                        $adop = $even->getAdop();
-                        $adop_famc = $even->getFamc();
-                    break;
-                    case 'Birt':
-                        $birt_famc = $even->getFamc();
-                    break;
-                    case 'Bapm':
-                    case 'Barm':
-                    case 'Basm':
-                    case 'Bles':
-                    case 'Buri':
-                    case 'Cast':
-                    case 'Cens':
-                    break;
-                    case 'Chr':
-                        $chr_famc = $even->getFamc();
-                    break;
-                    case 'Chra':
-                    case 'Conf':
-                    case 'Crem':
-                    case 'Dscr':
-                    case 'Deat':
-                    case 'Educ':
-                    case 'Emig':
-                    case 'Fcom':
-                    case 'Grad':
-                    case 'Idno':
-                    case 'Immi':
-                    case 'Nati':
-                    case 'Nchi':
-                    case 'Natu':
-                    case 'Nmr':
-                    case 'Occu':
-                    case 'Ordn':
-                    case 'Reti':
-                    case 'Prob':
-                    case 'Prop':
-                    case 'Reli':
-                    case 'Resi':
-                    case 'Ssn':
-                    case 'Titl':
-                    case 'Will':
-                    case 'Even':
-                    break;
-                    default:
-                }
-                    $adop = '';
-                    $adop_famc = '';
-                    $birt_famc = '';
+                    
+                    // Extract event-specific family context data
+                    $eventData = self::extractEventSpecificData($even, $class_name);
+                    $adop = $eventData['adop'];
+                    $adop_famc = $eventData['adop_famc'];
+                    $birt_famc = $eventData['birt_famc'];
+                    $chr_famc = $eventData['chr_famc'];
+                    
                     // store Even
                     $key = [
                         ['person_id', $person_id],
@@ -259,14 +203,15 @@ class Even
                         ['adop', $adop],
                         ['adop_famc', $adop_famc],
                         ['birt_famc', $birt_famc],
+                        ['chr_famc', $chr_famc],
                     ];
 
                     // update person's record
-                    if ($class_name == 'BIRT' && !empty($date)) {
+                    if (str_ends_with($class_name, '\Birt') && !empty($date)) {
                         $person->birthday = date('Y-m-d', strtotime((string) $date));
                     }
                     // add deathyear to person table ( for form builder )
-                    if ($class_name == 'DEAT' && !empty($date)) {
+                    if (str_ends_with($class_name, '\Deat') && !empty($date)) {
                         $person->deathday = date('Y-m-d', strtotime((string) $date));
                     }
                     $person->save();

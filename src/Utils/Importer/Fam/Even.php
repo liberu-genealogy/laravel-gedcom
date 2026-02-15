@@ -67,23 +67,20 @@ class Even
             }
 
             switch ($class_name) {
-                case 'Even':
-                case 'Anul':
-                case 'Cens':
-                case 'Div':
-                case 'Divf':
-                case 'Enga':
-                case 'Marr':
-                case 'Marb':
-                case 'Marc':
-                case 'Marl':
-                case 'Mars':
+                case 'Gedcom\Record\Fam\Even':
+                case 'Gedcom\Record\Fam\Anul':
+                case 'Gedcom\Record\Fam\Cens':
+                case 'Gedcom\Record\Fam\Div':
+                case 'Gedcom\Record\Fam\Divf':
+                case 'Gedcom\Record\Fam\Enga':
+                case 'Gedcom\Record\Fam\Marr':
+                case 'Gedcom\Record\Fam\Marb':
+                case 'Gedcom\Record\Fam\Marc':
+                case 'Gedcom\Record\Fam\Marl':
+                case 'Gedcom\Record\Fam\Mars':
                 break;
                 default:
             }
-            $adop = '';
-            $adop_famc = '';
-            $birt_famc = '';
             // store Fam/Even
             $key = [
                 'family_id'      => $fam_id,
