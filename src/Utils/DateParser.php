@@ -2,7 +2,7 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
-readonly class DateParser
+class DateParser
 {
     private int|float|null $year = null;
     private ?int $month = null;
