@@ -2,20 +2,15 @@
 
 namespace FamilyTree365\LaravelGedcom\Utils;
 
-use FamilyTree365\LaravelGedcom\Facades\GedcomParserFacade;
-use FamilyTree365\LaravelGedcom\Models\Person;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
+use FamilyTree365\LaravelGedcom\Jobs\GedcomImportJob;
 
 class GedcomImporter
 {
-    public static function importData($filename)
+    public static function importData(string $filename): void
     {
-        $gedFile = $filename . '.GED';
+        $gedFile = $filename . '.ged';
         $slug = $filename;
 
-        // Code extracted from GedcomImporter.php handle() function (lines 41-42)
-        GedcomParserFacade::parse('mysql', $gedFile, $slug, true);
+        GedcomImportJob::dispatch('mysql', $gedFile, $slug);
     }
 }
