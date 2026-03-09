@@ -44,6 +44,12 @@ class GedcomImporter extends Command
     public function handle(): int
     {
         $filename = $this->argument('filename');
+
+        if (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) !== 'ged') {
+            $this->error('The file must be a valid GEDCOM file with a .ged extension.');
+            return 1;
+        }
+
         $slug = pathinfo($filename, PATHINFO_FILENAME);
         GedcomParserFacade::parse('mysql', $filename, $slug, true);
         return 0;
