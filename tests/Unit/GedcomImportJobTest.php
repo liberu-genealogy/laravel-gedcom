@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Queue;
 
 class GedcomImportJobTest extends TestCase
 {
-    protected function getPackageProviders($app): array
-    {
-        return ['FamilyTree365\LaravelGedcom\ServiceProvider'];
-    }
-
     public function testJobIsDispatchedByGedcomImporter(): void
     {
         Queue::fake();
