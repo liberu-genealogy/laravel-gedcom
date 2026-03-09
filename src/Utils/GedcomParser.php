@@ -66,7 +66,8 @@ class GedcomParser
         $gedcom = @ $parser->parse($filename);
 
         if ($gedcom === null) {
-            error_log('PARSE ERROR: Failed to parse GEDCOM file: ' . $filename);
+            $reason = !file_exists($filename) ? 'file not found' : 'invalid or unreadable file';
+            error_log('PARSE ERROR: Failed to parse GEDCOM file: ' . $filename . ' (' . $reason . ')');
             return;
         }
 
