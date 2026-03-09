@@ -65,6 +65,11 @@ class GedcomParser
         $parser = new Parser();
         $gedcom = @ $parser->parse($filename);
 
+        if ($gedcom === null) {
+            error_log('PARSE ERROR: Failed to parse GEDCOM file: ' . $filename);
+            return;
+        }
+
         // Free up memory by not logging the entire gedcom structure
         error_log("GEDCOM file parsed successfully");
 
