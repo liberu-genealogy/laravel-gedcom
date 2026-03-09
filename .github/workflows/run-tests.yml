@@ -20,7 +20,9 @@ jobs:
     
     - name: Require this package
       working-directory: ./host
-      run: composer require liberu-genealogy/laravel-gedcom
+      run: |
+        composer config repositories.local '{"type": "path", "url": "packages/liberu-genealogy/laravel-gedcom"}'
+        composer require liberu-genealogy/laravel-gedcom:@dev --ignore-platform-reqs
 
     - name: Run tests
       working-directory: ./host      
