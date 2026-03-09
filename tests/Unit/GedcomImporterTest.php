@@ -7,11 +7,6 @@ use FamilyTree365\LaravelGedcom\Facades\GedcomParserFacade;
 
 class GedcomImporterTest extends TestCase
 {
-    protected function getPackageProviders($app): array
-    {
-        return ['FamilyTree365\LaravelGedcom\ServiceProvider'];
-    }
-
     public function testImportWithValidFile(): void
     {
         $tmpFile = tempnam(sys_get_temp_dir(), 'gedcom_test_') . '.ged';

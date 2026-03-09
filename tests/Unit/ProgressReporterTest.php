@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use FamilyTree365\LaravelGedcom\Events\GedComProgressSent;
 use FamilyTree365\LaravelGedcom\Utils\ProgressReporter;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class ProgressReporterTest extends TestCase
 {
@@ -21,8 +21,15 @@ class ProgressReporterTest extends TestCase
         $channel = ['name' => 'test-channel', 'eventName' => 'testEvent'];
         $progressReporter = new ProgressReporter($totalSteps, $channel);
 
-        $this->assertEquals($totalSteps, $progressReporter->totalSteps);
-        $this->assertEquals($channel, $progressReporter->channel);
+        $ref = new \ReflectionClass($progressReporter);
+
+        $totalStepsProp = $ref->getProperty('totalSteps');
+        $totalStepsProp->setAccessible(true);
+        $this->assertEquals($totalSteps, $totalStepsProp->getValue($progressReporter));
+
+        $channelProp = $ref->getProperty('channel');
+        $channelProp->setAccessible(true);
+        $this->assertEquals($channel, $channelProp->getValue($progressReporter));
     }
 
     public function testAdvanceProgress()
@@ -34,7 +41,7 @@ class ProgressReporterTest extends TestCase
         $progressReporter->advanceProgress(1);
 
         Event::assertDispatched(GedComProgressSent::class, function ($event) use ($channel) {
-            return $event->channel === $channel && $event->currentProgress === 1;
+            return $event->channel === $channel && $event->complete === 1;
         });
     }
 
@@ -47,7 +54,7 @@ class ProgressReporterTest extends TestCase
         $progressReporter->completeProgress();
 
         Event::assertDispatched(GedComProgressSent::class, function ($event) use ($totalSteps, $channel) {
-            return $event->channel === $channel && $event->currentProgress === $totalSteps;
+            return $event->channel === $channel && $event->complete === $totalSteps;
         });
     }
 }

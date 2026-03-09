@@ -45,6 +45,21 @@ trait GedcomExporterHelpers
     }
 
     /**
+     * Prepares data for view rendering.
+     *
+     * @param array $submissions Submission records
+     * @param array $people People records
+     * @return array
+     */
+    public static function prepareDataForView(array $submissions, array $people): array
+    {
+        return [
+            'submissions' => $submissions,
+            'people' => $people,
+        ];
+    }
+
+    /**
      * Writes content to a file.
      *
      * @param string $fullPath Path to write the file
