@@ -18,7 +18,7 @@ class Even
     public static function read($conn, $even, $fam, $obje_ids = [])
     {
         try {
-            if ($even == null || $fam === null) {
+           if ($even == null || !is_object($even) || $fam === null) {
                 return;
             }
             $class_name = $even::class;
