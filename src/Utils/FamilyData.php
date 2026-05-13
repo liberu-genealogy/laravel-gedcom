@@ -55,19 +55,12 @@ class FamilyData
 
                 foreach ($children as $child) {
                     if (!isset($persons_id[$child])) {
-                        $persons_id[$child] = app(Person::class)->where('gid', $child)->first()->id;
+                       $persons_id[$child] = app(Person::class)->where('gid', $child)->first()?->id;
                     }
                 }
-
-                $husband_key = $parentData ? array_search($husb, array_column($parentData, 'gid')) : null;
-                $husband_uid = $parentData[$husband_key]['uid'] ?? null;
-                $husband = $husband_uid ? app(Person::class)->where('uid', $husband_uid)->first() : null;
-                $husband_id = $husband?->id;
-
-                $wife_key = $parentData ? array_search($wife, array_column($parentData, 'gid')) : null;
-                $wife_uid = $parentData[$wife_key]['uid'] ?? null;
-                $wife = $wife_uid ? app(Person::class)->where('uid', $wife_uid)->first() : null;
-                $wife_id = $wife?->id;
+                
+                $husband_id = $husb ? app(Person::class)->where('gid', $husb)->first()?->id : null;
+                $wife_id    = $wife ? app(Person::class)->where('gid', $wife)->first()?->id : null;
 
                 $persons_id[$husb] = $husband_id;
                 $persons_id[$wife] = $wife_id;
@@ -85,7 +78,7 @@ class FamilyData
                 app(Family::class)->on($conn)->updateOrCreate($value, $value);
             }
             otherFamRecord::insertFamilyData($conn, $persons_id, $families, $obje_ids, $sour_ids);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = $e->getMessage();
 
             return \Log::error($error);
