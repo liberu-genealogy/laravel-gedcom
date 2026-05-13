@@ -81,7 +81,7 @@ class ParentData
                 // added to database
                 // string value
                 $sex = preg_replace('/[^MF]/', '', (string) $individual->getSex());
-                $uid = $individual->getUid() ?? strtoupper(str_replace('-', '', (string) Str::uuid()));
+                $uid = $individual->getUid() ?: strtoupper(str_replace('-', '', (string) Str::uuid()));
                 $resn = $individual->getResn();
                 $rin = $individual->getRin();
                 $rfn = $individual->getRfn();
