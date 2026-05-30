@@ -89,11 +89,11 @@ class Even
                 $agnc = $even->getAgnc();
                 
                 // Extract event-specific family context data
-+                $specificEventData = self::extractEventSpecificData($even, $class_name);
-+                $adop = $specificEventData['adop'];
-+                $adop_famc = $specificEventData['adop_famc'];
-+                $birt_famc = $specificEventData['birt_famc'];
-+                $chr_famc = $specificEventData['chr_famc'];
+                 $specificEventData = self::extractEventSpecificData($even, $class_name);
+                 $adop = $specificEventData['adop'];
+                 $adop_famc = $specificEventData['adop_famc'];
+                 $birt_famc = $specificEventData['birt_famc'];
+                 $chr_famc = $specificEventData['chr_famc'];
 
                 
                 // store Even
