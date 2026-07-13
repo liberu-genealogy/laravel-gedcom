@@ -9,9 +9,9 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.3'
+        php-version: '8.4'
     - name: Install host app
-      run: composer create-project --prefer-dist laravel/laravel host
+      run: composer create-project --prefer-dist "laravel/laravel:^13.0" host
 
     - name: Install package (this repo)
       uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
       working-directory: ./host
       run: |
         composer config repositories.local '{"type": "path", "url": "packages/liberu-genealogy/laravel-gedcom"}'
-        composer require liberu-genealogy/laravel-gedcom:@dev --ignore-platform-reqs
+        composer require liberu-genealogy/laravel-gedcom:@dev
 
     - name: Run tests
       working-directory: ./host      
