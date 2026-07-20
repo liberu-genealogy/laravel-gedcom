@@ -435,7 +435,7 @@ class GedcomGenerator
             $fam->addNote($note);
         }
 
-        $_sour = Source::all();
+        $_sour = app(Source::class)->query()->get();
         foreach ($_sour as $item) {
             $sour = new SourRef();
             $sour->setSour($item->sour);
@@ -463,7 +463,7 @@ class GedcomGenerator
     protected function setSour()
     {
         $sour = new \Gedcom\Record\Sour();
-        $_sour = Source::all();
+        $_sour = app(Source::class)->query()->get();
         foreach ($_sour as $item) {
             $sour->setTitl($item->titl);
         }
